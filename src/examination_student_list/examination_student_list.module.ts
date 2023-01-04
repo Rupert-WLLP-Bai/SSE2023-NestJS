@@ -4,6 +4,6 @@ import { ExaminationStudentListController } from './examination_student_list.con
 
 @Module({
   controllers: [ExaminationStudentListController],
-  providers: [ExaminationStudentListService]
+  providers: [ExaminationStudentListService],
 })
 export class ExaminationStudentListModule {}

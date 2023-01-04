@@ -4,6 +4,6 @@ import { ExperimentSubmitController } from './experiment_submit.controller';
 
 @Module({
   controllers: [ExperimentSubmitController],
-  providers: [ExperimentSubmitService]
+  providers: [ExperimentSubmitService],
 })
 export class ExperimentSubmitModule {}

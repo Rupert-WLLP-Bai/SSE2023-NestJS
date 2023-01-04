@@ -4,6 +4,6 @@ import { ExaminationWeightController } from './examination_weight.controller';
 
 @Module({
   controllers: [ExaminationWeightController],
-  providers: [ExaminationWeightService]
+  providers: [ExaminationWeightService],
 })
 export class ExaminationWeightModule {}

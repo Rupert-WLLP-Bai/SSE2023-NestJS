@@ -11,7 +11,9 @@ describe('ExaminationWeightController', () => {
       providers: [ExaminationWeightService],
     }).compile();
 
-    controller = module.get<ExaminationWeightController>(ExaminationWeightController);
+    controller = module.get<ExaminationWeightController>(
+      ExaminationWeightController,
+    );
   });
 
   it('should be defined', () => {

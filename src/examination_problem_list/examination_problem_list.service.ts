@@ -16,7 +16,10 @@ export class ExaminationProblemListService {
     return `This action returns a #${id} examinationProblemList`;
   }
 
-  update(id: number, updateExaminationProblemListDto: UpdateExaminationProblemListDto) {
+  update(
+    id: number,
+    updateExaminationProblemListDto: UpdateExaminationProblemListDto,
+  ) {
     return `This action updates a #${id} examinationProblemList`;
   }
 

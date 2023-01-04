@@ -4,6 +4,6 @@ import { TotalWeightController } from './total_weight.controller';
 
 @Module({
   controllers: [TotalWeightController],
-  providers: [TotalWeightService]
+  providers: [TotalWeightService],
 })
 export class TotalWeightModule {}
