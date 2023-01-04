@@ -81,3 +81,37 @@ Nest is [MIT licensed](LICENSE).
 1. 2023年1月4日13:20:26 async/await的问题
    - 问题: `const query_result = this.userService.findOne(+id);`, 如果不写成async/await的形式, 数据库的查询结果是{}
    - 解决: `const query_result = await this.userService.findOne(+id);`, controller层的方法前面加上async, 并且在方法内部使用await 
+
+2. 2023年1月4日20:58:05 
+  - 问题: `Nest can't resolve dependencies of the HelloService (?). Please make sure that the argument HelloRepository at index [0] is available in the RootTestModule context.`
+  - 解决: 在spec文件中, 需要引入HelloRepository, 并且在providers中添加`getRepositoryToken(Hello)`的provider, useValue: {}即可
+  - 参考: https://docs.nestjs.com/techniques/database#testing
+  - 代码:
+  ```ts
+  import { Test, TestingModule } from '@nestjs/testing';
+  import { getRepositoryToken } from '@nestjs/typeorm';
+  import { User } from './entities/user.entity';
+  import { UserService } from './user.service';
+
+  describe('UserService', () => {
+    let service: UserService;
+
+    beforeEach(async () => {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          UserService,
+          {
+            provide: getRepositoryToken(User),
+            useValue: {},
+          },
+        ],
+      }).compile();
+
+      service = module.get<UserService>(UserService);
+    });
+
+    it('should be defined', () => {
+      expect(service).toBeDefined();
+    });
+  });
+  ```
