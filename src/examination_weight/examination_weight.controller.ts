@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ExaminationWeightService } from './examination_weight.service';
 import { CreateExaminationWeightDto } from './dto/create-examination_weight.dto';
 import { UpdateExaminationWeightDto } from './dto/update-examination_weight.dto';
 
 @Controller('examination-weight')
+@ApiTags('examination-weight')
 export class ExaminationWeightController {
-  constructor(private readonly examinationWeightService: ExaminationWeightService) {}
+  constructor(
+    private readonly examinationWeightService: ExaminationWeightService,
+  ) {}
 
   @Post()
   create(@Body() createExaminationWeightDto: CreateExaminationWeightDto) {
@@ -23,8 +35,14 @@ export class ExaminationWeightController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExaminationWeightDto: UpdateExaminationWeightDto) {
-    return this.examinationWeightService.update(+id, updateExaminationWeightDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateExaminationWeightDto: UpdateExaminationWeightDto,
+  ) {
+    return this.examinationWeightService.update(
+      +id,
+      updateExaminationWeightDto,
+    );
   }
 
   @Delete(':id')

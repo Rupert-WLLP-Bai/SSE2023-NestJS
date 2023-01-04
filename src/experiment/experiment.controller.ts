@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ExperimentService } from './experiment.service';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
 
 @Controller('experiment')
+@ApiTags('experiment')
 export class ExperimentController {
   constructor(private readonly experimentService: ExperimentService) {}
 
@@ -23,7 +33,10 @@ export class ExperimentController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExperimentDto: UpdateExperimentDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateExperimentDto: UpdateExperimentDto,
+  ) {
     return this.experimentService.update(+id, updateExperimentDto);
   }
 

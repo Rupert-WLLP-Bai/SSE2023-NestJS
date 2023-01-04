@@ -1,15 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ExaminationProblemListService } from './examination_problem_list.service';
 import { CreateExaminationProblemListDto } from './dto/create-examination_problem_list.dto';
 import { UpdateExaminationProblemListDto } from './dto/update-examination_problem_list.dto';
 
 @Controller('examination-problem-list')
+@ApiTags('examination-problem-list')
 export class ExaminationProblemListController {
-  constructor(private readonly examinationProblemListService: ExaminationProblemListService) {}
+  constructor(
+    private readonly examinationProblemListService: ExaminationProblemListService,
+  ) {}
 
   @Post()
-  create(@Body() createExaminationProblemListDto: CreateExaminationProblemListDto) {
-    return this.examinationProblemListService.create(createExaminationProblemListDto);
+  create(
+    @Body() createExaminationProblemListDto: CreateExaminationProblemListDto,
+  ) {
+    return this.examinationProblemListService.create(
+      createExaminationProblemListDto,
+    );
   }
 
   @Get()
@@ -23,8 +39,14 @@ export class ExaminationProblemListController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExaminationProblemListDto: UpdateExaminationProblemListDto) {
-    return this.examinationProblemListService.update(+id, updateExaminationProblemListDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateExaminationProblemListDto: UpdateExaminationProblemListDto,
+  ) {
+    return this.examinationProblemListService.update(
+      +id,
+      updateExaminationProblemListDto,
+    );
   }
 
   @Delete(':id')

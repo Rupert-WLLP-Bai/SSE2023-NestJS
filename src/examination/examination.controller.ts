@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ExaminationService } from './examination.service';
 import { CreateExaminationDto } from './dto/create-examination.dto';
 import { UpdateExaminationDto } from './dto/update-examination.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('examination')
+@ApiTags('examination')
 export class ExaminationController {
   constructor(private readonly examinationService: ExaminationService) {}
 
@@ -23,7 +33,10 @@ export class ExaminationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExaminationDto: UpdateExaminationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateExaminationDto: UpdateExaminationDto,
+  ) {
     return this.examinationService.update(+id, updateExaminationDto);
   }
 

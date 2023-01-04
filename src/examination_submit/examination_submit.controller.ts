@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ExaminationSubmitService } from './examination_submit.service';
 import { CreateExaminationSubmitDto } from './dto/create-examination_submit.dto';
 import { UpdateExaminationSubmitDto } from './dto/update-examination_submit.dto';
 
 @Controller('examination-submit')
+@ApiTags('examination-submit')
 export class ExaminationSubmitController {
-  constructor(private readonly examinationSubmitService: ExaminationSubmitService) {}
+  constructor(
+    private readonly examinationSubmitService: ExaminationSubmitService,
+  ) {}
 
   @Post()
   create(@Body() createExaminationSubmitDto: CreateExaminationSubmitDto) {
@@ -23,8 +35,14 @@ export class ExaminationSubmitController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExaminationSubmitDto: UpdateExaminationSubmitDto) {
-    return this.examinationSubmitService.update(+id, updateExaminationSubmitDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateExaminationSubmitDto: UpdateExaminationSubmitDto,
+  ) {
+    return this.examinationSubmitService.update(
+      +id,
+      updateExaminationSubmitDto,
+    );
   }
 
   @Delete(':id')
