@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ExaminationScoreService } from './examination_score.service';
 import { CreateExaminationScoreDto } from './dto/create-examination_score.dto';
 import { UpdateExaminationScoreDto } from './dto/update-examination_score.dto';
 
 @Controller('examination-score')
+@ApiTags('examination-score')
 export class ExaminationScoreController {
-  constructor(private readonly examinationScoreService: ExaminationScoreService) {}
+  constructor(
+    private readonly examinationScoreService: ExaminationScoreService,
+  ) {}
 
   @Post()
   create(@Body() createExaminationScoreDto: CreateExaminationScoreDto) {
@@ -23,7 +35,10 @@ export class ExaminationScoreController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExaminationScoreDto: UpdateExaminationScoreDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateExaminationScoreDto: UpdateExaminationScoreDto,
+  ) {
     return this.examinationScoreService.update(+id, updateExaminationScoreDto);
   }
 
