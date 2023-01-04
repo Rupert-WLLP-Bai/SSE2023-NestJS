@@ -76,3 +76,8 @@ Nest is [MIT licensed](LICENSE).
 ### 2023年1月4日01:14:51
 - [ ] 1. 添加返回值的统一定义, 存放在'src/common/dto'目录下
 - [ ] 2. 完善分页查询和排序条件的封装
+
+## 踩坑记录
+1. 2023年1月4日13:20:26 async/await的问题
+   - 问题: `const query_result = this.userService.findOne(+id);`, 如果不写成async/await的形式, 数据库的查询结果是{}
+   - 解决: `const query_result = await this.userService.findOne(+id);`, controller层的方法前面加上async, 并且在方法内部使用await 
