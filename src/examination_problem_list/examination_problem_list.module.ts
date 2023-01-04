@@ -4,6 +4,6 @@ import { ExaminationProblemListController } from './examination_problem_list.con
 
 @Module({
   controllers: [ExaminationProblemListController],
-  providers: [ExaminationProblemListService]
+  providers: [ExaminationProblemListService],
 })
 export class ExaminationProblemListModule {}

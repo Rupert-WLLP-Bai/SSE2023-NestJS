@@ -4,6 +4,6 @@ import { ExperimentScoreController } from './experiment_score.controller';
 
 @Module({
   controllers: [ExperimentScoreController],
-  providers: [ExperimentScoreService]
+  providers: [ExperimentScoreService],
 })
 export class ExperimentScoreModule {}

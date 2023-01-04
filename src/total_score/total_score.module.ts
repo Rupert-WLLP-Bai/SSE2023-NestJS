@@ -4,6 +4,6 @@ import { TotalScoreController } from './total_score.controller';
 
 @Module({
   controllers: [TotalScoreController],
-  providers: [TotalScoreService]
+  providers: [TotalScoreService],
 })
 export class TotalScoreModule {}

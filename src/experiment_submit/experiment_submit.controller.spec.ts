@@ -11,7 +11,9 @@ describe('ExperimentSubmitController', () => {
       providers: [ExperimentSubmitService],
     }).compile();
 
-    controller = module.get<ExperimentSubmitController>(ExperimentSubmitController);
+    controller = module.get<ExperimentSubmitController>(
+      ExperimentSubmitController,
+    );
   });
 
   it('should be defined', () => {
