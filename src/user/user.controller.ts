@@ -139,6 +139,8 @@ export class UserController {
       const data = await this.userService.findPage(page, pageSize);
       result.data.list = data[0];
       result.data.total = data[1];
+      result.data.current = Number(page);
+      result.data.pageSize = Number(pageSize);
     } else {
       const data = await this.userService.findAllAndCount();
       result.data.list = data[0];
