@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { LoginParams } from './dto/login';
 import { LoginResponse } from './login.response';
 import { loginErrorCodes } from './login.error';
-import { getUserRoleName } from 'src/user/entities/user.entity';
+import { getUserRoleName } from '../user/entities/user.entity';
 
 @Injectable()
 export class LoginService {
