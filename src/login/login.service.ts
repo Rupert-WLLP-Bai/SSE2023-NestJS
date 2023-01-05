@@ -1,3 +1,4 @@
+import { UpdateUserDto } from './../user/dto/update-user.dto';
 import { Response } from './../common/response/response.interface';
 import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
@@ -45,6 +46,11 @@ export class LoginService {
     res.success = true;
     res.data.currentAuthority = getUserRoleName(user.role);
     res.data.token = user.id.toString();
+    // 修改用户登录时间
+    const updateUserDto: UpdateUserDto = {
+      last_login_time: new Date(),
+    };
+    await this.userService.update(user.id, updateUserDto);
     return res;
   }
 
