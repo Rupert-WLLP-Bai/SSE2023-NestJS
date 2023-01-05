@@ -34,5 +34,33 @@ export class User {
   last_login_time: Date;
   // 最后登录ip
   @Column({ nullable: true })
-  last_login_ip: string;
+  ip: string;
+}
+
+// 用户状态枚举
+export enum UserStatus {
+  DISABLE = 0,
+  ENABLE = 1,
+}
+
+// 用户角色枚举
+export enum UserRole {
+  ADMIN = 0,
+  STUDENT = 1,
+  TEACHER = 2,
+  ASSISTANT = 3,
+}
+
+// 根据用户枚举值获取用户角色名称
+export function getUserRoleName(role: UserRole): string {
+  switch (role) {
+    case UserRole.ADMIN:
+      return 'admin';
+    case UserRole.STUDENT:
+      return 'student';
+    case UserRole.TEACHER:
+      return 'teacher';
+    case UserRole.ASSISTANT:
+      return 'assistant';
+  }
 }

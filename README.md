@@ -115,3 +115,29 @@ Nest is [MIT licensed](LICENSE).
     });
   });
   ```
+
+3. 2023年1月5日13:53:29 LoginController中使用UserService的问题
+   - 问题: `Nest can't resolve dependencies of the LoginController (?). Please make sure that the argument UserService at index [0] is available in the RootTestModule context.`
+   - 解决: 在login.module.ts中, 导入UserModule; 在user.module.ts中, 导入TypeOrmModule.forFeature([User]), 导出UserService
+   - 代码
+     - user.module.ts
+      ```ts
+      @Module({
+        imports: [TypeOrmModule.forFeature([User])],
+        controllers: [UserController],
+        providers: [UserService],
+        exports: [UserService],
+      })
+      export class UserModule {}
+      ```
+      - login.module.ts
+      ```ts
+      @Module({
+        controllers: [LoginController],
+        providers: [LoginService],
+        imports: [UserModule],
+      })
+      export class LoginModule {}
+      ```
+
+
