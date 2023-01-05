@@ -36,8 +36,19 @@ export class UserController {
   @Post()
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: '创建用户' })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<Response> {
+    const res = await this.userService.create(createUserDto);
+    const result: Response = {
+      success: true,
+      data: {},
+      errorCode: '',
+      errorMessage: '',
+      showType: 0,
+      traceId: '',
+      host: '',
+    };
+    result.data = res;
+    return result;
   }
 
   @Get(':id')
@@ -66,6 +77,7 @@ export class UserController {
   @Patch(':id')
   @ApiOperation({ summary: '根据id更新用户' })
   @ApiParam({ name: 'id', description: '用户id' })
+  @ApiBody({ type: UpdateUserDto })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const result: UpdateResponse = {
       success: true,
