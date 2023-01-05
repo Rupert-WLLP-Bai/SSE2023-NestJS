@@ -1,6 +1,7 @@
+import { UserService } from './../user/user.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../user/entities/user.entity';
 import { LoginController } from './login.controller';
 import { LoginService } from './login.service';
 
@@ -12,6 +13,7 @@ describe('LoginController', () => {
       controllers: [LoginController],
       providers: [
         LoginService,
+        UserService,
         {
           provide: getRepositoryToken(User),
           useValue: {},
