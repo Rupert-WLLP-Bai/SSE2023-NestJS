@@ -1,4 +1,5 @@
-import { Body, Controller, Post, Logger } from '@nestjs/common';
+import { Response } from './../common/response/response.interface';
+import { Body, Controller, Post, Logger, Get } from '@nestjs/common';
 import { ApiOperation, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoginResponse } from 'src/login/login.response';
 import { LoginParams } from './dto/login';
@@ -16,5 +17,12 @@ export class LoginController {
   async login(@Body() loginParams: LoginParams): Promise<LoginResponse> {
     Logger.debug('loginParams', JSON.stringify(loginParams));
     return await this.loginService.login(loginParams);
+  }
+
+  //登出
+  @Get('outlogin')
+  @ApiOperation({ summary: '登出' })
+  async outlogin(): Promise<Response> {
+    return await this.loginService.outlogin();
   }
 }

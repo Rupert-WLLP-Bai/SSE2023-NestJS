@@ -1,3 +1,4 @@
+import { Response } from './../common/response/response.interface';
 import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
 import { LoginParams } from './dto/login';
@@ -44,6 +45,22 @@ export class LoginService {
     res.success = true;
     res.data.currentAuthority = getUserRoleName(user.role);
     res.data.token = user.id.toString();
+    return res;
+  }
+
+  // 登出
+  async outlogin(): Promise<Response> {
+    // 定义返回值
+    const res: Response = {
+      success: false,
+      data: {},
+      errorCode: '',
+      errorMessage: '',
+      showType: 0,
+      traceId: '',
+      host: '',
+    };
+    res.success = true;
     return res;
   }
 }

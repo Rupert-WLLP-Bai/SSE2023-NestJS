@@ -22,5 +22,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({ description: '最后登录时间', example: '2021-01-01 00:00:00' })
   last_login_time: Date;
   @ApiProperty({ description: '最后登录ip', example: '183.12.3.144' })
-  last_login_ip: string;
+  ip: string;
 }
