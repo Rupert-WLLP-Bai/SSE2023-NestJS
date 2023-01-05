@@ -83,38 +83,38 @@ Nest is [MIT licensed](LICENSE).
    - 解决: `const query_result = await this.userService.findOne(+id);`, controller层的方法前面加上async, 并且在方法内部使用await 
 
 2. 2023年1月4日20:58:05 
-  - 问题: `Nest can't resolve dependencies of the HelloService (?). Please make sure that the argument HelloRepository at index [0] is available in the RootTestModule context.`
-  - 解决: 在spec文件中, 需要引入HelloRepository, 并且在providers中添加`getRepositoryToken(Hello)`的provider, useValue: {}即可
-  - 参考: https://docs.nestjs.com/techniques/database#testing
-  - 代码:
-  ```ts
-  import { Test, TestingModule } from '@nestjs/testing';
-  import { getRepositoryToken } from '@nestjs/typeorm';
-  import { User } from './entities/user.entity';
-  import { UserService } from './user.service';
+   - 问题: `Nest can't resolve dependencies of the HelloService (?). Please make sure that the argument HelloRepository at index [0] is available in the RootTestModule context.`
+   - 解决: 在spec文件中, 需要引入HelloRepository, 并且在providers中添加`getRepositoryToken(Hello)`的provider, useValue: {}即可
+   - 参考: https://docs.nestjs.com/techniques/database#testing
+   - 代码:
+      ```ts
+      import { Test, TestingModule } from '@nestjs/testing';
+      import { getRepositoryToken } from '@nestjs/typeorm';
+      import { User } from './entities/user.entity';
+      import { UserService } from './user.service';
 
-  describe('UserService', () => {
-    let service: UserService;
+      describe('UserService', () => {
+        let service: UserService;
 
-    beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [
-          UserService,
-          {
-            provide: getRepositoryToken(User),
-            useValue: {},
-          },
-        ],
-      }).compile();
+        beforeEach(async () => {
+          const module: TestingModule = await Test.createTestingModule({
+            providers: [
+              UserService,
+              {
+                provide: getRepositoryToken(User),
+                useValue: {},
+              },
+            ],
+          }).compile();
 
-      service = module.get<UserService>(UserService);
-    });
+          service = module.get<UserService>(UserService);
+        });
 
-    it('should be defined', () => {
-      expect(service).toBeDefined();
-    });
-  });
-  ```
+        it('should be defined', () => {
+          expect(service).toBeDefined();
+        });
+      });
+      ```
 
 3. 2023年1月5日13:53:29 LoginController中使用UserService的问题
    - 问题: `Nest can't resolve dependencies of the LoginController (?). Please make sure that the argument UserService at index [0] is available in the RootTestModule context.`
@@ -140,4 +140,8 @@ Nest is [MIT licensed](LICENSE).
       export class LoginModule {}
       ```
 
-
+4. 2023年1月5日22:18:33 multipart/form-data
+   - 问题: 如何将传参方式改为multipart/form-data, 并在swagger中显示
+   - 解决: 在controller上加上`@ApiConsumes('multipart/form-data')`, `@UseInterceptors(AnyFilesInterceptor())`
+   - 需要安装的依赖:`@types/multer`
+   - 代码参考: `./src/user/user.controller.ts`

@@ -1,7 +1,9 @@
 import {
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiParam,
+  ApiProduces,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
@@ -14,6 +16,8 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  Logger,
 } from '@nestjs/common';
 import {
   Response,
@@ -23,6 +27,7 @@ import {
 import { NoticeService } from './notice.service';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('notice')
 @Controller('notice')
@@ -32,8 +37,9 @@ export class NoticeController {
   @Post()
   @ApiBody({ type: CreateNoticeDto })
   @ApiOperation({ summary: '创建公告' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
   async create(@Body() createNoticeDto: CreateNoticeDto): Promise<Response> {
-    const res = await this.noticeService.create(createNoticeDto);
     const result: Response = {
       success: true,
       data: {},
@@ -43,7 +49,14 @@ export class NoticeController {
       traceId: '',
       host: '',
     };
-    result.data = res;
+    try {
+      const res = await this.noticeService.create(createNoticeDto);
+      result.data = res;
+    } catch (e) {
+      Logger.error(e);
+      result.success = false;
+      result.errorMessage = e.message;
+    }
     return result;
   }
 
@@ -68,29 +81,6 @@ export class NoticeController {
     return result;
   }
 
-  /**
-   * 
-  @Patch(':id')
-  @ApiOperation({ summary: '根据id更新用户' })
-  @ApiParam({ name: 'id', description: '用户id' })
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const result: UpdateResponse = {
-      success: true,
-      data: {
-        raw: {},
-        affected: 0,
-        generatedMaps: [],
-      },
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
-    };
-    result.data = await this.userService.update(+id, updateUserDto);
-    return result;
-  }
-   */
   @Patch(':id')
   @ApiOperation({ summary: '根据id更新公告' })
   @ApiParam({ name: 'id', description: '公告id' })
