@@ -16,6 +16,8 @@ import { ExaminationStudentListModule } from './examination_student_list/examina
 import { TotalScoreModule } from './total_score/total_score.module';
 import { TotalWeightModule } from './total_weight/total_weight.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoginController } from './login/login.controller';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],
