@@ -9,6 +9,8 @@ async function bootstrap() {
   });
   // 开启跨域
   app.enableCors();
+  // 设置全局前缀
+  app.setGlobalPrefix('api');
   // 添加swagger
   const options = new DocumentBuilder()
     .setTitle('Nestjs API')
@@ -17,7 +19,7 @@ async function bootstrap() {
     .addTag('Nestjs API')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
   // 启动服务
   await app.listen(3000);
 }
