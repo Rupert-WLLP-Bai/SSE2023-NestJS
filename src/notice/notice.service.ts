@@ -1,26 +1,50 @@
+import { Notice } from './entities/notice.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class NoticeService {
+  constructor(
+    @InjectRepository(Notice)
+    private readonly noticeRepository: Repository<Notice>,
+  ) {}
+
   create(createNoticeDto: CreateNoticeDto) {
-    return 'This action adds a new notice';
+    return this.noticeRepository.save(createNoticeDto);
   }
 
   findAll() {
-    return `This action returns all notice`;
+    return this.noticeRepository.find();
+  }
+
+  findAllAndCount() {
+    return this.noticeRepository.findAndCount();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} notice`;
+    return this.noticeRepository.findOneBy({ id: id });
   }
 
   update(id: number, updateNoticeDto: UpdateNoticeDto) {
-    return `This action updates a #${id} notice`;
+    return this.noticeRepository.update(id, updateNoticeDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} notice`;
+    return this.noticeRepository.delete(id);
+  }
+
+  async findPage(page: number, pageSize: number): Promise<[Notice[], number]> {
+    const take = pageSize;
+    const skip = (page - 1) * pageSize;
+    const res = await this.noticeRepository.findAndCount({
+      take: take,
+      skip: skip,
+    });
+    const data = res[0];
+    const total = data.length;
+    return [data, total];
   }
 }
