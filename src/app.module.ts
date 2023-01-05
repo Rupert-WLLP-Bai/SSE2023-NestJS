@@ -37,7 +37,7 @@ import { LoginModule } from './login/login.module';
     TotalWeightModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: '119.3.154.46',
       port: 5432,
       username: 'postgres',
       password: '1230',
