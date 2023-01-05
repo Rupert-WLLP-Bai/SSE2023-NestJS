@@ -16,17 +16,20 @@ import {
   Delete,
   Logger,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('user')
 @Controller('user')
@@ -35,6 +38,8 @@ export class UserController {
 
   @Post()
   @ApiBody({ type: CreateUserDto })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
   @ApiOperation({ summary: '创建用户' })
   async create(@Body() createUserDto: CreateUserDto): Promise<Response> {
     const res = await this.userService.create(createUserDto);
