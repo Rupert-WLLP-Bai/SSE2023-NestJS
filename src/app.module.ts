@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -18,6 +23,8 @@ import { TotalWeightModule } from './total_weight/total_weight.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginController } from './login/login.controller';
 import { LoginModule } from './login/login.module';
+import { LoggerMiddleware } from './logger/logger.middleware';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -47,8 +54,18 @@ import { LoginModule } from './login/login.module';
       autoLoadEntities: true,
     }),
     LoginModule,
+    MulterModule.register({
+      dest: '/tmp/uploads',
+    }),
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

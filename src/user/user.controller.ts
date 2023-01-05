@@ -35,13 +35,14 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  private readonly logger = new Logger(UserController.name);
   @Post()
   @ApiBody({ type: CreateUserDto })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
   @ApiOperation({ summary: '创建用户' })
   async create(@Body() createUserDto: CreateUserDto): Promise<Response> {
+    this.logger.log(JSON.stringify(createUserDto));
     const res = await this.userService.create(createUserDto);
     const result: Response = {
       success: true,
@@ -61,7 +62,7 @@ export class UserController {
   @ApiParam({ name: 'id', description: '用户id' })
   async findOne(@Param('id') id: string): Promise<QueryResponse> {
     // 日志输出参数
-    Logger.log('[GET] /user/:id', id);
+    this.logger.log(id);
     const result: QueryResponse = {
       success: true,
       data: {},
@@ -84,6 +85,8 @@ export class UserController {
   @ApiParam({ name: 'id', description: '用户id' })
   @ApiBody({ type: UpdateUserDto })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    this.logger.log(id);
+    this.logger.log(JSON.stringify(updateUserDto));
     const result: UpdateResponse = {
       success: true,
       data: {
@@ -105,6 +108,7 @@ export class UserController {
   @ApiOperation({ summary: '根据id删除用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   async remove(@Param('id') id: string) {
+    this.logger.log(id);
     const result: DeleteResponse = {
       success: true,
       data: {
@@ -143,6 +147,8 @@ export class UserController {
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
   ) {
+    this.logger.log(page);
+    this.logger.log(pageSize);
     const result: QueryResponse = {
       success: true,
       data: {},

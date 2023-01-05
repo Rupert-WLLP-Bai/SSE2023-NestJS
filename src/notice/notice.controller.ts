@@ -27,19 +27,20 @@ import {
 import { NoticeService } from './notice.service';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('notice')
 @Controller('notice')
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
-
+  private readonly logger = new Logger(NoticeController.name);
   @Post()
   @ApiBody({ type: CreateNoticeDto })
   @ApiOperation({ summary: '创建公告' })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
+  @UseInterceptors(AnyFilesInterceptor())
   async create(@Body() createNoticeDto: CreateNoticeDto): Promise<Response> {
+    this.logger.log(JSON.stringify(createNoticeDto));
     const result: Response = {
       success: true,
       data: {},
@@ -53,7 +54,7 @@ export class NoticeController {
       const res = await this.noticeService.create(createNoticeDto);
       result.data = res;
     } catch (e) {
-      Logger.error(e);
+      this.logger.warn(e);
       result.success = false;
       result.errorMessage = e.message;
     }
@@ -64,6 +65,7 @@ export class NoticeController {
   @ApiParam({ name: 'id', description: '公告id' })
   @ApiOperation({ summary: '根据id查询公告' })
   async findOne(@Param('id') id: string): Promise<QueryResponse> {
+    this.logger.log(id);
     const result: QueryResponse = {
       success: true,
       data: {},
@@ -89,6 +91,8 @@ export class NoticeController {
     @Param('id') id: string,
     @Body() updateNoticeDto: UpdateNoticeDto,
   ) {
+    this.logger.log(id);
+    this.logger.log(JSON.stringify(updateNoticeDto));
     const result: Response = {
       success: true,
       data: {},
@@ -106,6 +110,7 @@ export class NoticeController {
   @ApiOperation({ summary: '根据id删除公告' })
   @ApiParam({ name: 'id', description: '公告id' })
   async remove(@Param('id') id: string) {
+    this.logger.log(id);
     const result: DeleteResponse = {
       success: true,
       data: {
@@ -139,6 +144,8 @@ export class NoticeController {
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
   ) {
+    this.logger.log(page);
+    this.logger.log(pageSize);
     const result: QueryResponse = {
       success: true,
       data: {},
