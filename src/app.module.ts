@@ -21,7 +21,6 @@ import { ExaminationStudentListModule } from './examination_student_list/examina
 import { TotalScoreModule } from './total_score/total_score.module';
 import { TotalWeightModule } from './total_weight/total_weight.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoginController } from './login/login.controller';
 import { LoginModule } from './login/login.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MulterModule } from '@nestjs/platform-express';

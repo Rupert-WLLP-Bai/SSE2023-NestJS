@@ -1,12 +1,15 @@
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Headers, Logger, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from './common/response/response.interface';
 
 @Controller()
+@ApiTags('通用')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Hello World' })
   getHello(): string {
     return this.appService.getHello();
   }
@@ -16,6 +19,7 @@ export class AppController {
   // TODO 目前使用id作为token
   // 返回data类型: Promise<User>
   @Get('currentUser')
+  @ApiOperation({ summary: '获取当前用户信息' })
   async getCurrentUser(@Req() req): Promise<Response> {
     const token = req.headers.authorization;
     Logger.debug('token: ' + token);
