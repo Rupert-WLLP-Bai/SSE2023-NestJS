@@ -13,10 +13,10 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   // 添加swagger
   const options = new DocumentBuilder()
-    .setTitle('Nestjs API')
-    .setDescription('Nestjs API')
-    .setVersion('1.0')
-    .addTag('Nestjs API')
+    .setTitle('SSE2023 API')
+    .setDescription('软件工程课程设计 高程教学管理系统')
+    .setVersion('0.0.1')
+    // .addTag('SSE2023')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('swagger', app, document);
