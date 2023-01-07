@@ -1,3 +1,4 @@
+import { QueryUserDto } from './dto/query-user.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,6 +12,7 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
+  private readonly logger = new Logger(UserService.name);
   create(createUserDto: CreateUserDto) {
     return this.userRepository.save(createUserDto);
   }
@@ -45,6 +47,29 @@ export class UserService {
     const res = await this.userRepository.findAndCount({
       take: take,
       skip: skip,
+    });
+    // 需要的得到的是当前页有多少条数据
+    const data = res[0];
+    // 总条数
+    const total = data.length;
+    return [data, total];
+  }
+
+  // 通用查询
+  async findCommon(queryUserDto: QueryUserDto): Promise<[User[], number]> {
+    const { page, limit, sort, order, filter } = queryUserDto;
+    this.logger.log(JSON.stringify(queryUserDto));
+    const take = limit;
+    // 跳过的条数
+    const skip = (page - 1) * limit;
+    // 查询数据
+    const res = await this.userRepository.findAndCount({
+      take: take,
+      skip: skip,
+      order: {
+        [sort]: order,
+      },
+      where: filter,
     });
     // 需要的得到的是当前页有多少条数据
     const data = res[0];
