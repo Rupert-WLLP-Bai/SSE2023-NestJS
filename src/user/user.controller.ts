@@ -194,11 +194,17 @@ export class UserController {
       traceId: '',
       host: '',
     };
-    const data = await this.userService.findCommon(queryUserDto);
-    result.data.list = data[0];
-    result.data.total = data[1];
-    result.data.current = Number(queryUserDto.page);
-    result.data.pageSize = Number(queryUserDto.limit);
-    return result;
+    try {
+      const data = await this.userService.findCommon(queryUserDto);
+      result.data.list = data[0];
+      result.data.total = data[1];
+      result.data.current = Number(queryUserDto.page);
+      result.data.pageSize = Number(queryUserDto.limit);
+    } catch (e) {
+      result.success = false;
+      result.errorMessage = e.message;
+    } finally {
+      return result;
+    }
   }
 }
