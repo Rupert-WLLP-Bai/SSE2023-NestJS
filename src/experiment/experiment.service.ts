@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
+import { Experiment } from './entities/experiment.entity';
 
 @Injectable()
 export class ExperimentService {
+  constructor(
+    @InjectRepository(Experiment)
+    private readonly experimentRepository: Repository<Experiment>,
+  ) {}
   create(createExperimentDto: CreateExperimentDto) {
-    return 'This action adds a new experiment';
+    return this.experimentRepository.save(createExperimentDto);
   }
 
   findAll() {
-    return `This action returns all experiment`;
+    return this.experimentRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} experiment`;
+    return this.experimentRepository.findOneBy({ id: id });
   }
 
   update(id: number, updateExperimentDto: UpdateExperimentDto) {
-    return `This action updates a #${id} experiment`;
+    return this.experimentRepository.update(id, updateExperimentDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} experiment`;
+    return this.experimentRepository.delete(id);
   }
 }
