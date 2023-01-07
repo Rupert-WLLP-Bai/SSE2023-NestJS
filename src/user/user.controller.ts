@@ -1,3 +1,4 @@
+import { QueryUserDto } from './dto/query-user.dto';
 import {
   QueryResponse,
   UpdateResponse,
@@ -169,6 +170,35 @@ export class UserController {
       result.data.list = data[0];
       result.data.total = data[1];
     }
+    return result;
+  }
+
+  // 通用查询
+  // TODO 测试完成后将之前的分页查询删除
+  // POST /user/query
+  @Post('query')
+  @ApiOperation({ summary: '通用查询用户' })
+  @ApiBody({
+    type: QueryUserDto,
+    description: '查询条件',
+    required: false,
+  })
+  async findCommon(@Body() queryUserDto: QueryUserDto) {
+    this.logger.log(JSON.stringify(queryUserDto));
+    const result: QueryResponse = {
+      success: true,
+      data: {},
+      errorCode: '',
+      errorMessage: '',
+      showType: 0,
+      traceId: '',
+      host: '',
+    };
+    const data = await this.userService.findCommon(queryUserDto);
+    result.data.list = data[0];
+    result.data.total = data[1];
+    result.data.current = Number(queryUserDto.page);
+    result.data.pageSize = Number(queryUserDto.limit);
     return result;
   }
 }
