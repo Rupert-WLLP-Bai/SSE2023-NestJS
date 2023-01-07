@@ -1,4 +1,4 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -18,10 +18,13 @@ export class ExperimentController {
   constructor(private readonly experimentService: ExperimentService) {}
 
   @Post()
+  @ApiOperation({ summary: '创建实验' })
+  @ApiBody({ type: CreateExperimentDto })
   create(@Body() createExperimentDto: CreateExperimentDto) {
     return this.experimentService.create(createExperimentDto);
   }
 
+  // TODO 实现分页查询和条件查询排序
   @Get()
   findAll() {
     return this.experimentService.findAll();
