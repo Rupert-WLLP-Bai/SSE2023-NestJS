@@ -47,4 +47,8 @@ export class NoticeService {
     const total = data.length;
     return [data, total];
   }
+  // 通用查询
+  // 1. 分页
+  // 2. 条件查询
+  // 3. 排序
 }

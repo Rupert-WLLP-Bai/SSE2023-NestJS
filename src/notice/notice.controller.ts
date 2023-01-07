@@ -3,7 +3,6 @@ import {
   ApiConsumes,
   ApiOperation,
   ApiParam,
-  ApiProduces,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
@@ -27,7 +26,7 @@ import {
 import { NoticeService } from './notice.service';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('notice')
 @Controller('notice')
@@ -168,4 +167,6 @@ export class NoticeController {
     }
     return result;
   }
+
+  // 根据whereCondition查询
 }
