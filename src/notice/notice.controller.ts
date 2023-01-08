@@ -36,8 +36,8 @@ export class NoticeController {
   @Post()
   @ApiBody({ type: CreateNoticeDto })
   @ApiOperation({ summary: '创建公告' })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(AnyFilesInterceptor())
+  // @ApiConsumes('multipart/form-data')
+  // @UseInterceptors(AnyFilesInterceptor())
   async create(@Body() createNoticeDto: CreateNoticeDto): Promise<Response> {
     this.logger.log(JSON.stringify(createNoticeDto));
     const result: Response = {
