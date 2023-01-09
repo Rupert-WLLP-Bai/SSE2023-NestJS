@@ -1,3 +1,4 @@
+import { QueryNoticeDto } from './dto/query-notice.dto';
 import {
   ApiBody,
   ApiConsumes,
@@ -168,5 +169,30 @@ export class NoticeController {
     return result;
   }
 
-  // 根据whereCondition查询
+  // 通用查询
+  @Post('query')
+  @ApiOperation({ summary: '通用查询公告' })
+  @ApiBody({ type: QueryNoticeDto })
+  async findCommon(@Body() queryNoticeDto: QueryNoticeDto) {
+    this.logger.log(JSON.stringify(queryNoticeDto));
+    const result: QueryResponse = {
+      success: true,
+      data: {},
+      errorCode: '',
+      errorMessage: '',
+      showType: 0,
+      traceId: '',
+      host: '',
+    };
+    try {
+      const data = await this.noticeService.findCommon(queryNoticeDto);
+      result.data.list = data[0];
+      result.data.total = data[1];
+    } catch (e) {
+      this.logger.warn(e);
+      result.success = false;
+      result.errorMessage = e.message;
+    }
+    return result;
+  }
 }
