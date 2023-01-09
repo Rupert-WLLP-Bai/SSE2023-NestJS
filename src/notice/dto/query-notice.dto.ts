@@ -1,5 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Notice } from '../entities/notice.entity';
+
+export class NoticeFilter {
+  @ApiProperty({ description: '公告id', example: 2052526, nullable: true })
+  id?: number;
+  @ApiProperty({ description: '公告标题', example: '公告标题', nullable: true })
+  title?: string;
+  @ApiProperty({ description: '公告内容', example: '公告内容', nullable: true })
+  content?: string;
+  @ApiProperty({
+    description: '发布日期',
+    example: '2020-01-01 00:00:00',
+    nullable: true,
+  })
+  publishDate?: Date;
+  @ApiProperty({ description: '发布人id', example: 2052526, nullable: true })
+  publisherId?: number;
+  @ApiProperty({ description: '发布人', example: '发布人', nullable: true })
+  publisher?: string;
+}
+
 export class QueryNoticeDto {
   // 1. 分页
   @ApiProperty({ description: '页码', example: 1, nullable: true })
@@ -29,23 +49,4 @@ export class QueryNoticeDto {
     nullable: true,
   })
   filter?: NoticeFilter;
-}
-
-export class NoticeFilter {
-  @ApiProperty({ description: '公告id', example: 2052526, nullable: true })
-  id?: number;
-  @ApiProperty({ description: '公告标题', example: '公告标题', nullable: true })
-  title?: string;
-  @ApiProperty({ description: '公告内容', example: '公告内容', nullable: true })
-  content?: string;
-  @ApiProperty({
-    description: '发布日期',
-    example: '2020-01-01 00:00:00',
-    nullable: true,
-  })
-  publishDate?: Date;
-  @ApiProperty({ description: '发布人id', example: 2052526, nullable: true })
-  publisherId?: number;
-  @ApiProperty({ description: '发布人', example: '发布人', nullable: true })
-  publisher?: string;
 }
