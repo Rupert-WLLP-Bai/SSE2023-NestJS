@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
 import { Repository } from 'typeorm';
+import { QueryNoticeDto } from './dto/query-notice.dto';
 
 @Injectable()
 export class NoticeService {
@@ -51,4 +52,24 @@ export class NoticeService {
   // 1. 分页
   // 2. 条件查询
   // 3. 排序
+  async findCommon(
+    queryNoticeDto: QueryNoticeDto,
+  ): Promise<[Notice[], number]> {
+    const { page, limit, sort, order, filter } = queryNoticeDto;
+    const take = limit;
+    const skip = (page - 1) * limit;
+    const res = await this.noticeRepository.findAndCount({
+      take: take,
+      skip: skip,
+      order: {
+        [sort]: order,
+      },
+      where: {
+        ...filter,
+      },
+    });
+    const data = res[0];
+    const total = data.length;
+    return [data, total];
+  }
 }
