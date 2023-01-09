@@ -39,12 +39,11 @@ export class UserController {
   private readonly logger = new Logger(UserController.name);
   @Post()
   @ApiBody({ type: CreateUserDto })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
+  // @ApiConsumes('multipart/form-data')
+  // @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
   @ApiOperation({ summary: '创建用户' })
   async create(@Body() createUserDto: CreateUserDto): Promise<Response> {
     this.logger.log(JSON.stringify(createUserDto));
-    const res = await this.userService.create(createUserDto);
     const result: Response = {
       success: true,
       data: {},
@@ -54,7 +53,13 @@ export class UserController {
       traceId: '',
       host: '',
     };
-    result.data = res;
+    try {
+      const res = await this.userService.create(createUserDto);
+      result.data = res;
+    } catch (error) {
+      result.success = false;
+      result.errorMessage = error.message;
+    }
     return result;
   }
 
