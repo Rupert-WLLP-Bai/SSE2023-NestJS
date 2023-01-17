@@ -1,8 +1,10 @@
+import { ExperimentSubmitService } from './../experiment_submit/experiment_submit.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Experiment } from './entities/experiment.entity';
 import { ExperimentController } from './experiment.controller';
 import { ExperimentService } from './experiment.service';
+import { ExperimentSubmit } from '../experiment_submit/entities/experiment_submit.entity';
 
 describe('ExperimentController', () => {
   let controller: ExperimentController;
@@ -14,6 +16,11 @@ describe('ExperimentController', () => {
         ExperimentService,
         {
           provide: getRepositoryToken(Experiment),
+          useValue: {},
+        },
+        ExperimentSubmitService,
+        {
+          provide: getRepositoryToken(ExperimentSubmit),
           useValue: {},
         },
       ],

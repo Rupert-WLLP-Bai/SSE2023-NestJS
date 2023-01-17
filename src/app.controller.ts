@@ -1,7 +1,7 @@
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Headers, Logger, Req } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Response } from './common/response/response.interface';
+import { NormalResponse } from './common/response/response.interface';
 
 @Controller()
 @ApiTags('通用')
@@ -20,11 +20,11 @@ export class AppController {
   // 返回data类型: Promise<User>
   @Get('currentUser')
   @ApiOperation({ summary: '获取当前用户信息' })
-  async getCurrentUser(@Req() req): Promise<Response> {
+  async getCurrentUser(@Req() req): Promise<NormalResponse> {
     const token = req.headers.authorization;
     Logger.debug('token: ' + token);
     const res = await this.appService.getCurrentUser(token);
-    const response: Response = {
+    const response: NormalResponse = {
       success: true,
       data: {},
       errorCode: '',

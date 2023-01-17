@@ -4,7 +4,7 @@ import {
   UpdateResponse,
 } from 'src/common/response/response.interface';
 import {
-  Response,
+  NormalResponse,
   DeleteResponse,
 } from './../common/response/response.interface';
 import {
@@ -42,9 +42,9 @@ export class UserController {
   // @ApiConsumes('multipart/form-data')
   // @UseInterceptors(AnyFilesInterceptor()) // 使用form-data格式上传
   @ApiOperation({ summary: '创建用户' })
-  async create(@Body() createUserDto: CreateUserDto): Promise<Response> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<NormalResponse> {
     this.logger.log(JSON.stringify(createUserDto));
-    const result: Response = {
+    const result: NormalResponse = {
       success: true,
       data: {},
       errorCode: '',

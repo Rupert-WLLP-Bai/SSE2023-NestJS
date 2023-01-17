@@ -20,7 +20,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import {
-  Response,
+  NormalResponse,
   QueryResponse,
   DeleteResponse,
 } from './../common/response/response.interface';
@@ -39,9 +39,9 @@ export class NoticeController {
   @ApiOperation({ summary: '创建公告' })
   // @ApiConsumes('multipart/form-data')
   // @UseInterceptors(AnyFilesInterceptor())
-  async create(@Body() createNoticeDto: CreateNoticeDto): Promise<Response> {
+  async create(@Body() createNoticeDto: CreateNoticeDto): Promise<NormalResponse> {
     this.logger.log(JSON.stringify(createNoticeDto));
-    const result: Response = {
+    const result: NormalResponse = {
       success: true,
       data: {},
       errorCode: '',
@@ -93,7 +93,7 @@ export class NoticeController {
   ) {
     this.logger.log(id);
     this.logger.log(JSON.stringify(updateNoticeDto));
-    const result: Response = {
+    const result: NormalResponse = {
       success: true,
       data: {},
       errorCode: '',

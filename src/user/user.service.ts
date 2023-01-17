@@ -74,7 +74,7 @@ export class UserService {
     // 需要的得到的是当前页有多少条数据
     const data = res[0];
     // 总条数
-    const total = data.length;
+    const total = res[1];
     return [data, total];
   }
 }

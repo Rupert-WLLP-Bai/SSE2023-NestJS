@@ -37,6 +37,7 @@
     "qiniu-js": "^3.4.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "sqlite3": "^5.1.4",
     "typeorm": "^0.3.11",
     "webpack": "^5.75.0"
   },
