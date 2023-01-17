@@ -1,5 +1,5 @@
 import { UpdateUserDto } from './../user/dto/update-user.dto';
-import { Response } from './../common/response/response.interface';
+import { NormalResponse } from './../common/response/response.interface';
 import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
 import { LoginParams } from './dto/login';
@@ -55,9 +55,9 @@ export class LoginService {
   }
 
   // 登出
-  async outlogin(): Promise<Response> {
+  async outlogin(): Promise<NormalResponse> {
     // 定义返回值
-    const res: Response = {
+    const res: NormalResponse = {
       success: false,
       data: {},
       errorCode: '',

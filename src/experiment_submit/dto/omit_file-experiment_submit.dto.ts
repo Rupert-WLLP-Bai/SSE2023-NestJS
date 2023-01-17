@@ -1,28 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateExperimentSubmitDto {
+export class OmitFileExperimentSubmitDto {
+  @ApiProperty({ description: '实验提交ID', example: 1, required: true })
+  id: number;
   @ApiProperty({ description: '实验ID', example: 1, required: true })
   experimentId: number;
   @ApiProperty({ description: '学生ID', example: 2052526, required: true })
   studentId: number;
   @ApiProperty({
     description: '时间戳',
-    example: Date.now(),
+    example: new Date(),
     required: true,
   })
   timeStamp: bigint;
   @ApiProperty({
-    description: '文件',
-    example: 'file',
-    required: false,
-    format: 'binary',
-    type: 'string',
-  })
-  file: Express.Multer.File;
-  @ApiProperty({
     description: '文件URL',
     example: 'http://xxx',
-    required: false,
+    required: true,
   })
   fileUrl: string;
   @ApiProperty({ description: '文件名', required: false, readOnly: true })
