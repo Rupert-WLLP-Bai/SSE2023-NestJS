@@ -21,12 +21,12 @@ export class LoggerMiddleware implements NestMiddleware {
     // output the response log
     // getResponseLog(res);
     // output example: {METHOD} {URL} {STATUS}
-    logger.log(`${req.method} ${req.originalUrl} ${res.statusCode}`);
+    logger.debug(`${req.method} ${req.originalUrl} ${res.statusCode}`);
     // output the payload
     // if the content-type is application/json, the payload will be in req.body
-    logger.log(JSON.stringify(req.body));
+    logger.debug(JSON.stringify(req.body));
     // output the files
-    logger.log(JSON.stringify(req.files));
+    logger.debug(JSON.stringify(req.files));
     if (next) {
       next();
     }
