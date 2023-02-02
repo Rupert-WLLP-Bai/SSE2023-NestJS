@@ -24,6 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginModule } from './login/login.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MulterModule } from '@nestjs/platform-express';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: '/tmp/uploads',
     }),
+    FileModule,
   ],
 
   controllers: [AppController],
