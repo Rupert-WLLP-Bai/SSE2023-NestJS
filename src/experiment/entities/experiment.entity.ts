@@ -24,6 +24,9 @@ export class Experiment extends BaseEntity {
   // 实验描述
   @Column({ nullable: true })
   description: string;
+  // 课程ID
+  @Column({ nullable: true })
+  courseId: number;
   // 实验状态
   @Column({ nullable: true })
   status: number;

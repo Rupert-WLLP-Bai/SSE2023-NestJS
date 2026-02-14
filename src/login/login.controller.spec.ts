@@ -1,5 +1,6 @@
 import { UserService } from './../user/user.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { JwtService } from '@nestjs/jwt';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { LoginController } from './login.controller';
@@ -17,6 +18,12 @@ describe('LoginController', () => {
         {
           provide: getRepositoryToken(User),
           useValue: {},
+        },
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn().mockReturnValue('mock-jwt-token'),
+          },
         },
       ],
     }).compile();

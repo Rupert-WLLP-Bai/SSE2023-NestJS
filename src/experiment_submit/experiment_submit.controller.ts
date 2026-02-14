@@ -16,6 +16,7 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { ExperimentSubmitService } from './experiment_submit.service';
 import { CreateExperimentSubmitDto } from './dto/create-experiment_submit.dto';
@@ -28,10 +29,11 @@ import {
 } from '../common/response/response.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { OmitFileExperimentSubmitDto } from './dto/omit_file-experiment_submit.dto';
-import multer from 'multer';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('experiment-submit')
 @ApiTags('experiment-submit')
+@UseGuards(JwtAuthGuard)
 export class ExperimentSubmitController {
   constructor(
     private readonly experimentSubmitService: ExperimentSubmitService,

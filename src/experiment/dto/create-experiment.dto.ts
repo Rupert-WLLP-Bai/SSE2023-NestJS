@@ -9,6 +9,8 @@ export class CreateExperimentDto {
   publisherName: string;
   @ApiProperty({ description: '实验描述', example: '这是一个实验' })
   description: string;
+  @ApiProperty({ description: '课程ID', example: 1, nullable: true })
+  courseId?: number;
   @ApiProperty({ description: '实验状态', example: 1 })
   status: number;
   @ApiProperty({ description: '实验开始时间', example: '2021-01-01 00:00:00' })

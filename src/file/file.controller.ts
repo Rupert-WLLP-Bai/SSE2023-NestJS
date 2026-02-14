@@ -6,17 +6,20 @@ import {
   Res,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import { ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AccessKey, SecretKey } from '../common/key';
+import { getAccessKey, getSecretKey, getQiniuBucket, getQiniuDomain } from '../common/key';
 import * as qiniu from 'qiniu';
 import axios from 'axios';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('file')
 @ApiTags('file')
+@UseGuards(JwtAuthGuard)
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
@@ -44,10 +47,10 @@ export class FileController {
   })
   async uploadFileToQiniu(@UploadedFile() file) {
     // 定义鉴权对象
-    const mac = new qiniu.auth.digest.Mac(AccessKey, SecretKey);
+    const mac = new qiniu.auth.digest.Mac(getAccessKey(), getSecretKey());
     // 定义配置对象
     const options = {
-      scope: 'tongue-sse2023',
+      scope: getQiniuBucket(),
     };
     // 生成上传凭证
     const putPolicy = new qiniu.rs.PutPolicy(options);
@@ -90,10 +93,10 @@ export class FileController {
     example: 'test_file.txt',
   })
   async downloadFileFromQiniu(@Param('filepath') filepath: string, @Res() res) {
-    const mac = new qiniu.auth.digest.Mac(AccessKey, SecretKey);
+    const mac = new qiniu.auth.digest.Mac(getAccessKey(), getSecretKey());
     const config = new qiniu.conf.Config();
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
-    const publicBucketDomain = 'roiadjo8z.hn-bkt.clouddn.com';
+    const publicBucketDomain = getQiniuDomain();
     const publicDownloadUrl = bucketManager.publicDownloadUrl(
       publicBucketDomain,
       filepath,
@@ -116,7 +119,7 @@ export class FileController {
   @Get('qiniu')
   async listFileFromQiniu() {
     // 定义鉴权对象
-    const mac = new qiniu.auth.digest.Mac(AccessKey, SecretKey);
+    const mac = new qiniu.auth.digest.Mac(getAccessKey(), getSecretKey());
     // 定义配置对象
     const config = new qiniu.conf.Config({
       zone: qiniu.zone.Zone_z2,
@@ -124,7 +127,7 @@ export class FileController {
     // 定义空间管理对象
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
     // 定义空间名
-    const bucket = 'tongue-sse2023';
+    const bucket = getQiniuBucket();
     // 定义前缀
     const prefix = '';
     // 定义分隔符

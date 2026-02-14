@@ -20,6 +20,8 @@ export class ExperimentFilter {
   publisherName?: string;
   @ApiProperty({ description: '实验描述', example: '实验描述', nullable: true })
   description?: string;
+  @ApiProperty({ description: '课程ID', example: 1, nullable: true })
+  courseId?: number;
   @ApiProperty({ description: '实验状态', example: 1, nullable: true })
   status?: number;
   @ApiProperty({

@@ -2,14 +2,19 @@ import { UpdateUserDto } from './../user/dto/update-user.dto';
 import { NormalResponse } from './../common/response/response.interface';
 import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { LoginParams } from './dto/login';
 import { LoginResponse } from './login.response';
 import { loginErrorCodes } from './login.error';
 import { getUserRoleName } from '../user/entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LoginService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
   // 登录
   async login(loginParams: LoginParams): Promise<LoginResponse> {
     // 定义返回值
@@ -37,7 +42,8 @@ export class LoginService {
       return res;
     }
     // 密码错误
-    if (user.password !== password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       res.errorCode = loginErrorCodes.PASSWORD_ERROR;
       res.errorMessage = '密码错误';
       return res;
@@ -45,7 +51,9 @@ export class LoginService {
     // 登录成功
     res.success = true;
     res.data.currentAuthority = getUserRoleName(user.role);
-    res.data.token = user.id.toString();
+    // Generate JWT token
+    const payload = { sub: user.id, id: user.id, role: user.role };
+    res.data.token = this.jwtService.sign(payload);
     // 修改用户登录时间
     const updateUserDto: UpdateUserDto = {
       last_login_time: new Date(),

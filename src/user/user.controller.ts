@@ -17,20 +17,19 @@ import {
   Delete,
   Logger,
   Query,
-  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiBody,
-  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('user')
 @Controller('user')
@@ -64,6 +63,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '根据id查询用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   async findOne(@Param('id') id: string): Promise<QueryResponse> {
@@ -87,6 +87,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '根据id更新用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   @ApiBody({ type: UpdateUserDto })
@@ -111,6 +112,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '根据id删除用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   async remove(@Param('id') id: string) {
@@ -136,6 +138,7 @@ export class UserController {
   // 如果不传page和pageSize, 则返回所有数据
   // page设置为required: false, pageSize设置为required: false
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '分页查询用户' })
   @ApiQuery({
     name: 'page',
@@ -182,6 +185,7 @@ export class UserController {
   // TODO 测试完成后将之前的分页查询删除
   // POST /user/query
   @Post('query')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '通用查询用户' })
   @ApiBody({
     type: QueryUserDto,

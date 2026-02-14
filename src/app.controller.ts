@@ -14,6 +14,12 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('health')
+  @ApiOperation({ summary: 'Health Check' })
+  getHealth(): { status: string; timestamp: string } {
+    return this.appService.getHealth();
+  }
+
   // 从header中的Authorization中获取token
   // 使用token获取用户信息
   // TODO 目前使用id作为token

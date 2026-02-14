@@ -1,0 +1,38 @@
+import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty } from '@nestjs/swagger';
+import { CreateClassDto } from './create-class.dto';
+
+export class UpdateClassDto extends PartialType(CreateClassDto) {
+  @ApiProperty({ description: '班级名称', example: '计算机21级1班' })
+  name?: string;
+
+  @ApiProperty({ description: '班级代码', example: 'CS2021-1' })
+  code?: string;
+
+  @ApiProperty({ description: '课程ID', example: 1 })
+  courseId?: number;
+
+  @ApiProperty({ description: '教师ID', example: 2052526 })
+  teacherId?: number;
+
+  @ApiProperty({ description: '教师名称', example: '张三' })
+  teacherName?: string;
+
+  @ApiProperty({ description: '学期', example: '春季' })
+  semester?: string;
+
+  @ApiProperty({ description: '年份', example: 2023 })
+  year?: number;
+
+  @ApiProperty({ description: '最大学生数', example: 60 })
+  maxStudents?: number;
+
+  @ApiProperty({ description: '描述', example: '计算机科学与技术专业班级' })
+  description?: string;
+
+  @ApiProperty({ description: '创建时间', example: '2023-01-01 00:00:00' })
+  createTime?: Date;
+
+  @ApiProperty({ description: '更新时间', example: '2023-01-01 00:00:00' })
+  updateTime?: Date;
+}

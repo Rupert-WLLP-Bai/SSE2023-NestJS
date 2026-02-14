@@ -4,6 +4,9 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -25,9 +28,17 @@ import { LoginModule } from './login/login.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MulterModule } from '@nestjs/platform-express';
 import { FileModule } from './file/file.module';
+import { JwtStrategy } from './common/strategies/jwt.strategy';
+import { CourseModule } from './course/course.module';
+import { ClassModule } from './class/class.module';
+import { EnrollmentModule } from './enrollment/enrollment.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     UserModule,
     ExperimentModule,
     ExperimentSubmitModule,
@@ -42,26 +53,42 @@ import { FileModule } from './file/file.module';
     ExaminationStudentListModule,
     TotalScoreModule,
     TotalWeightModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: '119.3.154.46',
-      port: 5432,
-      username: 'postgres',
-      password: '1230',
-      database: 'postgres',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      autoLoadEntities: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+        autoLoadEntities: true,
+      }),
     }),
     LoginModule,
     MulterModule.register({
       dest: '/tmp/uploads',
     }),
     FileModule,
+    CourseModule,
+    ClassModule,
+    EnrollmentModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '7d' },
+      }),
+    }),
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -9,6 +9,13 @@ export class AppService {
     return 'Hello World!';
   }
 
+  getHealth(): { status: string; timestamp: string } {
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
   // 从header中的Authorization中获取token
   // 使用token获取用户信息
   // TODO 目前使用id作为token

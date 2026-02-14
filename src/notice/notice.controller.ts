@@ -18,6 +18,7 @@ import {
   Query,
   UseInterceptors,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import {
   NormalResponse,
@@ -28,6 +29,7 @@ import { NoticeService } from './notice.service';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('notice')
 @Controller('notice')
@@ -35,6 +37,7 @@ export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
   private readonly logger = new Logger(NoticeController.name);
   @Post()
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: CreateNoticeDto })
   @ApiOperation({ summary: '创建公告' })
   // @ApiConsumes('multipart/form-data')
@@ -84,6 +87,7 @@ export class NoticeController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '根据id更新公告' })
   @ApiParam({ name: 'id', description: '公告id' })
   @ApiBody({ type: UpdateNoticeDto })
@@ -107,6 +111,7 @@ export class NoticeController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '根据id删除公告' })
   @ApiParam({ name: 'id', description: '公告id' })
   async remove(@Param('id') id: string) {
@@ -171,6 +176,7 @@ export class NoticeController {
 
   // 通用查询
   @Post('query')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '通用查询公告' })
   @ApiBody({ type: QueryNoticeDto })
   async findCommon(@Body() queryNoticeDto: QueryNoticeDto) {

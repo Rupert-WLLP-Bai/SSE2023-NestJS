@@ -24,12 +24,16 @@ import {
   Logger,
   Res,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { ExperimentService } from './experiment.service';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+
 @Controller('experiment')
 @ApiTags('experiment')
+@UseGuards(JwtAuthGuard)
 export class ExperimentController {
   constructor(
     private readonly experimentService: ExperimentService,

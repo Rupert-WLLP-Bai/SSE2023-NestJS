@@ -10,6 +10,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+bun-debug.log*
 
 # OS
 .DS_Store
@@ -36,3 +37,10 @@ lerna-debug.log*
 
 # databases
 database.sqlite
+
+# Environment variables
+.env
+
+# PRD and tasks (not for production)
+tasks/
+prd*.json

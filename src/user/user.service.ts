@@ -5,6 +5,9 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 10;
 
 @Injectable()
 export class UserService {
@@ -13,7 +16,11 @@ export class UserService {
   ) {}
 
   private readonly logger = new Logger(UserService.name);
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    // Hash the password before saving
+    if (createUserDto.password) {
+      createUserDto.password = await bcrypt.hash(createUserDto.password, SALT_ROUNDS);
+    }
     return this.userRepository.save(createUserDto);
   }
 
