@@ -14,6 +14,8 @@ import { ClassModule } from '../src/class/class.module';
 import { EnrollmentModule } from '../src/enrollment/enrollment.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from '../src/common/strategies/jwt.strategy';
+import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
+import { TransformInterceptor } from '../src/common/interceptors/success.interceptor';
 
 const JWT_SECRET = 'test-secret-for-e2e';
 
@@ -53,6 +55,8 @@ describe('CourseController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalFilters(new AllExceptionsFilter());
+    app.useGlobalInterceptors(new TransformInterceptor());
     await app.init();
 
     courseRepository = moduleFixture.get<Repository<Course>>(getRepositoryToken(Course));

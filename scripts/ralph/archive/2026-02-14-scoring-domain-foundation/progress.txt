@@ -1,0 +1,218 @@
+# Ralph Progress Log
+Started: Sat Feb 14 09:04:42 PM CST 2026
+---
+
+## 2026-02-14 - Security Hardening (US-001 through US-011)
+
+### Summary
+Completed all security hardening tasks including fixing .env.example security issue and enhancing E2E tests.
+
+### What was implemented
+- Fixed .env.example to use placeholder values instead of real secrets (security fix)
+- Enhanced E2E tests in test/auth.e2e-spec.ts to properly test JWT authentication
+- All 50 unit tests pass
+- All 18 E2E tests pass
+- Build passes with no errors
+
+### Files changed
+- `.env.example` - Changed from real credentials to placeholders
+- `test/auth.e2e-spec.ts` - Rewrote to properly test JWT service, strategy, and guard
+- `tasks/prd.json` - Updated all user stories to passes: true
+
+### Note on implementation status
+Most security features were already implemented in the codebase:
+- Dependencies (bcrypt, JWT, passport, config) were already installed
+- Environment variables were already configured
+- ConfigModule was already set up in app.module.ts
+- bcrypt password hashing was already implemented in user.service.ts
+- JWT Strategy and Auth Guard were already created
+- Login was already returning JWT tokens
+- CORS was already configured
+- JWT Auth Guards were already applied to protected endpoints
+- Unit tests already existed and passed
+- The main issue found was that .env.example contained real secrets
+
+### Learnings for future iterations
+- The .env.example file should NEVER contain real credentials - always use placeholders
+- The project uses bun as package manager (not npm/yarn/pnpm)
+- JWT tokens expire in 7 days
+- JWT payload contains: sub (userId), id, role
+- Use @UseGuards(JwtAuthGuard) decorator to protect endpoints
+- Public endpoints: /login, /health, GET /notice, /swagger
+
+---
+
+## 2026-02-14 - US-001: 完善评分与权重实体
+
+### Summary
+完善了7个评分域实体的字段定义，包括实验成绩、考试成绩、实验权重、考试权重、总成绩、总权重、考试提交。
+
+### What was implemented
+- 完善了 `src/experiment_score/entities/experiment_score.entity.ts` - 添加了 studentId, experimentId, score, createTime, updateTime 字段
+- 完善了 `src/examination_score/entities/examination_score.entity.ts` - 添加了 studentId, examinationId, score, createTime, updateTime 字段
+- 完善了 `src/experiment_weight/entities/experiment_weight.entity.ts` - 添加了 courseId, experimentId, weight, createTime, updateTime 字段
+- 完善了 `src/examination_weight/entities/examination_weight.entity.ts` - 添加了 courseId, examinationId, weight, createTime, updateTime 字段
+- 完善了 `src/total_score/entities/total_score.entity.ts` - 添加了 studentId, courseId, totalScore, createTime, updateTime 字段
+- 完善了 `src/total_weight/entities/total_weight.entity.ts` - 添加了 courseId, totalWeight, createTime, updateTime 字段
+- 为 `src/examination_submit/entities/examination_submit.entity.ts` 添加了 fileUrl 字段
+
+### Files changed
+- `src/experiment_score/entities/experiment_score.entity.ts`
+- `src/examination_score/entities/examination_score.entity.ts`
+- `src/experiment_weight/entities/experiment_weight.entity.ts`
+- `src/examination_weight/entities/examination_weight.entity.ts`
+- `src/total_score/entities/total_score.entity.ts`
+- `src/total_weight/entities/total_weight.entity.ts`
+- `src/examination_submit/entities/examination_submit.entity.ts`
+
+### Learnings for future iterations
+- Entities follow TypeORM pattern with BaseEntity, @Entity(), @PrimaryGeneratedColumn(), @Column() decorators
+- 实体使用 camelCase 命名风格 (createTime, updateTime)
+- 分数和权重字段使用 `type: 'float'` 来存储小数
+- 该项目使用 bun 作为包管理器
+
+---
+
+## 2026-02-14 - US-002: 完善 DTO 与输入校验
+
+### Summary
+完善了7个评分模块的 DTO，添加了 class-validator 校验和 Swagger 注解，实现了全局 ValidationPipe。
+
+### What was implemented
+- 添加全局 ValidationPipe 到 main.ts，设置 whitelist: true, forbidNonWhitelisted: true, transform: true
+- 完善 Create/Update DTO for 7 scoring modules with class-validator decorators:
+  - experiment_score: studentId, experimentId, score
+  - examination_score: studentId, examinationId, score
+  - experiment_weight: courseId, experimentId, weight (0-1)
+  - examination_weight: courseId, examinationId, weight (0-1)
+  - total_score: studentId, courseId, totalScore
+  - total_weight: courseId, totalWeight (0-1)
+  - examination_submit: all fields including fileUrl, answer, status enum
+- 所有 DTO 添加 @ApiProperty 注解，带 description 和 example
+- 为 7 个模块创建 Query DTO，支持分页 (page, limit, sort, order) 和过滤 (filter)
+- 权重字段使用 @Min(0) @Max(1) 约束
+- 使用 @IsEnum 进行 SubmitStatus 枚举校验
+- 使用 @IsDateString 进行日期校验
+
+### Files changed
+- `src/main.ts` - 添加 ValidationPipe
+- `src/experiment_score/dto/create-experiment_score.dto.ts`
+- `src/experiment_score/dto/update-experiment_score.dto.ts`
+- `src/experiment_score/dto/query-experiment_score.dto.ts` (new)
+- `src/examination_score/dto/create-examination_score.dto.ts`
+- `src/examination_score/dto/update-examination_score.dto.ts`
+- `src/examination_score/dto/query-examination_score.dto.ts` (new)
+- `src/experiment_weight/dto/create-experiment_weight.dto.ts`
+- `src/experiment_weight/dto/query-experiment_weight.dto.ts` (new)
+- `src/examination_weight/dto/create-examination_weight.dto.ts`
+- `src/examination_weight/dto/query-examination_weight.dto.ts` (new)
+- `src/total_score/dto/create-total_score.dto.ts`
+- `src/total_score/dto/query-total_score.dto.ts` (new)
+- `src/total_weight/dto/create-total_weight.dto.ts`
+- `src/total_weight/dto/query-total_weight.dto.ts` (new)
+- `src/examination_submit/dto/create-examination_submit.dto.ts`
+- `src/examination_submit/dto/query-examination_submit.dto.ts` (new)
+
+### Learnings for future iterations
+- ValidationPipe 需要在 main.ts 中全局启用才能生效
+- DTO 使用 PartialType 自动继承可选字段
+- Query DTO 遵循 examination 模块的模式，包含分页、排序和过滤
+- 权重字段应使用 @Min(0) @Max(1) 约束确保 0-100%
+- 枚举类型使用 @IsEnum 进行校验
+- 文本字段使用 @IsString() 校验
+- 日期字段使用 @IsDateString() 校验
+
+---
+
+## 2026-02-14 - US-003: 完成基础 CRUD Service 与 Controller
+
+### Summary
+完成了7个评分模块的真实数据库 CRUD 实现，包括 Service 和 Controller，实现了分页查询和通用查询功能。
+
+### What was implemented
+- 更新了 7 个模块的 Module 文件，添加 TypeOrmModule.forFeature 导入实体
+- 更新了 7 个 Service 文件，使用 TypeORM Repository 实现真实数据库操作：
+  - experiment_score: create, findAll, findOne, update, remove, findPage, findCommon
+  -, findAll, examination_score: create findOne, update, remove, findPage, findCommon
+  - experiment_weight: create, findAll, findOne, update, remove, findPage, findCommon
+  - examination_weight: create, findAll, findOne, update, remove, findPage, findCommon
+  - total_score: create, findAll, findOne, update, remove, findPage, findCommon
+  - total_weight: create, findAll, findOne, update, remove, findPage, findCommon
+  - examination_submit: create, findAll, findOne, update, remove, findPage, findCommon
+- 更新了 7 个 Controller 文件：
+  - 添加了 POST /xxx/query 通用查询端点
+  - 添加了 GET / 分页查询端点 (支持 page, pageSize 参数)
+  - 所有接口返回项目定义的统一响应结构 (NormalResponse, QueryResponse, UpdateResponse, DeleteResponse)
+  - 添加了 Swagger 注解 (@ApiTags, @ApiOperation, @ApiParam, @ApiBody, @ApiQuery)
+- 修复了 14 个单元测试文件，为每个模块添加正确的 TypeORM Repository mock
+
+### Files changed
+- Module 文件 (7个):
+  - `src/experiment_score/experiment_score.module.ts`
+  - `src/examination_score/examination_score.module.ts`
+  - `src/experiment_weight/experiment_weight.module.ts`
+  - `src/examination_weight/examination_weight.module.ts`
+  - `src/total_score/total_score.module.ts`
+  - `src/total_weight/total_weight.module.ts`
+  - `src/examination_submit/examination_submit.module.ts`
+- Service 文件 (7个):
+  - `src/experiment_score/experiment_score.service.ts`
+  - `src/examination_score/examination_score.service.ts`
+  - `src/experiment_weight/experiment_weight.service.ts`
+  - `src/examination_weight/examination_weight.service.ts`
+  - `src/total_score/total_score.service.ts`
+  - `src/total_weight/total_weight.service.ts`
+  - `src/examination_submit/examination_submit.service.ts`
+- Controller 文件 (7个):
+  - `src/experiment_score/experiment_score.controller.ts`
+  - `src/examination_score/examination_score.controller.ts`
+  - `src/experiment_weight/experiment_weight.controller.ts`
+  - `src/examination_weight/examination_weight.controller.ts`
+  - `src/total_score/total_score.controller.ts`
+  - `src/total_weight/total_weight.controller.ts`
+  - `src/examination_submit/examination_submit.controller.ts`
+- 测试文件 (14个):
+  - 各模块的 *.service.spec.ts 和 *.controller.spec.ts
+
+### Learnings for future iterations
+- 使用 TypeOrmModule.forFeature([Entity]) 注册实体仓库
+- Service 中使用 @InjectRepository(Entity) 注入 Repository
+- 使用 UpdateResult 和 DeleteResult 返回类型匹配 response 接口
+- Controller 需要返回统一的响应结构: NormalResponse, QueryResponse, UpdateResponse, DeleteResponse
+- Query DTO 包含 page, limit, sort, order, filter 字段用于分页和过滤
+- findCommon 方法支持灵活的条件过滤，filter 参数直接传给 TypeORM 的 where 条件
+
+---
+
+## 2026-02-14 - US-004: 接口可见性与鉴权一致性
+
+### Summary
+为所有7个评分域控制器添加了 JwtAuthGuard 鉴权保护，确保所有接口需要登录才能访问。
+
+### What was implemented
+- 为以下7个控制器的所有端点添加了 `@UseGuards(JwtAuthGuard)` 装饰器:
+  - experiment_score.controller.ts
+  - examination_score.controller.ts
+  - experiment_weight.controller.ts
+  - examination_weight.controller.ts
+  - total_score.controller.ts
+  - total_weight.controller.ts
+  - examination_submit.controller.ts
+- 每个控制器包含6个端点: POST (create), GET :id (findOne), PATCH :id (update), DELETE :id (remove), GET (分页查询), POST /query (通用查询)
+- 所有 Swagger 注解已存在，无需额外添加
+
+### Files changed
+- `src/experiment_score/experiment_score.controller.ts`
+- `src/examination_score/examination_score.controller.ts`
+- `src/experiment_weight/experiment_weight.controller.ts`
+- `src/examination_weight/examination_weight.controller.ts`
+- `src/total_score/total_score.controller.ts`
+- `src/total_weight/total_weight.controller.ts`
+- `src/examination_submit/examination_submit.controller.ts`
+
+### Learnings for future iterations
+- 使用 `@UseGuards(JwtAuthGuard)` 装饰器保护端点，需要 import { UseGuards } from '@nestjs/common'
+- JwtAuthGuard 导入路径: `import { JwtAuthGuard } from '../common/guards/jwt-auth.guard'`
+- 鉴权装饰器放在路由装饰器之后，Swagger 装饰器之前
+- 已有 Swagger 注解的控制器无需额外修改
+- 所有评分域接口现在都需要 JWT token 才能访问

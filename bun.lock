@@ -13,6 +13,7 @@
         "@nestjs/passport": "^11.0.5",
         "@nestjs/platform-express": "^9.4.3",
         "@nestjs/swagger": "^6.3.0",
+        "@nestjs/throttler": "^6.5.0",
         "@nestjs/typeorm": "^9.0.1",
         "@types/bcrypt": "^6.0.0",
         "@types/multer": "^1.4.13",
@@ -236,6 +237,8 @@
     "@nestjs/swagger": ["@nestjs/swagger@6.3.0", "https://registry.npmmirror.com/@nestjs/swagger/-/swagger-6.3.0.tgz", { "dependencies": { "@nestjs/mapped-types": "1.2.2", "js-yaml": "4.1.0", "lodash": "4.17.21", "path-to-regexp": "3.2.0", "swagger-ui-dist": "4.18.2" }, "peerDependencies": { "@fastify/static": "^6.0.0", "@nestjs/common": "^9.0.0", "@nestjs/core": "^9.0.0", "class-transformer": "*", "class-validator": "*", "reflect-metadata": "^0.1.12" }, "optionalPeers": ["@fastify/static", "class-transformer", "class-validator"] }, "sha512-Gnig189oa1tD+h0BYIfUwhp/wvvmTn6iO3csR2E4rQrDTgCxSxZDlNdfZo3AC+Rmf8u0KX4ZAX1RZN1qXTtC7A=="],
 
     "@nestjs/testing": ["@nestjs/testing@9.4.3", "https://registry.npmmirror.com/@nestjs/testing/-/testing-9.4.3.tgz", { "dependencies": { "tslib": "2.5.3" }, "peerDependencies": { "@nestjs/common": "^9.0.0", "@nestjs/core": "^9.0.0", "@nestjs/microservices": "^9.0.0", "@nestjs/platform-express": "^9.0.0" }, "optionalPeers": ["@nestjs/microservices", "@nestjs/platform-express"] }, "sha512-LDT8Ai2eKnTzvnPaJwWOK03qTaFap5uHHsJCv6dL0uKWk6hyF9jms8DjyVaGsaujCaXDG8izl1mDEER0OmxaZA=="],
+
+    "@nestjs/throttler": ["@nestjs/throttler@6.5.0", "https://registry.npmmirror.com/@nestjs/throttler/-/throttler-6.5.0.tgz", { "peerDependencies": { "@nestjs/common": "^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0", "@nestjs/core": "^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0", "reflect-metadata": "^0.1.13 || ^0.2.0" } }, "sha512-9j0ZRfH0QE1qyrj9JjIRDz5gQLPqq9yVC2nHsrosDVAfI5HHw08/aUAWx9DZLSdQf4HDkmhTTEGLrRFHENvchQ=="],
 
     "@nestjs/typeorm": ["@nestjs/typeorm@9.0.1", "https://registry.npmmirror.com/@nestjs/typeorm/-/typeorm-9.0.1.tgz", { "dependencies": { "uuid": "8.3.2" }, "peerDependencies": { "@nestjs/common": "^8.0.0 || ^9.0.0", "@nestjs/core": "^8.0.0 || ^9.0.0", "reflect-metadata": "^0.1.13", "rxjs": "^7.2.0", "typeorm": "^0.3.0" } }, "sha512-A2BgLIPsMtmMI0bPKEf4bmzgFPsnvHqNBx3KkvaJ7hJrBQy0OqYOb+Rr06ifblKWDWS2tUPNrAFQbZjtk3PI+g=="],
 

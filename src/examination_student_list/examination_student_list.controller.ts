@@ -9,8 +9,9 @@ import {
   Query,
   Logger,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
-import { ExaminationStudentListService } from './examination_student_list.service';
+import { ExaminationStudentListService, ImportResult } from './examination_student_list.service';
 import { CreateExaminationStudentListDto } from './dto/create-examination_student_list.dto';
 import { UpdateExaminationStudentListDto } from './dto/update-examination_student_list.dto';
 import {
@@ -20,7 +21,8 @@ import {
   ApiQuery,
   ApiBody,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
+import { UserRole } from '../user/entities/user.entity';
 import {
   NormalResponse,
   QueryResponse,
@@ -234,6 +236,39 @@ export class ExaminationStudentListController {
     try {
       const deleteResult = await this.studentListService.remove(+id);
       result.data.affected = deleteResult.affected || 0;
+    } catch (error) {
+      result.success = false;
+      result.errorMessage = error.message;
+    }
+    return result;
+  }
+
+  @Post('examination/:examinationId/import-class/:classId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
+  @ApiOperation({ summary: '按班级导入考生' })
+  @ApiParam({ name: 'examinationId', description: '考试ID' })
+  @ApiParam({ name: 'classId', description: '班级ID' })
+  async importClass(
+    @Param('examinationId', ParseIntPipe) examinationId: number,
+    @Param('classId', ParseIntPipe) classId: number,
+  ): Promise<NormalResponse> {
+    this.logger.log(`Importing students for examination ${examinationId} from class ${classId}`);
+    const result: NormalResponse = {
+      success: true,
+      data: {},
+      errorCode: '',
+      errorMessage: '',
+      showType: 0,
+      traceId: '',
+      host: '',
+    };
+    try {
+      const importResult: ImportResult = await this.studentListService.importStudentsFromClass(
+        examinationId,
+        classId,
+      );
+      result.data = importResult;
     } catch (error) {
       result.success = false;
       result.errorMessage = error.message;

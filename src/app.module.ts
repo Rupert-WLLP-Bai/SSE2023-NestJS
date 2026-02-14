@@ -1,3 +1,5 @@
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import {
   MiddlewareConsumer,
   Module,
@@ -32,6 +34,9 @@ import { JwtStrategy } from './common/strategies/jwt.strategy';
 import { CourseModule } from './course/course.module';
 import { ClassModule } from './class/class.module';
 import { EnrollmentModule } from './enrollment/enrollment.module';
+import { GuardsModule } from './common/guards/guards.module';
+import { AuditModule } from './audit/audit.module';
+import { GradeReportModule } from './grade-report/grade-report.module';
 
 @Module({
   imports: [
@@ -39,6 +44,19 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    // 限流模块配置
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 60000, // 1分钟
+        limit: 10, // 默认每分钟10次
+      },
+      {
+        name: 'login',
+        ttl: 60000, // 1分钟
+        limit: 5, // 登录每分钟5次
+      },
+    ]),
     UserModule,
     ExperimentModule,
     ExperimentSubmitModule,
@@ -64,8 +82,12 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        // 非开发环境关闭 synchronize
+        synchronize: configService.get<string>('NODE_ENV') !== 'production',
         autoLoadEntities: true,
+        migrations: [__dirname + '/migrations/*{.ts,.js}'],
+        migrationsRun: configService.get<string>('NODE_ENV') === 'production',
+        migrationsTableName: 'migrations',
       }),
     }),
     LoginModule,
@@ -76,6 +98,9 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
     CourseModule,
     ClassModule,
     EnrollmentModule,
+    GuardsModule,
+    AuditModule,
+    GradeReportModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -88,7 +113,14 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
   ],
 
   controllers: [AppController],
-  providers: [AppService, JwtStrategy],
+  providers: [
+    AppService,
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

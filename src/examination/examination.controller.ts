@@ -20,49 +20,30 @@ import {
   ApiParam,
   ApiQuery,
   ApiBody,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import {
-  NormalResponse,
-  QueryResponse,
-  UpdateResponse,
-  DeleteResponse,
-} from '../common/response/response.interface';
+import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
+import { UserRole } from '../user/entities/user.entity';
 
 @ApiTags('examination')
+@ApiBearerAuth('JWT-auth')
 @Controller('examination')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ExaminationController {
   constructor(private readonly examinationService: ExaminationService) {}
   private readonly logger = new Logger(ExaminationController.name);
 
   @Post()
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
   @ApiOperation({ summary: '创建考试' })
   @ApiBody({ type: CreateExaminationDto })
-  async create(
-    @Body() createExaminationDto: CreateExaminationDto,
-  ): Promise<NormalResponse> {
+  async create(@Body() createExaminationDto: CreateExaminationDto) {
     this.logger.log(JSON.stringify(createExaminationDto));
-    const result: NormalResponse = {
-      success: true,
-      data: {},
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
-    };
-    try {
-      const res = await this.examinationService.create(createExaminationDto);
-      result.data = res;
-    } catch (error) {
-      result.success = false;
-      result.errorMessage = error.message;
-    }
-    return result;
+    return this.examinationService.create(createExaminationDto);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT, UserRole.STUDENT)
   @ApiOperation({ summary: '分页查询考试' })
   @ApiQuery({
     name: 'page',
@@ -77,149 +58,104 @@ export class ExaminationController {
   async findPage(
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
-  ): Promise<QueryResponse> {
+  ) {
     this.logger.log(`page: ${page}, pageSize: ${pageSize}`);
-    const result: QueryResponse = {
-      success: true,
-      data: {},
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
-    };
     if (page && pageSize) {
       const data = await this.examinationService.findPage(page, pageSize);
-      result.data.list = data[0];
-      result.data.total = data[1];
-      result.data.current = Number(page);
-      result.data.pageSize = Number(pageSize);
+      return {
+        list: data[0],
+        total: data[1],
+        current: Number(page),
+        pageSize: Number(pageSize),
+      };
     } else {
       const data = await this.examinationService.findAndCount();
-      result.data.list = data[0];
-      result.data.total = data[1];
+      return {
+        list: data[0],
+        total: data[1],
+      };
     }
-    return result;
   }
 
   @Post('query')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT, UserRole.STUDENT)
   @ApiOperation({ summary: '通用查询考试' })
   @ApiBody({
     type: QueryExaminationDto,
     description: '查询条件',
     required: false,
   })
-  async findCommon(
-    @Body() queryExaminationDto: QueryExaminationDto,
-  ): Promise<QueryResponse> {
+  async findCommon(@Body() queryExaminationDto: QueryExaminationDto) {
     this.logger.log(JSON.stringify(queryExaminationDto));
-    const result: QueryResponse = {
-      success: true,
-      data: {},
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
+    const data = await this.examinationService.findCommon(queryExaminationDto);
+    return {
+      list: data[0],
+      total: data[1],
+      current: Number(queryExaminationDto.page),
+      pageSize: Number(queryExaminationDto.limit),
     };
-    try {
-      const data = await this.examinationService.findCommon(queryExaminationDto);
-      result.data.list = data[0];
-      result.data.total = data[1];
-      result.data.current = Number(queryExaminationDto.page);
-      result.data.pageSize = Number(queryExaminationDto.limit);
-    } catch (error) {
-      result.success = false;
-      result.errorMessage = error.message;
-    }
-    return result;
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT, UserRole.STUDENT)
   @ApiOperation({ summary: '根据id查询考试' })
   @ApiParam({ name: 'id', description: '考试id' })
-  async findOne(@Param('id') id: string): Promise<QueryResponse> {
+  async findOne(@Param('id') id: string) {
     this.logger.log(id);
-    const result: QueryResponse = {
-      success: true,
-      data: {},
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
-    };
     const queryResult = await this.examinationService.findOne(+id);
-    result.data = {
+    return {
       list: [queryResult],
       total: queryResult ? 1 : 0,
     };
-    return result;
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
   @ApiOperation({ summary: '根据id更新考试' })
   @ApiParam({ name: 'id', description: '考试id' })
   @ApiBody({ type: UpdateExaminationDto })
   async update(
     @Param('id') id: string,
     @Body() updateExaminationDto: UpdateExaminationDto,
-  ): Promise<UpdateResponse> {
+  ) {
     this.logger.log(id);
     this.logger.log(JSON.stringify(updateExaminationDto));
-    const result: UpdateResponse = {
-      success: true,
-      data: {
-        raw: {},
-        affected: 0,
-        generatedMaps: [],
-      },
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
-    };
-    try {
-      result.data = await this.examinationService.update(
-        +id,
-        updateExaminationDto,
-      );
-    } catch (error) {
-      result.success = false;
-      result.errorMessage = error.message;
-    }
-    return result;
+    return this.examinationService.update(+id, updateExaminationDto);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER)
   @ApiOperation({ summary: '根据id删除考试' })
   @ApiParam({ name: 'id', description: '考试id' })
-  async remove(@Param('id') id: string): Promise<DeleteResponse> {
+  async remove(@Param('id') id: string) {
     this.logger.log(id);
-    const result: DeleteResponse = {
-      success: true,
-      data: {
-        raw: {},
-        affected: 0,
-      },
-      errorCode: '',
-      errorMessage: '',
-      showType: 0,
-      traceId: '',
-      host: '',
-    };
-    try {
-      await this.examinationService.remove(+id);
-      result.data.affected = 1;
-    } catch (error) {
-      result.success = false;
-      result.errorMessage = error.message;
-    }
-    return result;
+    return this.examinationService.remove(+id);
+  }
+
+  @Post(':id/start')
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
+  @ApiOperation({ summary: '开始考试：将状态从 NOT_STARTED 转换为 IN_PROGRESS' })
+  @ApiParam({ name: 'id', description: '考试id' })
+  async start(@Param('id') id: string) {
+    this.logger.log(`Starting examination: ${id}`);
+    return this.examinationService.start(+id);
+  }
+
+  @Post(':id/end')
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
+  @ApiOperation({ summary: '结束考试：将状态从 IN_PROGRESS 转换为 FINISHED' })
+  @ApiParam({ name: 'id', description: '考试id' })
+  async end(@Param('id') id: string) {
+    this.logger.log(`Ending examination: ${id}`);
+    return this.examinationService.end(+id);
+  }
+
+  @Post(':id/archive')
+  @Roles(UserRole.ADMIN, UserRole.TEACHER)
+  @ApiOperation({ summary: '归档考试：将状态从 FINISHED 转换为 ARCHIVED' })
+  @ApiParam({ name: 'id', description: '考试id' })
+  async archive(@Param('id') id: string) {
+    this.logger.log(`Archiving examination: ${id}`);
+    return this.examinationService.archive(+id);
   }
 }

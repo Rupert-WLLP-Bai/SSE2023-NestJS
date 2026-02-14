@@ -1,14 +1,10 @@
-/**
- * @file examination_submit.entity.ts
- * @description 考试提交实体
- * @author SSE Team
- * @version 1.0.0
- */
 import {
   BaseEntity,
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 export enum SubmitStatus {
@@ -22,37 +18,41 @@ export class ExaminationSubmit extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ comment: '考试ID' })
   examinationId: number;
 
-  @Column({ nullable: true })
+  @Column({ comment: '学生ID' })
   studentId: number;
 
-  @Column({ nullable: true })
+  @Column({ comment: '题目ID' })
   problemId: number;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true, comment: '答案' })
   answer: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true, comment: '文件URL' })
+  fileUrl: string;
 
   @Column({
     type: 'int',
     nullable: true,
     default: SubmitStatus.NOT_SUBMITTED,
+    comment: '提交状态: 0-未提交, 1-已提交, 2-已批改',
   })
   status: SubmitStatus;
 
-  @Column({ nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, comment: '分数' })
   score: number;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true, comment: '反馈' })
   feedback: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'datetime', nullable: true, comment: '提交时间' })
   submitTime: Date;
 
-  @Column({ nullable: true })
+  @CreateDateColumn({ comment: '创建时间' })
   createTime: Date;
 
-  @Column({ nullable: true })
+  @UpdateDateColumn({ comment: '更新时间' })
   updateTime: Date;
 }

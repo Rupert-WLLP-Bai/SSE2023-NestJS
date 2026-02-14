@@ -18,6 +18,7 @@ import {
   UseInterceptors,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ExperimentSubmitService } from './experiment_submit.service';
 import { CreateExperimentSubmitDto } from './dto/create-experiment_submit.dto';
 import { UpdateExperimentSubmitDto } from './dto/update-experiment_submit.dto';
@@ -40,6 +41,7 @@ export class ExperimentSubmitController {
   ) {}
 
   @Post()
+  @Throttle({ short: { limit: 10, ttl: 60000 } })
   @ApiOperation({ summary: '创建实验提交' })
   @ApiProperty({ description: '文件', example: 'file', required: false })
   @ApiConsumes('multipart/form-data')
