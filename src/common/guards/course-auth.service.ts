@@ -24,7 +24,9 @@ export class CourseAuthService {
    * - 助教 (role=3) 只能操作自己教授的课程
    * - 学生 (role=1) 无权操作课程数据
    */
-  async validateCourseOwnership(context: CourseOwnershipContext): Promise<boolean> {
+  async validateCourseOwnership(
+    context: CourseOwnershipContext,
+  ): Promise<boolean> {
     const { userId, userRole, courseId } = context;
 
     // 管理员可以绕过课程归属限制

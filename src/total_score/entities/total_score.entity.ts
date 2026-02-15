@@ -21,10 +21,22 @@ export class TotalScore extends BaseEntity {
   @Column({ type: 'decimal', precision: 5, scale: 2, comment: '总成绩' })
   totalScore: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, comment: '实验成绩' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    comment: '实验成绩',
+  })
   experimentScore: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, comment: '考试成绩' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    comment: '考试成绩',
+  })
   examinationScore: number;
 
   @CreateDateColumn({ comment: '创建时间' })

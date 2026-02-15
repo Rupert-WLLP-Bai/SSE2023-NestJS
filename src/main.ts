@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import { LogLevel } from '@nestjs/common';
 // 引入swagger
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 // 引入 ValidationPipe
@@ -11,8 +12,14 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/success.interceptor';
 
 async function bootstrap() {
+  // 生产环境只显示 error 和 warn 日志
+  const isProduction = process.env.NODE_ENV === 'production';
+  const logger: LogLevel[] = isProduction
+    ? ['error', 'warn']
+    : ['error', 'warn', 'debug', 'log', 'verbose'];
+
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'debug', 'log', 'verbose'],
+    logger,
   });
 
   // 全局验证管道

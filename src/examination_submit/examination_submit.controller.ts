@@ -93,9 +93,17 @@ export class ExaminationSubmitController {
     };
     try {
       // 先验证是否已提交
-      await this.examinationSubmitService.validateSubmitted(examinationId, studentId, problemId);
+      await this.examinationSubmitService.validateSubmitted(
+        examinationId,
+        studentId,
+        problemId,
+      );
       // 更新状态为已评分
-      response.data = await this.examinationSubmitService.markAsGraded(examinationId, studentId, problemId);
+      response.data = await this.examinationSubmitService.markAsGraded(
+        examinationId,
+        studentId,
+        problemId,
+      );
       response.success = true;
     } catch (e) {
       response.success = false;
@@ -134,9 +142,7 @@ export class ExaminationSubmitController {
   @ApiOperation({ summary: '根据ID获取考试提交' })
   @ApiParam({ name: 'id', description: '提交记录ID', type: Number })
   @ApiResponse({ status: 200, description: '查询成功', type: QueryResponse })
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<QueryResponse> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: { list: [], total: 0, current: 1, pageSize: 10 },
@@ -196,9 +202,7 @@ export class ExaminationSubmitController {
   @ApiOperation({ summary: '删除考试提交' })
   @ApiParam({ name: 'id', description: '提交记录ID', type: Number })
   @ApiResponse({ status: 200, description: '删除成功', type: DeleteResponse })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<DeleteResponse> {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResponse> {
     const response: DeleteResponse = {
       success: true,
       data: { raw: [], affected: 0 },

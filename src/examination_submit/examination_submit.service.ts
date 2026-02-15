@@ -3,8 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateExaminationSubmitDto } from './dto/create-examination_submit.dto';
 import { UpdateExaminationSubmitDto } from './dto/update-examination_submit.dto';
-import { ExaminationSubmit, SubmitStatus } from './entities/examination_submit.entity';
-import { Examination, ExaminationStatus } from '../examination/entities/examination.entity';
+import {
+  ExaminationSubmit,
+  SubmitStatus,
+} from './entities/examination_submit.entity';
+import {
+  Examination,
+  ExaminationStatus,
+} from '../examination/entities/examination.entity';
 import { ExaminationService } from '../examination/examination.service';
 
 @Injectable()
@@ -36,7 +42,10 @@ export class ExaminationSubmitService {
     id: number,
     updateExaminationSubmitDto: UpdateExaminationSubmitDto,
   ) {
-    await this.examinationSubmitRepository.update(id, updateExaminationSubmitDto);
+    await this.examinationSubmitRepository.update(
+      id,
+      updateExaminationSubmitDto,
+    );
     return this.examinationSubmitRepository.findOneBy({ id });
   }
 
@@ -69,7 +78,15 @@ export class ExaminationSubmitService {
    * 通用查询（支持分页）
    */
   async findCommon(query: any): Promise<[ExaminationSubmit[], number]> {
-    const { page = 1, limit = 10, examinationId, studentId, problemId, status, ...filters } = query;
+    const {
+      page = 1,
+      limit = 10,
+      examinationId,
+      studentId,
+      problemId,
+      status,
+      ...filters
+    } = query;
 
     const where: any = {};
     if (examinationId) where.examinationId = examinationId;
@@ -95,13 +112,17 @@ export class ExaminationSubmitService {
     const examination = await this.examinationService.findOne(examinationId);
 
     if (!examination) {
-      throw new BadRequestException(`Examination with id ${examinationId} not found`);
+      throw new BadRequestException(
+        `Examination with id ${examinationId} not found`,
+      );
     }
 
     // 检查考试状态
     if (examination.status !== ExaminationStatus.IN_PROGRESS) {
       throw new BadRequestException(
-        `Submission not allowed: examination status is ${ExaminationStatus[examination.status]}, expected IN_PROGRESS`,
+        `Submission not allowed: examination status is ${
+          ExaminationStatus[examination.status]
+        }, expected IN_PROGRESS`,
       );
     }
 
@@ -126,7 +147,9 @@ export class ExaminationSubmitService {
   /**
    * 创建提交并验证窗口
    */
-  async createWithValidation(createDto: CreateExaminationSubmitDto): Promise<ExaminationSubmit> {
+  async createWithValidation(
+    createDto: CreateExaminationSubmitDto,
+  ): Promise<ExaminationSubmit> {
     await this.validateSubmissionWindow(createDto.examinationId);
 
     const newRecord = this.examinationSubmitRepository.create({

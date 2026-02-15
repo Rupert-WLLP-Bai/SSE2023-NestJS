@@ -114,9 +114,7 @@ export class ExaminationScoreController {
   @ApiOperation({ summary: '根据ID获取考试成绩' })
   @ApiParam({ name: 'id', description: '成绩ID', type: Number })
   @ApiResponse({ status: 200, description: '查询成功', type: QueryResponse })
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<QueryResponse> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: { list: [], total: 0, current: 1, pageSize: 10 },
@@ -193,9 +191,7 @@ export class ExaminationScoreController {
   @ApiOperation({ summary: '删除考试成绩' })
   @ApiParam({ name: 'id', description: '成绩ID', type: Number })
   @ApiResponse({ status: 200, description: '删除成功', type: DeleteResponse })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<DeleteResponse> {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResponse> {
     const response: DeleteResponse = {
       success: true,
       data: { raw: [], affected: 0 },
@@ -265,9 +261,13 @@ export class ExaminationScoreController {
     };
     try {
       // 检查是否存在
-      const { courseId, studentId, examinationId, problemId } = createExaminationScoreDto;
+      const { courseId, studentId, examinationId, problemId } =
+        createExaminationScoreDto;
       const existing = await this.examinationScoreService.findOneByCondition({
-        courseId, studentId, examinationId, problemId,
+        courseId,
+        studentId,
+        examinationId,
+        problemId,
       });
       const oldValue = existing || null;
 

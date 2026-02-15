@@ -109,9 +109,7 @@ export class ExperimentWeightController {
   @ApiOperation({ summary: '根据ID获取实验权重' })
   @ApiParam({ name: 'id', description: '权重ID', type: Number })
   @ApiResponse({ status: 200, description: '查询成功', type: QueryResponse })
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<QueryResponse> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: { list: [], total: 0, current: 1, pageSize: 10 },
@@ -184,9 +182,7 @@ export class ExperimentWeightController {
   @ApiOperation({ summary: '删除实验权重' })
   @ApiParam({ name: 'id', description: '权重ID', type: Number })
   @ApiResponse({ status: 200, description: '删除成功', type: DeleteResponse })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<DeleteResponse> {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResponse> {
     const response: DeleteResponse = {
       success: true,
       data: { raw: [], affected: 0 },

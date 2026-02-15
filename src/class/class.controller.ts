@@ -199,7 +199,9 @@ export class ClassController {
   @Get('course/:courseId')
   @ApiOperation({ summary: '根据课程ID查询班级' })
   @ApiParam({ name: 'courseId', description: '课程ID' })
-  async findByCourseId(@Param('courseId') courseId: string): Promise<QueryResponse> {
+  async findByCourseId(
+    @Param('courseId') courseId: string,
+  ): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: {},
@@ -223,7 +225,9 @@ export class ClassController {
   @Get('teacher/:teacherId')
   @ApiOperation({ summary: '根据教师ID查询班级' })
   @ApiParam({ name: 'teacherId', description: '教师ID' })
-  async findByTeacherId(@Param('teacherId') teacherId: string): Promise<QueryResponse> {
+  async findByTeacherId(
+    @Param('teacherId') teacherId: string,
+  ): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: {},

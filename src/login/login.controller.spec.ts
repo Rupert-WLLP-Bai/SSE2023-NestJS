@@ -13,11 +13,13 @@ describe('LoginController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ThrottlerModule.forRoot([{
-          name: 'login',
-          limit: 5,
-          ttl: 60000,
-        }]),
+        ThrottlerModule.forRoot([
+          {
+            name: 'login',
+            limit: 5,
+            ttl: 60000,
+          },
+        ]),
       ],
       controllers: [LoginController],
       providers: [

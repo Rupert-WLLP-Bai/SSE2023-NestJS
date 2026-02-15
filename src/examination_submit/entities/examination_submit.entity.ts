@@ -41,7 +41,13 @@ export class ExaminationSubmit extends BaseEntity {
   })
   status: SubmitStatus;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, comment: '分数' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    comment: '分数',
+  })
   score: number;
 
   @Column({ type: 'text', nullable: true, comment: '反馈' })

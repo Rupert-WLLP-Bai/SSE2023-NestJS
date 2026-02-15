@@ -7,7 +7,10 @@ import { TotalWeight } from '../total_weight/entities/total_weight.entity';
 import { AuditModule } from '../audit/audit.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ExaminationWeight, TotalWeight]), AuditModule],
+  imports: [
+    TypeOrmModule.forFeature([ExaminationWeight, TotalWeight]),
+    AuditModule,
+  ],
   controllers: [ExaminationWeightController],
   providers: [ExaminationWeightService],
   exports: [ExaminationWeightService],

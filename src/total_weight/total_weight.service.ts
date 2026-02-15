@@ -78,22 +78,25 @@ export class TotalWeightService {
     const { experimentWeight, examinationWeight } = updateTotalWeightDto;
 
     // Validate weight sum if both weights are provided
-    if (
-      experimentWeight !== undefined &&
-      examinationWeight !== undefined
-    ) {
+    if (experimentWeight !== undefined && examinationWeight !== undefined) {
       this.validateWeightSum(experimentWeight, examinationWeight);
     } else if (experimentWeight !== undefined) {
       // If only experimentWeight is provided, get existing examinationWeight
       const existing = await this.totalWeightRepository.findOneBy({ id });
       if (existing) {
-        this.validateWeightSum(experimentWeight, Number(existing.examinationWeight));
+        this.validateWeightSum(
+          experimentWeight,
+          Number(existing.examinationWeight),
+        );
       }
     } else if (examinationWeight !== undefined) {
       // If only examinationWeight is provided, get existing experimentWeight
       const existing = await this.totalWeightRepository.findOneBy({ id });
       if (existing) {
-        this.validateWeightSum(Number(existing.experimentWeight), examinationWeight);
+        this.validateWeightSum(
+          Number(existing.experimentWeight),
+          examinationWeight,
+        );
       }
     }
 

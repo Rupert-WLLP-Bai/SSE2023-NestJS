@@ -40,7 +40,16 @@ export class AuditService {
   }
 
   async findAll(query: QueryAuditLogDto) {
-    const { userId, targetType, targetId, action, startDate, endDate, page = 1, pageSize = 10 } = query;
+    const {
+      userId,
+      targetType,
+      targetId,
+      action,
+      startDate,
+      endDate,
+      page = 1,
+      pageSize = 10,
+    } = query;
 
     const whereConditions: any = {};
 
@@ -57,7 +66,10 @@ export class AuditService {
       whereConditions.action = action;
     }
     if (startDate && endDate) {
-      whereConditions.createdAt = Between(new Date(startDate), new Date(endDate));
+      whereConditions.createdAt = Between(
+        new Date(startDate),
+        new Date(endDate),
+      );
     }
 
     const [list, total] = await this.auditLogRepository.findAndCount({
@@ -75,7 +87,10 @@ export class AuditService {
     };
   }
 
-  async findByTarget(targetType: string, targetId: number): Promise<AuditLog[]> {
+  async findByTarget(
+    targetType: string,
+    targetId: number,
+  ): Promise<AuditLog[]> {
     return await this.auditLogRepository.find({
       where: { targetType, targetId },
       order: { createdAt: 'DESC' },

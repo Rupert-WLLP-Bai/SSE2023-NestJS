@@ -12,7 +12,12 @@ import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import { ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
-import { getAccessKey, getSecretKey, getQiniuBucket, getQiniuDomain } from '../common/key';
+import {
+  getAccessKey,
+  getSecretKey,
+  getQiniuBucket,
+  getQiniuDomain,
+} from '../common/key';
 import * as qiniu from 'qiniu';
 import axios from 'axios';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';

@@ -63,7 +63,10 @@ describe('LoginService', () => {
         role: 1,
       });
 
-      const result = await service.login({ id: 123, password: 'wrongpassword' });
+      const result = await service.login({
+        id: 123,
+        password: 'wrongpassword',
+      });
 
       expect(result.success).toBe(false);
       expect(result.errorCode).toBe('10002');
@@ -79,7 +82,10 @@ describe('LoginService', () => {
       });
       mockUserService.update.mockResolvedValue({});
 
-      const result = await service.login({ id: 123, password: 'correctpassword' });
+      const result = await service.login({
+        id: 123,
+        password: 'correctpassword',
+      });
 
       expect(result.success).toBe(true);
       expect(result.data.token).toBe('mock-jwt-token');

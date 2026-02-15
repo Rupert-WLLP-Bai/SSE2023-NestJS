@@ -66,7 +66,10 @@ export class CourseController {
   @Patch(':id')
   @ApiOperation({ summary: '根据id更新课程' })
   @ApiBody({ type: UpdateCourseDto })
-  async update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCourseDto: UpdateCourseDto,
+  ) {
     return this.courseService.update(+id, updateCourseDto);
   }
 

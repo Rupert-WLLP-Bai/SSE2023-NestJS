@@ -4,12 +4,7 @@
  * @author SSE Team
  * @version 1.0.0
  */
-import {
-  BaseEntity,
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum StudentStatus {
   NOT_STARTED = 0,

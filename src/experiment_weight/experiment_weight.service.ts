@@ -26,7 +26,9 @@ export class ExperimentWeightService {
     excludeId?: number,
   ): Promise<void> {
     // Get total weight for the course
-    const totalWeight = await this.totalWeightRepository.findOneBy({ courseId });
+    const totalWeight = await this.totalWeightRepository.findOneBy({
+      courseId,
+    });
     if (!totalWeight) {
       throw new BadRequestException({
         errorCode: 'TOTAL_WEIGHT_NOT_FOUND',

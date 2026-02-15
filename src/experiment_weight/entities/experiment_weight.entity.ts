@@ -20,7 +20,12 @@ export class ExperimentWeight extends BaseEntity {
   @Column({ comment: '实验ID' })
   experimentId: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, comment: '实验权重 (0-100)' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    comment: '实验权重 (0-100)',
+  })
   weight: number;
 
   @CreateDateColumn({ comment: '创建时间' })

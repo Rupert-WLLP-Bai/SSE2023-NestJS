@@ -132,7 +132,10 @@ export class EnrollmentController {
       host: '',
     };
     try {
-      response.data = await this.enrollmentService.update(+id, updateEnrollmentDto);
+      response.data = await this.enrollmentService.update(
+        +id,
+        updateEnrollmentDto,
+      );
       response.success = true;
     } catch (e) {
       response.success = false;
@@ -199,7 +202,9 @@ export class EnrollmentController {
   @Get('student/:studentId')
   @ApiOperation({ summary: '根据学生ID查询选课记录' })
   @ApiParam({ name: 'studentId', description: '学生ID' })
-  async findByStudentId(@Param('studentId') studentId: string): Promise<QueryResponse> {
+  async findByStudentId(
+    @Param('studentId') studentId: string,
+  ): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: {},
@@ -210,7 +215,9 @@ export class EnrollmentController {
       host: '',
     };
     try {
-      response.data.list = await this.enrollmentService.findByStudentId(+studentId);
+      response.data.list = await this.enrollmentService.findByStudentId(
+        +studentId,
+      );
       response.data.total = response.data.list.length;
       response.success = true;
     } catch (e) {
@@ -223,7 +230,9 @@ export class EnrollmentController {
   @Get('class/:classId')
   @ApiOperation({ summary: '根据班级ID查询选课记录' })
   @ApiParam({ name: 'classId', description: '班级ID' })
-  async findByClassId(@Param('classId') classId: string): Promise<QueryResponse> {
+  async findByClassId(
+    @Param('classId') classId: string,
+  ): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: {},
@@ -247,7 +256,9 @@ export class EnrollmentController {
   @Get('course/:courseId')
   @ApiOperation({ summary: '根据课程ID查询选课记录' })
   @ApiParam({ name: 'courseId', description: '课程ID' })
-  async findByCourseId(@Param('courseId') courseId: string): Promise<QueryResponse> {
+  async findByCourseId(
+    @Param('courseId') courseId: string,
+  ): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: {},
@@ -258,7 +269,9 @@ export class EnrollmentController {
       host: '',
     };
     try {
-      response.data.list = await this.enrollmentService.findByCourseId(+courseId);
+      response.data.list = await this.enrollmentService.findByCourseId(
+        +courseId,
+      );
       response.data.total = response.data.list.length;
       response.success = true;
     } catch (e) {
@@ -286,7 +299,10 @@ export class EnrollmentController {
       host: '',
     };
     try {
-      response.data = await this.enrollmentService.dropCourse(+studentId, +classId);
+      response.data = await this.enrollmentService.dropCourse(
+        +studentId,
+        +classId,
+      );
       response.success = true;
     } catch (e) {
       response.success = false;

@@ -35,9 +35,7 @@ export class ClassService {
     return this.classRepository.delete(id);
   }
 
-  async findCommon(
-    queryClassDto: QueryClassDto,
-  ): Promise<[Class[], number]> {
+  async findCommon(queryClassDto: QueryClassDto): Promise<[Class[], number]> {
     const { page, limit, sort, order, filter } = queryClassDto;
     const take = limit;
     const skip = (page - 1) * limit;

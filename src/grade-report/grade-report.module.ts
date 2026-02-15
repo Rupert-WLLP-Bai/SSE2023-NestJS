@@ -15,6 +15,8 @@ import { CourseModule } from '../course/course.module';
 import { CourseService } from '../course/course.service';
 import { Experiment } from '../experiment/entities/experiment.entity';
 import { Examination } from '../examination/entities/examination.entity';
+import { Enrollment } from '../enrollment/entities/enrollment.entity';
+import { Course } from '../course/entities/course.entity';
 
 @Module({
   imports: [
@@ -28,16 +30,14 @@ import { Examination } from '../examination/entities/examination.entity';
       User,
       Experiment,
       Examination,
+      Enrollment,
+      Course,
     ]),
     EnrollmentModule,
     CourseModule,
   ],
   controllers: [GradeReportController],
-  providers: [
-    GradeReportService,
-    EnrollmentService,
-    CourseService,
-  ],
+  providers: [GradeReportService, EnrollmentService, CourseService],
   exports: [GradeReportService],
 })
 export class GradeReportModule {}

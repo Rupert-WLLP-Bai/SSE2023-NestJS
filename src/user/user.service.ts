@@ -19,7 +19,10 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     // Hash the password before saving
     if (createUserDto.password) {
-      createUserDto.password = await bcrypt.hash(createUserDto.password, SALT_ROUNDS);
+      createUserDto.password = await bcrypt.hash(
+        createUserDto.password,
+        SALT_ROUNDS,
+      );
     }
     return this.userRepository.save(createUserDto);
   }

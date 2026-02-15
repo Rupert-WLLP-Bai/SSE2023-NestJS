@@ -42,7 +42,9 @@ export class NoticeController {
   @ApiOperation({ summary: '创建公告' })
   // @ApiConsumes('multipart/form-data')
   // @UseInterceptors(AnyFilesInterceptor())
-  async create(@Body() createNoticeDto: CreateNoticeDto): Promise<NormalResponse> {
+  async create(
+    @Body() createNoticeDto: CreateNoticeDto,
+  ): Promise<NormalResponse> {
     this.logger.log(JSON.stringify(createNoticeDto));
     const result: NormalResponse = {
       success: true,

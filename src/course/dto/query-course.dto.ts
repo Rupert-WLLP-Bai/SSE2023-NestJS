@@ -48,7 +48,15 @@ export class QueryCourseDto {
   @ApiProperty({
     description: '排序字段',
     example: 'id',
-    enum: ['id', 'name', 'code', 'teacherId', 'credit', 'createTime', 'updateTime'],
+    enum: [
+      'id',
+      'name',
+      'code',
+      'teacherId',
+      'credit',
+      'createTime',
+      'updateTime',
+    ],
     nullable: true,
   })
   sort?: string;

@@ -20,7 +20,10 @@ export class ExaminationScoreService {
     const { examinationId, studentId } = createExaminationScoreDto;
 
     // 评分前检查提交记录是否存在且状态为 SUBMITTED
-    await this.examinationSubmitService.validateSubmitted(examinationId, studentId);
+    await this.examinationSubmitService.validateSubmitted(
+      examinationId,
+      studentId,
+    );
 
     const newRecord = this.examinationScoreRepository.create(
       createExaminationScoreDto,
@@ -46,18 +49,27 @@ export class ExaminationScoreService {
     id: number,
     updateExaminationScoreDto: UpdateExaminationScoreDto,
   ) {
-    const existingScore = await this.examinationScoreRepository.findOneBy({ id });
+    const existingScore = await this.examinationScoreRepository.findOneBy({
+      id,
+    });
     if (!existingScore) {
-      throw new BadRequestException(`Examination score with id ${id} not found`);
+      throw new BadRequestException(
+        `Examination score with id ${id} not found`,
+      );
     }
 
     const { examinationId, studentId } = existingScore;
 
     // 评分前检查提交记录是否存在且状态为 SUBMITTED
-    await this.examinationSubmitService.validateSubmitted(examinationId, studentId);
+    await this.examinationSubmitService.validateSubmitted(
+      examinationId,
+      studentId,
+    );
 
     await this.examinationScoreRepository.update(id, updateExaminationScoreDto);
-    const updatedRecord = await this.examinationScoreRepository.findOneBy({ id });
+    const updatedRecord = await this.examinationScoreRepository.findOneBy({
+      id,
+    });
 
     return updatedRecord;
   }
@@ -84,7 +96,13 @@ export class ExaminationScoreService {
    * 通用查询（支持分页）
    */
   async findCommon(query: any): Promise<[ExaminationScore[], number]> {
-    const { page = 1, limit = 10, examinationId, studentId, ...filters } = query;
+    const {
+      page = 1,
+      limit = 10,
+      examinationId,
+      studentId,
+      ...filters
+    } = query;
 
     const where: any = {};
     if (examinationId) where.examinationId = examinationId;
@@ -105,10 +123,14 @@ export class ExaminationScoreService {
    * Upsert key: courseId + studentId + examinationId + problemId
    */
   async upsert(createExaminationScoreDto: CreateExaminationScoreDto) {
-    const { courseId, studentId, examinationId, problemId, score } = createExaminationScoreDto;
+    const { courseId, studentId, examinationId, problemId, score } =
+      createExaminationScoreDto;
 
     // 评分前检查提交记录是否存在且状态为 SUBMITTED
-    await this.examinationSubmitService.validateSubmitted(examinationId, studentId);
+    await this.examinationSubmitService.validateSubmitted(
+      examinationId,
+      studentId,
+    );
 
     const existing = await this.examinationScoreRepository.findOne({
       where: { courseId, studentId, examinationId, problemId },

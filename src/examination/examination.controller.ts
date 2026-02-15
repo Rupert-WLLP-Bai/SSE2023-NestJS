@@ -134,7 +134,9 @@ export class ExaminationController {
 
   @Post(':id/start')
   @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
-  @ApiOperation({ summary: '开始考试：将状态从 NOT_STARTED 转换为 IN_PROGRESS' })
+  @ApiOperation({
+    summary: '开始考试：将状态从 NOT_STARTED 转换为 IN_PROGRESS',
+  })
   @ApiParam({ name: 'id', description: '考试id' })
   async start(@Param('id') id: string) {
     this.logger.log(`Starting examination: ${id}`);

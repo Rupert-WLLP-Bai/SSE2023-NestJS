@@ -1,16 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsNumber,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Min,
+  IsInt,
+} from 'class-validator';
 
 export class CreateExperimentSubmitDto {
   @ApiProperty({ description: '实验ID', example: 1, required: true })
+  @IsNotEmpty({ message: '实验ID不能为空' })
+  @IsNumber({}, { message: '实验ID必须是数字' })
+  @Min(1)
   experimentId: number;
+
   @ApiProperty({ description: '学生ID', example: 2052526, required: true })
+  @IsNotEmpty({ message: '学生ID不能为空' })
+  @IsNumber({}, { message: '学生ID必须是数字' })
+  @Min(1)
   studentId: number;
+
   @ApiProperty({
     description: '时间戳',
     example: Date.now(),
     required: true,
   })
+  @IsNotEmpty({ message: '时间戳不能为空' })
   timeStamp: bigint;
+
   @ApiProperty({
     description: '文件',
     example: 'file',
@@ -18,21 +36,41 @@ export class CreateExperimentSubmitDto {
     format: 'binary',
     type: 'string',
   })
-  file: Express.Multer.File;
+  @IsOptional()
+  file?: Express.Multer.File;
+
   @ApiProperty({
     description: '文件URL',
     example: 'http://xxx',
     required: false,
   })
-  fileUrl: string;
+  @IsOptional()
+  @IsString()
+  fileUrl?: string;
+
   @ApiProperty({ description: '文件名', required: false, readOnly: true })
-  fileName: string;
+  @IsOptional()
+  @IsString()
+  fileName?: string;
+
   @ApiProperty({ description: '文件大小', required: false, readOnly: true })
-  fileSize: number;
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  fileSize?: number;
+
   @ApiProperty({ description: '文件类型', required: false, readOnly: true })
-  mineType: string;
+  @IsOptional()
+  @IsString()
+  mineType?: string;
+
   @ApiProperty({ description: '文件字段名', required: false, readOnly: true })
-  fieldname: string;
+  @IsOptional()
+  @IsString()
+  fieldname?: string;
+
   @ApiProperty({ description: '文件编码', required: false, readOnly: true })
-  encoding: string;
+  @IsOptional()
+  @IsString()
+  encoding?: string;
 }

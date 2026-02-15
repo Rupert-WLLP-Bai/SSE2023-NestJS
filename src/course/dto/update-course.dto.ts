@@ -9,7 +9,10 @@ export class UpdateCourseDto extends PartialType(CreateCourseDto) {
   @ApiProperty({ description: '课程代码', example: 'CS301' })
   code?: string;
 
-  @ApiProperty({ description: '课程描述', example: '学习数据结构的基本概念和算法' })
+  @ApiProperty({
+    description: '课程描述',
+    example: '学习数据结构的基本概念和算法',
+  })
   description?: string;
 
   @ApiProperty({ description: '教师ID', example: 2052526 })

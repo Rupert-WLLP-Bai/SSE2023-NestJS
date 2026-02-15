@@ -81,7 +81,8 @@ export class ExperimentScoreService {
    * Upsert key: courseId + studentId + experimentId
    */
   async upsert(createExperimentScoreDto: CreateExperimentScoreDto) {
-    const { courseId, studentId, experimentId, score } = createExperimentScoreDto;
+    const { courseId, studentId, experimentId, score } =
+      createExperimentScoreDto;
 
     const existing = await this.experimentScoreRepository.findOne({
       where: { courseId, studentId, experimentId },

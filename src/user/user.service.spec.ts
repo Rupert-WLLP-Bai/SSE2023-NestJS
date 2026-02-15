@@ -10,7 +10,9 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     mockRepository = {
-      save: jest.fn().mockImplementation((user) => Promise.resolve({ ...user, id: 1 })),
+      save: jest
+        .fn()
+        .mockImplementation((user) => Promise.resolve({ ...user, id: 1 })),
       find: jest.fn().mockResolvedValue([]),
       findAndCount: jest.fn().mockResolvedValue([[], 0]),
       findOneBy: jest.fn(),
@@ -49,7 +51,9 @@ describe('UserService', () => {
       expect(mockRepository.save).toHaveBeenCalled();
       const savedUser = mockRepository.save.mock.calls[0][0];
       expect(savedUser.password).not.toBe('plainpassword');
-      expect(await bcrypt.compare('plainpassword', savedUser.password)).toBe(true);
+      expect(await bcrypt.compare('plainpassword', savedUser.password)).toBe(
+        true,
+      );
     });
 
     it('should hash any password provided', async () => {

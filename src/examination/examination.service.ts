@@ -24,7 +24,9 @@ export class ExaminationService {
   ) {}
   private readonly logger = new Logger(ExaminationService.name);
 
-  async create(createExaminationDto: CreateExaminationDto): Promise<Examination> {
+  async create(
+    createExaminationDto: CreateExaminationDto,
+  ): Promise<Examination> {
     const examination = this.examinationRepository.create(createExaminationDto);
     return this.examinationRepository.save(examination);
   }

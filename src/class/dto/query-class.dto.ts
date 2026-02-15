@@ -5,7 +5,11 @@ export class ClassFilter {
   @ApiProperty({ description: '班级ID', example: 1, nullable: true })
   id?: number;
 
-  @ApiProperty({ description: '班级名称', example: '计算机21级1班', nullable: true })
+  @ApiProperty({
+    description: '班级名称',
+    example: '计算机21级1班',
+    nullable: true,
+  })
   name?: string;
 
   @ApiProperty({ description: '班级代码', example: 'CS2021-1', nullable: true })
@@ -32,7 +36,11 @@ export class ClassFilter {
   @ApiProperty({ description: '当前学生数', example: 30, nullable: true })
   currentStudents?: number;
 
-  @ApiProperty({ description: '描述', example: '计算机科学与技术专业班级', nullable: true })
+  @ApiProperty({
+    description: '描述',
+    example: '计算机科学与技术专业班级',
+    nullable: true,
+  })
   description?: string;
 
   @ApiProperty({
@@ -60,7 +68,16 @@ export class QueryClassDto {
   @ApiProperty({
     description: '排序字段',
     example: 'id',
-    enum: ['id', 'name', 'code', 'courseId', 'teacherId', 'year', 'createTime', 'updateTime'],
+    enum: [
+      'id',
+      'name',
+      'code',
+      'courseId',
+      'teacherId',
+      'year',
+      'createTime',
+      'updateTime',
+    ],
     nullable: true,
   })
   sort?: string;

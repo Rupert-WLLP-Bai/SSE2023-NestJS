@@ -123,7 +123,8 @@ export class TotalScoreService {
       });
       if (expScore) {
         // 权重占比 = 单项权重 / 总实验权重
-        const weightRatio = Number(expWeight.weight) / Number(totalExperimentWeight);
+        const weightRatio =
+          Number(expWeight.weight) / Number(totalExperimentWeight);
         experimentTotalScore += Number(expScore.score) * weightRatio;
       }
     }
@@ -142,7 +143,8 @@ export class TotalScoreService {
         );
         const avgExamScore = totalExamScore / examScores.length;
         // 权重占比 = 单项权重 / 总考试权重
-        const weightRatio = Number(examWeight.weight) / Number(totalExaminationWeight);
+        const weightRatio =
+          Number(examWeight.weight) / Number(totalExaminationWeight);
         examinationTotalScore += avgExamScore * weightRatio;
       }
     }
@@ -163,7 +165,9 @@ export class TotalScoreService {
    */
   async recalculate(courseId: number): Promise<TotalScore[]> {
     // 获取课程总权重
-    const totalWeight = await this.totalWeightRepository.findOneBy({ courseId });
+    const totalWeight = await this.totalWeightRepository.findOneBy({
+      courseId,
+    });
     if (!totalWeight) {
       throw new BadRequestException({
         errorCode: 'TOTAL_WEIGHT_NOT_FOUND',

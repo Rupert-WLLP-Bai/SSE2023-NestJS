@@ -48,9 +48,9 @@ describe('CourseAuthService', () => {
     it('should deny student access to course data', async () => {
       const studentContext = { ...context, userRole: UserRole.STUDENT };
 
-      await expect(service.validateCourseOwnership(studentContext)).rejects.toThrow(
-        ForbiddenException,
-      );
+      await expect(
+        service.validateCourseOwnership(studentContext),
+      ).rejects.toThrow(ForbiddenException);
     });
 
     it('should allow teacher to access their own course', async () => {
@@ -104,9 +104,9 @@ describe('CourseAuthService', () => {
       });
 
       const assistantContext = { ...context, userRole: UserRole.ASSISTANT };
-      await expect(service.validateCourseOwnership(assistantContext)).rejects.toThrow(
-        ForbiddenException,
-      );
+      await expect(
+        service.validateCourseOwnership(assistantContext),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 });

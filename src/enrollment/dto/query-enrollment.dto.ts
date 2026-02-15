@@ -14,7 +14,11 @@ export class EnrollmentFilter {
   @ApiProperty({ description: '班级ID', example: 1, nullable: true })
   classId?: number;
 
-  @ApiProperty({ description: '班级名称', example: '计算机21级1班', nullable: true })
+  @ApiProperty({
+    description: '班级名称',
+    example: '计算机21级1班',
+    nullable: true,
+  })
   className?: string;
 
   @ApiProperty({ description: '课程ID', example: 1, nullable: true })
@@ -26,10 +30,18 @@ export class EnrollmentFilter {
   @ApiProperty({ description: '状态', example: 'active', nullable: true })
   status?: string;
 
-  @ApiProperty({ description: '选课日期', example: '2023-01-01', nullable: true })
+  @ApiProperty({
+    description: '选课日期',
+    example: '2023-01-01',
+    nullable: true,
+  })
   enrollmentDate?: Date;
 
-  @ApiProperty({ description: '退课日期', example: '2023-01-01', nullable: true })
+  @ApiProperty({
+    description: '退课日期',
+    example: '2023-01-01',
+    nullable: true,
+  })
   dropDate?: Date;
 
   @ApiProperty({ description: '成绩', example: 90, nullable: true })
@@ -63,7 +75,16 @@ export class QueryEnrollmentDto {
   @ApiProperty({
     description: '排序字段',
     example: 'id',
-    enum: ['id', 'studentId', 'classId', 'courseId', 'grade', 'enrollmentDate', 'createTime', 'updateTime'],
+    enum: [
+      'id',
+      'studentId',
+      'classId',
+      'courseId',
+      'grade',
+      'enrollmentDate',
+      'createTime',
+      'updateTime',
+    ],
     nullable: true,
   })
   sort?: string;

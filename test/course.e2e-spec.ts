@@ -39,7 +39,7 @@ describe('CourseController (e2e)', () => {
           signOptions: { expiresIn: '7d' },
         }),
         TypeOrmModule.forRoot({
-          type: 'sqlite',
+          type: 'better-sqlite3',
           database: ':memory:',
           entities: [Course, Class, Enrollment],
           synchronize: true,
@@ -59,9 +59,15 @@ describe('CourseController (e2e)', () => {
     app.useGlobalInterceptors(new TransformInterceptor());
     await app.init();
 
-    courseRepository = moduleFixture.get<Repository<Course>>(getRepositoryToken(Course));
-    classRepository = moduleFixture.get<Repository<Class>>(getRepositoryToken(Class));
-    enrollmentRepository = moduleFixture.get<Repository<Enrollment>>(getRepositoryToken(Enrollment));
+    courseRepository = moduleFixture.get<Repository<Course>>(
+      getRepositoryToken(Course),
+    );
+    classRepository = moduleFixture.get<Repository<Class>>(
+      getRepositoryToken(Class),
+    );
+    enrollmentRepository = moduleFixture.get<Repository<Enrollment>>(
+      getRepositoryToken(Enrollment),
+    );
   });
 
   afterAll(async () => {

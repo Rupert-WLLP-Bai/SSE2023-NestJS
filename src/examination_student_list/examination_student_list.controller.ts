@@ -11,7 +11,10 @@ import {
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ExaminationStudentListService, ImportResult } from './examination_student_list.service';
+import {
+  ExaminationStudentListService,
+  ImportResult,
+} from './examination_student_list.service';
 import { CreateExaminationStudentListDto } from './dto/create-examination_student_list.dto';
 import { UpdateExaminationStudentListDto } from './dto/update-examination_student_list.dto';
 import {
@@ -253,7 +256,9 @@ export class ExaminationStudentListController {
     @Param('examinationId', ParseIntPipe) examinationId: number,
     @Param('classId', ParseIntPipe) classId: number,
   ): Promise<NormalResponse> {
-    this.logger.log(`Importing students for examination ${examinationId} from class ${classId}`);
+    this.logger.log(
+      `Importing students for examination ${examinationId} from class ${classId}`,
+    );
     const result: NormalResponse = {
       success: true,
       data: {},
@@ -264,10 +269,11 @@ export class ExaminationStudentListController {
       host: '',
     };
     try {
-      const importResult: ImportResult = await this.studentListService.importStudentsFromClass(
-        examinationId,
-        classId,
-      );
+      const importResult: ImportResult =
+        await this.studentListService.importStudentsFromClass(
+          examinationId,
+          classId,
+        );
       result.data = importResult;
     } catch (error) {
       result.success = false;

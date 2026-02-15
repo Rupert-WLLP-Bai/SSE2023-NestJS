@@ -74,13 +74,19 @@ export class EnrollmentService {
     });
   }
 
-  async findByStudentAndClass(studentId: number, classId: number): Promise<Enrollment | null> {
+  async findByStudentAndClass(
+    studentId: number,
+    classId: number,
+  ): Promise<Enrollment | null> {
     return this.enrollmentRepository.findOne({
       where: { studentId, classId },
     });
   }
 
-  async dropCourse(studentId: number, classId: number): Promise<Enrollment | null> {
+  async dropCourse(
+    studentId: number,
+    classId: number,
+  ): Promise<Enrollment | null> {
     const enrollment = await this.findByStudentAndClass(studentId, classId);
     if (enrollment) {
       enrollment.status = 'dropped';

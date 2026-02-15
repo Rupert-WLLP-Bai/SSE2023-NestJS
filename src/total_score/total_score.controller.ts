@@ -93,9 +93,7 @@ export class TotalScoreController {
   @ApiOperation({ summary: '根据ID获取总成绩' })
   @ApiParam({ name: 'id', description: '成绩ID', type: Number })
   @ApiResponse({ status: 200, description: '查询成功', type: QueryResponse })
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<QueryResponse> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<QueryResponse> {
     const response: QueryResponse = {
       success: true,
       data: { list: [], total: 0, current: 1, pageSize: 10 },
@@ -137,7 +135,10 @@ export class TotalScoreController {
       host: '',
     };
     try {
-      const result = await this.totalScoreService.update(id, updateTotalScoreDto);
+      const result = await this.totalScoreService.update(
+        id,
+        updateTotalScoreDto,
+      );
       response.data = { raw: result, affected: 1, generatedMaps: [] };
       response.success = true;
     } catch (e) {
@@ -152,9 +153,7 @@ export class TotalScoreController {
   @ApiOperation({ summary: '删除总成绩' })
   @ApiParam({ name: 'id', description: '成绩ID', type: Number })
   @ApiResponse({ status: 200, description: '删除成功', type: DeleteResponse })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<DeleteResponse> {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResponse> {
     const response: DeleteResponse = {
       success: true,
       data: { raw: [], affected: 0 },
@@ -250,7 +249,9 @@ export class TotalScoreController {
       host: '',
     };
     try {
-      const results = await this.totalScoreService.findByCourseWithStudents(courseId);
+      const results = await this.totalScoreService.findByCourseWithStudents(
+        courseId,
+      );
       response.success = true;
       response.data.list = results;
       response.data.total = results.length;

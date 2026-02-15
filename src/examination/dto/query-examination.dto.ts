@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsNumber, IsString, IsEnum } from 'class-validator';
-import { ExaminationStatus, ExaminationType } from '../entities/examination.entity';
+import {
+  ExaminationStatus,
+  ExaminationType,
+} from '../entities/examination.entity';
 
 export class ExaminationFilter {
   @ApiProperty({ description: '考试ID', example: 1, required: false })
@@ -8,12 +11,20 @@ export class ExaminationFilter {
   @IsNumber()
   id?: number;
 
-  @ApiProperty({ description: '考试标题', example: '期末考试', required: false })
+  @ApiProperty({
+    description: '考试标题',
+    example: '期末考试',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   title?: string;
 
-  @ApiProperty({ description: '考试描述', example: '期末考试描述', required: false })
+  @ApiProperty({
+    description: '考试描述',
+    example: '期末考试描述',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   description?: string;
@@ -23,7 +34,11 @@ export class ExaminationFilter {
   @IsNumber()
   courseId?: number;
 
-  @ApiProperty({ description: '课程名称', example: '软件工程', required: false })
+  @ApiProperty({
+    description: '课程名称',
+    example: '软件工程',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   courseName?: string;
@@ -33,20 +48,36 @@ export class ExaminationFilter {
   @IsNumber()
   publisherId?: number;
 
-  @ApiProperty({ description: '发布者名称', example: '教师姓名', required: false })
+  @ApiProperty({
+    description: '发布者名称',
+    example: '教师姓名',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   publisherName?: string;
 
-  @ApiProperty({ description: '考试开始时间', example: '2023-06-01 09:00:00', required: false })
+  @ApiProperty({
+    description: '考试开始时间',
+    example: '2023-06-01 09:00:00',
+    required: false,
+  })
   @IsOptional()
   startTime?: Date;
 
-  @ApiProperty({ description: '考试结束时间', example: '2023-06-01 12:00:00', required: false })
+  @ApiProperty({
+    description: '考试结束时间',
+    example: '2023-06-01 12:00:00',
+    required: false,
+  })
   @IsOptional()
   endTime?: Date;
 
-  @ApiProperty({ description: '考试时长（分钟）', example: 180, required: false })
+  @ApiProperty({
+    description: '考试时长（分钟）',
+    example: 180,
+    required: false,
+  })
   @IsOptional()
   @IsNumber()
   duration?: number;
@@ -81,11 +112,19 @@ export class ExaminationFilter {
   @IsEnum(ExaminationType)
   type?: ExaminationType;
 
-  @ApiProperty({ description: '创建时间', example: '2023-05-15 00:00:00', required: false })
+  @ApiProperty({
+    description: '创建时间',
+    example: '2023-05-15 00:00:00',
+    required: false,
+  })
   @IsOptional()
   createTime?: Date;
 
-  @ApiProperty({ description: '更新时间', example: '2023-05-15 00:00:00', required: false })
+  @ApiProperty({
+    description: '更新时间',
+    example: '2023-05-15 00:00:00',
+    required: false,
+  })
   @IsOptional()
   updateTime?: Date;
 }

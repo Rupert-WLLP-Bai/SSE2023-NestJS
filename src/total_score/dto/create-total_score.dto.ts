@@ -18,14 +18,22 @@ export class CreateTotalScoreDto {
   @Max(100)
   totalScore: number;
 
-  @ApiProperty({ description: '实验成绩 (0-100)', example: 80, required: false })
+  @ApiProperty({
+    description: '实验成绩 (0-100)',
+    example: 80,
+    required: false,
+  })
   @IsNumber()
   @IsOptional()
   @Min(0)
   @Max(100)
   experimentScore?: number;
 
-  @ApiProperty({ description: '考试成绩 (0-100)', example: 90, required: false })
+  @ApiProperty({
+    description: '考试成绩 (0-100)',
+    example: 90,
+    required: false,
+  })
   @IsNumber()
   @IsOptional()
   @Min(0)
