@@ -7,6 +7,7 @@ import {
 } from '../common/response/response.interface';
 import { QueryExperimentDto } from './dto/query-experiment.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -33,6 +34,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('experiment')
 @ApiTags('experiment')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 export class ExperimentController {
   constructor(

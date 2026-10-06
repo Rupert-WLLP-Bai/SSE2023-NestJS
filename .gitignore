@@ -44,3 +44,8 @@ database.sqlite
 # PRD and tasks (not for production)
 tasks/
 prd*.json
+
+src/coverage/
+.superpowers/
+__pycache__/
+*.pyc

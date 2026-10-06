@@ -1,5 +1,6 @@
 import { QueryCourseDto } from './dto/query-course.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -25,6 +26,7 @@ import { NormalResponse } from '../common/response/response.interface';
 
 @Controller('course')
 @ApiTags('course')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}

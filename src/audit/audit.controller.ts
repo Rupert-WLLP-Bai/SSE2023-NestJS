@@ -1,11 +1,12 @@
 import { QueryResponse } from '../common/response/response.interface';
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { AuditService, QueryAuditLogDto } from './audit.service';
 import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
 import { UserRole } from '../user/entities/user.entity';
 
 @ApiTags('audit')
+@ApiBearerAuth('JWT-auth')
 @Controller('audit')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AuditController {

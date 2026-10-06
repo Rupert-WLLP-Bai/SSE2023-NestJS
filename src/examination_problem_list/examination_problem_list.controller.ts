@@ -14,6 +14,7 @@ import { ExaminationProblemListService } from './examination_problem_list.servic
 import { CreateExaminationProblemListDto } from './dto/create-examination_problem_list.dto';
 import { UpdateExaminationProblemListDto } from './dto/update-examination_problem_list.dto';
 import {
+  ApiBearerAuth,
   ApiTags,
   ApiOperation,
   ApiParam,
@@ -29,6 +30,7 @@ import {
 } from '../common/response/response.interface';
 
 @ApiTags('examination-problem-list')
+@ApiBearerAuth('JWT-auth')
 @Controller('examination-problem-list')
 export class ExaminationProblemListController {
   constructor(

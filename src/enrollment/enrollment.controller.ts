@@ -6,6 +6,7 @@ import {
 } from '../common/response/response.interface';
 import { QueryEnrollmentDto } from './dto/query-enrollment.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -29,6 +30,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('enrollment')
 @ApiTags('enrollment')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 export class EnrollmentController {
   constructor(private readonly enrollmentService: EnrollmentService) {}

@@ -1,4 +1,5 @@
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiOperation,
@@ -34,6 +35,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('experiment-submit')
 @ApiTags('experiment-submit')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 export class ExperimentSubmitController {
   constructor(

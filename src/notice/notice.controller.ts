@@ -1,5 +1,6 @@
 import { QueryNoticeDto } from './dto/query-notice.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiOperation,
@@ -32,6 +33,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('notice')
+@ApiBearerAuth('JWT-auth')
 @Controller('notice')
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}

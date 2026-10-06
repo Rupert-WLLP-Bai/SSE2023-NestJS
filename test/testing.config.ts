@@ -49,7 +49,7 @@ export const TEST_ENTITIES = [
 export const JWT_SECRET = 'test-secret-for-e2e';
 
 /**
- * 创建 SQLite 内存数据库配置
+ * 创建 SQLite 文件数据库配置
  */
 export function createSqliteConfig(): TypeOrmModuleOptions {
   return {

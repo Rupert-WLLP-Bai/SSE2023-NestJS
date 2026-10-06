@@ -18,6 +18,7 @@ import {
 import { CreateExaminationStudentListDto } from './dto/create-examination_student_list.dto';
 import { UpdateExaminationStudentListDto } from './dto/update-examination_student_list.dto';
 import {
+  ApiBearerAuth,
   ApiTags,
   ApiOperation,
   ApiParam,
@@ -34,6 +35,7 @@ import {
 } from '../common/response/response.interface';
 
 @ApiTags('examination-student-list')
+@ApiBearerAuth('JWT-auth')
 @Controller('examination-student-list')
 export class ExaminationStudentListController {
   constructor(
