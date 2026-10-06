@@ -39,6 +39,13 @@ jobs:
           JWT_SECRET: test_secret_key_for_ci_at_least_32_chars
           CORS_ORIGINS: http://localhost:3000
 
+      - name: Run e2e tests
+        run: bun run test:e2e -- --runInBand
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test_secret_key_for_ci_at_least_32_chars
+          CORS_ORIGINS: http://localhost:3000
+
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
         with:

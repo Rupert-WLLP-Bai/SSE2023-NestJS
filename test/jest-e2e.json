@@ -6,7 +6,15 @@
   "transform": {
     "^.+\\.(t|j)s$": ["ts-jest", {
       "tsconfig": {
-        "skipLibCheck": true
+        "target": "es2023",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "strictNullChecks": false,
+        "noImplicitAny": false,
+        "types": ["jest", "node", "multer"]
       }
     }]
   },

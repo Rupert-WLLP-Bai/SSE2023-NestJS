@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ExaminationSubmit, SubmitStatus } from './entities/examination_submit.entity';
+import {
+  ExaminationSubmit,
+  SubmitStatus,
+} from './entities/examination_submit.entity';
 import { ExaminationSubmitController } from './examination_submit.controller';
 import { ExaminationSubmitService } from './examination_submit.service';
 import { ExaminationService } from '../examination/examination.service';
-import { Examination, ExaminationStatus } from '../examination/entities/examination.entity';
+import {
+  Examination,
+  ExaminationStatus,
+} from '../examination/entities/examination.entity';
 
 describe('ExaminationSubmitController', () => {
   let controller: ExaminationSubmitController;
@@ -184,7 +190,10 @@ describe('ExaminationSubmitController', () => {
   describe('update', () => {
     it('should update examination submit', async () => {
       const updateDto = { score: 90, feedback: 'Good job!' };
-      mockService.update.mockResolvedValue({ ...mockExaminationSubmit, ...updateDto });
+      mockService.update.mockResolvedValue({
+        ...mockExaminationSubmit,
+        ...updateDto,
+      });
 
       const result = await controller.update(1, updateDto);
 
@@ -250,9 +259,7 @@ describe('ExaminationSubmitController', () => {
 
     it('should return error when marking as graded fails', async () => {
       mockService.validateSubmitted.mockResolvedValue(undefined);
-      mockService.markAsGraded.mockRejectedValue(
-        new Error('Update failed'),
-      );
+      mockService.markAsGraded.mockRejectedValue(new Error('Update failed'));
 
       const result = await controller.markAsGraded(1, 1, 1);
 

@@ -9,8 +9,9 @@ import {
   Max,
   MinLength,
   MaxLength,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({ description: '用户id', example: 2052526, nullable: true })
@@ -69,7 +70,8 @@ export class CreateUserDto {
     nullable: true,
   })
   @IsOptional()
-  @IsDateString({}, { message: '创建时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '创建时间格式不正确' })
   create_time?: Date;
 
   @ApiProperty({
@@ -77,7 +79,8 @@ export class CreateUserDto {
     example: '2021-01-01 00:00:00',
   })
   @IsOptional()
-  @IsDateString({}, { message: '更新时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '更新时间格式不正确' })
   update_time?: Date;
 
   @ApiProperty({
@@ -86,7 +89,8 @@ export class CreateUserDto {
     nullable: true,
   })
   @IsOptional()
-  @IsDateString({}, { message: '最后登录时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '最后登录时间格式不正确' })
   last_login_time?: Date;
 
   @ApiProperty({

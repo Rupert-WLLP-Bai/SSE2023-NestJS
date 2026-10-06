@@ -4,13 +4,13 @@ jest.mock('uuid', () => ({
 }));
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ThrottlerModule } from '@nestjs/throttler';
-import * as request from 'supertest';
+import request from 'supertest';
 
 import { Course } from '../src/course/entities/course.entity';
 import { Examination } from '../src/examination/entities/examination.entity';
@@ -35,6 +35,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from '../src/common/strategies/jwt.strategy';
 import { TransformInterceptor } from '../src/common/interceptors/success.interceptor';
 import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
+import { createValidationPipe } from '../src/common/pipes/validation.pipe';
 
 const JWT_SECRET = 'test-secret-for-e2e-core';
 
@@ -108,7 +109,7 @@ describe('Core Flow E2E (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalPipes(createValidationPipe());
     app.useGlobalInterceptors(new TransformInterceptor());
     app.useGlobalFilters(new AllExceptionsFilter());
     await app.init();
@@ -120,7 +121,7 @@ describe('Core Flow E2E (e2e)', () => {
       sub: 1001,
       id: 1001,
       role: 2,
-      name: 'Teacher Li'
+      name: 'Teacher Li',
     });
 
     // 生成学生token (role: 1 = STUDENT)
@@ -128,7 +129,7 @@ describe('Core Flow E2E (e2e)', () => {
       sub: 2052526,
       id: 2052526,
       role: 1,
-      name: 'Student Zhang'
+      name: 'Student Zhang',
     });
   });
 

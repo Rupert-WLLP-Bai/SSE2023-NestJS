@@ -88,7 +88,10 @@ describe('ExperimentScoreService', () => {
   describe('update', () => {
     it('should update experiment score', async () => {
       mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.findOneBy.mockResolvedValue({ ...mockExperimentScore, score: 90 });
+      mockRepository.findOneBy.mockResolvedValue({
+        ...mockExperimentScore,
+        score: 90,
+      });
       const result = await service.update(1, { score: 90 } as any);
       expect(result).toBeDefined();
     });
@@ -170,7 +173,10 @@ describe('ExperimentScoreService', () => {
 
     it('should filter by both experimentId and studentId', async () => {
       mockRepository.findAndCount.mockResolvedValue([[mockExperimentScore], 1]);
-      const result = await service.findCommon({ experimentId: 1, studentId: 1 });
+      const result = await service.findCommon({
+        experimentId: 1,
+        studentId: 1,
+      });
       expect(result).toEqual([[mockExperimentScore], 1]);
       expect(mockRepository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -194,7 +200,10 @@ describe('ExperimentScoreService', () => {
   describe('upsert', () => {
     it('should update existing record', async () => {
       mockRepository.findOne.mockResolvedValue(mockExperimentScore);
-      mockRepository.save.mockResolvedValue({ ...mockExperimentScore, score: 90 });
+      mockRepository.save.mockResolvedValue({
+        ...mockExperimentScore,
+        score: 90,
+      });
       const result = await service.upsert({
         courseId: 1,
         experimentId: 1,

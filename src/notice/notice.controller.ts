@@ -31,6 +31,7 @@ import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('notice')
 @ApiBearerAuth('JWT-auth')
@@ -63,7 +64,7 @@ export class NoticeController {
     } catch (e) {
       this.logger.warn(e);
       result.success = false;
-      result.errorMessage = e.message;
+      result.errorMessage = errorMessage(e);
     }
     return result;
   }
@@ -201,7 +202,7 @@ export class NoticeController {
     } catch (e) {
       this.logger.warn(e);
       result.success = false;
-      result.errorMessage = e.message;
+      result.errorMessage = errorMessage(e);
     }
     return result;
   }

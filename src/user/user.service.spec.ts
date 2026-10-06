@@ -159,7 +159,10 @@ describe('UserService', () => {
 
     it('should update user with multiple fields', async () => {
       mockRepository.update.mockResolvedValue({ affected: 1 });
-      const updateUserDto = { name: 'Updated Name', email: 'newemail@example.com' };
+      const updateUserDto = {
+        name: 'Updated Name',
+        email: 'newemail@example.com',
+      };
       const result = await service.update(1, updateUserDto);
       expect(mockRepository.update).toHaveBeenCalledWith(1, updateUserDto);
       expect(result).toEqual({ affected: 1 });

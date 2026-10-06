@@ -25,11 +25,10 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    const { code, message } = response.data
-
-    if (code !== 200 && code !== undefined) {
-      ElMessage.error(message || '请求失败')
-      return Promise.reject(new Error(message || '请求失败'))
+    const payload = response.data
+    if (payload && payload.success === false) {
+      ElMessage.error(payload.errorMessage || '请求失败')
+      return Promise.reject(new Error(payload.errorMessage || '请求失败'))
     }
 
     return response.data

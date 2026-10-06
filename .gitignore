@@ -41,6 +41,12 @@ database.sqlite
 # Environment variables
 .env
 
+# TypeScript incremental
+*.tsbuildinfo
+
+# Agent/local skill dumps
+.claude/skills/
+
 # PRD and tasks (not for production)
 tasks/
 prd*.json

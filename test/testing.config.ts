@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from '../src/common/strategies/jwt.strategy';
 import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
 import { TransformInterceptor } from '../src/common/interceptors/success.interceptor';
+import { createValidationPipe } from '../src/common/pipes/validation.pipe';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 
 // 导入所有实体
@@ -124,7 +125,7 @@ export async function createTestModule(
 export async function configureTestApp(
   app: INestApplication,
 ): Promise<INestApplication> {
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(createValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
   return app;

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
@@ -5,7 +6,7 @@ import { LogLevel } from '@nestjs/common';
 // 引入swagger
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 // 引入 ValidationPipe
-import { ValidationPipe } from '@nestjs/common';
+import { createValidationPipe } from './common/pipes/validation.pipe';
 // 引入全局异常过滤器
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 // 引入成功响应拦截器
@@ -23,16 +24,7 @@ async function bootstrap() {
   });
 
   // 全局验证管道
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // 自动剥离非白名单属性
-      forbidNonWhitelisted: true, // 如果有非白名单属性，抛出错误
-      transform: true, // 自动转换参数类型
-      transformOptions: {
-        enableImplicitConversion: true, // 启用隐式类型转换
-      },
-    }),
-  );
+  app.useGlobalPipes(createValidationPipe());
 
   // 全局异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());

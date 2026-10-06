@@ -4,8 +4,9 @@ import {
   IsNumber,
   IsString,
   IsEnum,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { StudentStatus } from '../entities/examination_student_list.entity';
 
 export class CreateExaminationStudentListDto {
@@ -48,7 +49,8 @@ export class CreateExaminationStudentListDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   startTime?: Date;
 
   @ApiProperty({
@@ -57,7 +59,8 @@ export class CreateExaminationStudentListDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   endTime?: Date;
 
   @ApiProperty({
@@ -66,7 +69,8 @@ export class CreateExaminationStudentListDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   createTime?: Date;
 
   @ApiProperty({
@@ -75,6 +79,7 @@ export class CreateExaminationStudentListDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   updateTime?: Date;
 }

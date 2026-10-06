@@ -34,7 +34,7 @@ export class LoginService {
     // 获取用户信息
     const id = loginParams.id;
     const password = loginParams.password;
-    const user = await this.userService.findOne(id);
+    const user = await this.userService.findOneWithPassword(id);
     // 用户不存在
     if (!user) {
       res.errorCode = loginErrorCodes.USER_NOT_EXIST;

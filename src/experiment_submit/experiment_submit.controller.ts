@@ -32,6 +32,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { OmitFileExperimentSubmitDto } from './dto/omit_file-experiment_submit.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { errorMessage } from '../common/errors';
 
 @Controller('experiment-submit')
 @ApiTags('experiment-submit')
@@ -79,7 +80,7 @@ export class ExperimentSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -118,7 +119,7 @@ export class ExperimentSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -158,7 +159,7 @@ export class ExperimentSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -184,7 +185,7 @@ export class ExperimentSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

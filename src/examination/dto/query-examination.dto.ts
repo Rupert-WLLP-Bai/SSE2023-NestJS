@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsNumber, IsString, IsEnum } from 'class-validator';
+import {
+  IsIn,
+  IsOptional,
+  IsNumber,
+  IsString,
+  IsEnum,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   ExaminationStatus,
   ExaminationType,
@@ -157,6 +165,7 @@ export class QueryExaminationDto {
     required: false,
   })
   @IsOptional()
+  @IsIn(['ASC', 'DESC'])
   order?: 'ASC' | 'DESC';
 
   @ApiProperty({
@@ -166,5 +175,7 @@ export class QueryExaminationDto {
     required: false,
   })
   @IsOptional()
+  @ValidateNested()
+  @Type(() => ExaminationFilter)
   filter?: ExaminationFilter;
 }

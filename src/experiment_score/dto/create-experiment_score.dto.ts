@@ -5,8 +5,9 @@ import {
   IsOptional,
   Min,
   Max,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateExperimentScoreDto {
   @ApiProperty({ description: '课程ID', example: 1 })
@@ -38,8 +39,13 @@ export class CreateExperimentScoreDto {
   @IsOptional()
   comment?: string;
 
-  @ApiProperty({ description: '评分时间', example: '2023-06-01 00:00:00', nullable: true })
+  @ApiProperty({
+    description: '评分时间',
+    example: '2023-06-01 00:00:00',
+    nullable: true,
+  })
   @IsOptional()
-  @IsDateString({}, { message: '评分时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '评分时间格式不正确' })
   scoredAt?: Date;
 }

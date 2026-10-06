@@ -31,6 +31,7 @@ import { ExperimentService } from './experiment.service';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { errorMessage } from '../common/errors';
 
 @Controller('experiment')
 @ApiTags('experiment')
@@ -68,7 +69,7 @@ export class ExperimentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -91,7 +92,7 @@ export class ExperimentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -116,7 +117,7 @@ export class ExperimentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -149,7 +150,7 @@ export class ExperimentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -175,7 +176,7 @@ export class ExperimentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -204,7 +205,7 @@ export class ExperimentController {
       response.data.pageSize = queryExperimentDto.limit;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

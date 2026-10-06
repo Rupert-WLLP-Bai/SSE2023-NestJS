@@ -5,8 +5,9 @@ import {
   IsInt,
   Min,
   MaxLength,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateNoticeDto {
   @ApiProperty({ description: '实验标题', example: '实验1' })
@@ -23,7 +24,8 @@ export class CreateNoticeDto {
 
   @ApiProperty({ description: '发布日期', example: '2020-12-12' })
   @IsOptional()
-  @IsDateString({}, { message: '发布日期格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '发布日期格式不正确' })
   publishDate?: Date;
 
   @ApiProperty({ description: '发布人id', example: '1' })

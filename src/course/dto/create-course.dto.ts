@@ -8,8 +8,9 @@ import {
   Max,
   MinLength,
   MaxLength,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateCourseDto {
   @ApiProperty({ description: '课程名称', example: '数据结构' })
@@ -57,11 +58,13 @@ export class CreateCourseDto {
 
   @ApiProperty({ description: '创建时间', example: '2021-01-01 00:00:00' })
   @IsOptional()
-  @IsDateString({}, { message: '创建时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '创建时间格式不正确' })
   createTime?: Date;
 
   @ApiProperty({ description: '更新时间', example: '2021-01-01 00:00:00' })
   @IsOptional()
-  @IsDateString({}, { message: '更新时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '更新时间格式不正确' })
   updateTime?: Date;
 }

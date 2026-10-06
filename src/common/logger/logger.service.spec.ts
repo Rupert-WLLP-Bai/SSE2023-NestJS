@@ -79,7 +79,10 @@ describe('LoggerService', () => {
       });
 
       it('should log error with meta', () => {
-        logger.error('Error message', 'ErrorContext', { userId: 123, action: 'login' });
+        logger.error('Error message', 'ErrorContext', {
+          userId: 123,
+          action: 'login',
+        });
 
         expect(consoleSpy.error).toHaveBeenCalled();
         const loggedData = JSON.parse(consoleSpy.error.mock.calls[0][0]);

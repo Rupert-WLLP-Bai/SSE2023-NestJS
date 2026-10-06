@@ -28,6 +28,7 @@ import { CreateTotalScoreDto } from './dto/create-total_score.dto';
 import { UpdateTotalScoreDto } from './dto/update-total_score.dto';
 import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
 import { UserRole } from '../user/entities/user.entity';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('total-score')
 @ApiBearerAuth('JWT-auth')
@@ -58,7 +59,7 @@ export class TotalScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -83,7 +84,7 @@ export class TotalScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -110,7 +111,7 @@ export class TotalScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -143,7 +144,7 @@ export class TotalScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -168,7 +169,7 @@ export class TotalScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -197,7 +198,7 @@ export class TotalScoreController {
       response.data.pageSize = query.limit || 10;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -226,7 +227,7 @@ export class TotalScoreController {
       response.data.total = results.length;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -249,15 +250,14 @@ export class TotalScoreController {
       host: '',
     };
     try {
-      const results = await this.totalScoreService.findByCourseWithStudents(
-        courseId,
-      );
+      const results =
+        await this.totalScoreService.findByCourseWithStudents(courseId);
       response.success = true;
       response.data.list = results;
       response.data.total = results.length;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

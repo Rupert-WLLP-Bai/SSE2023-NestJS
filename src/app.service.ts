@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { User } from './user/entities/user.entity';
 import { UserService } from './user/user.service';
@@ -30,7 +30,7 @@ export class AppService {
     try {
       await this.dataSource.query('SELECT 1');
       latency = Date.now() - start;
-    } catch (error) {
+    } catch {
       dbStatus = 'down';
     }
 
@@ -44,12 +44,7 @@ export class AppService {
     };
   }
 
-  // 从header中的Authorization中获取token
-  // 使用token获取用户信息
-  // TODO 目前使用id作为token
-  // 返回:Promise<User>
-  getCurrentUser(token: string): Promise<User> {
-    const res = this.userService.findOne(Number(token));
-    return res;
+  getCurrentUser(userId: number): Promise<User> {
+    return this.userService.findOne(userId);
   }
 }

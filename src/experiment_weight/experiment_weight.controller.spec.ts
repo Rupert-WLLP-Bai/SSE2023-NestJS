@@ -88,7 +88,9 @@ describe('ExperimentWeightController', () => {
 
   describe('create', () => {
     it('should create experiment weight successfully', async () => {
-      jest.spyOn(service, 'create').mockResolvedValue(mockExperimentWeight as ExperimentWeight);
+      jest
+        .spyOn(service, 'create')
+        .mockResolvedValue(mockExperimentWeight as ExperimentWeight);
       mockAuditRepository.create.mockReturnValue({});
       mockAuditRepository.save.mockResolvedValue({});
 
@@ -103,7 +105,9 @@ describe('ExperimentWeightController', () => {
     });
 
     it('should handle create error', async () => {
-      jest.spyOn(service, 'create').mockRejectedValue(new Error('Create failed'));
+      jest
+        .spyOn(service, 'create')
+        .mockRejectedValue(new Error('Create failed'));
 
       const result = await controller.create(
         { courseId: 1, experimentId: 1, weight: 20 },
@@ -118,7 +122,9 @@ describe('ExperimentWeightController', () => {
 
   describe('findAll', () => {
     it('should return all experiment weights', async () => {
-      jest.spyOn(service, 'findAll').mockResolvedValue([mockExperimentWeight] as ExperimentWeight[]);
+      jest
+        .spyOn(service, 'findAll')
+        .mockResolvedValue([mockExperimentWeight] as ExperimentWeight[]);
 
       const result = await controller.findAll();
 
@@ -128,7 +134,9 @@ describe('ExperimentWeightController', () => {
     });
 
     it('should handle findAll error', async () => {
-      jest.spyOn(service, 'findAll').mockRejectedValue(new Error('Find all failed'));
+      jest
+        .spyOn(service, 'findAll')
+        .mockRejectedValue(new Error('Find all failed'));
 
       const result = await controller.findAll();
 
@@ -139,7 +147,9 @@ describe('ExperimentWeightController', () => {
 
   describe('findOne', () => {
     it('should return experiment weight by id', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValue(mockExperimentWeight as ExperimentWeight);
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue(mockExperimentWeight as ExperimentWeight);
 
       const result = await controller.findOne(1);
 
@@ -159,7 +169,9 @@ describe('ExperimentWeightController', () => {
     });
 
     it('should handle findOne error', async () => {
-      jest.spyOn(service, 'findOne').mockRejectedValue(new Error('Find one failed'));
+      jest
+        .spyOn(service, 'findOne')
+        .mockRejectedValue(new Error('Find one failed'));
 
       const result = await controller.findOne(1);
 
@@ -170,7 +182,9 @@ describe('ExperimentWeightController', () => {
 
   describe('update', () => {
     it('should update experiment weight successfully', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValue(mockExperimentWeight as ExperimentWeight);
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue(mockExperimentWeight as ExperimentWeight);
       jest.spyOn(service, 'update').mockResolvedValue({
         ...mockExperimentWeight,
         weight: 30,
@@ -189,8 +203,12 @@ describe('ExperimentWeightController', () => {
     });
 
     it('should handle update error', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValue(mockExperimentWeight as ExperimentWeight);
-      jest.spyOn(service, 'update').mockRejectedValue(new Error('Update failed'));
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue(mockExperimentWeight as ExperimentWeight);
+      jest
+        .spyOn(service, 'update')
+        .mockRejectedValue(new Error('Update failed'));
 
       const result = await controller.update(
         1,
@@ -215,7 +233,9 @@ describe('ExperimentWeightController', () => {
     });
 
     it('should handle remove error', async () => {
-      jest.spyOn(service, 'remove').mockRejectedValue(new Error('Delete failed'));
+      jest
+        .spyOn(service, 'remove')
+        .mockRejectedValue(new Error('Delete failed'));
 
       const result = await controller.remove(1);
 

@@ -1,9 +1,15 @@
 import { QueryResponse } from '../common/response/response.interface';
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { AuditService, QueryAuditLogDto } from './audit.service';
 import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
 import { UserRole } from '../user/entities/user.entity';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('audit')
 @ApiBearerAuth('JWT-auth')
@@ -42,7 +48,7 @@ export class AuditController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

@@ -156,7 +156,9 @@ describe('EnrollmentController', () => {
     });
 
     it('should handle error when finding by student id', async () => {
-      mockService.findByStudentId.mockRejectedValue(new Error('Database error'));
+      mockService.findByStudentId.mockRejectedValue(
+        new Error('Database error'),
+      );
       const result = await controller.findByStudentId('1');
       expect(result.success).toBe(false);
     });

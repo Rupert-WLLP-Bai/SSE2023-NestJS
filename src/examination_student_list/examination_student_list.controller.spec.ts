@@ -157,7 +157,9 @@ describe('ExaminationStudentListController', () => {
     });
 
     it('should handle error when importing', async () => {
-      mockService.importStudentsFromClass.mockRejectedValue(new Error('Import error'));
+      mockService.importStudentsFromClass.mockRejectedValue(
+        new Error('Import error'),
+      );
       const result = await controller.importClass(1, 1);
       expect(result.success).toBe(false);
     });

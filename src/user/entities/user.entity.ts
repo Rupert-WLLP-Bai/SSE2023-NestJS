@@ -9,7 +9,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   name: string;
   // 密码 sha256
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   password: string;
   // 邮箱
   @Column({ nullable: true })

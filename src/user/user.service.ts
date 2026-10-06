@@ -37,7 +37,26 @@ export class UserService {
 
   findOne(id: number): Promise<User> | undefined {
     // 使用id查询
-    return this.userRepository.findOneBy({ id: id });
+    return this.userRepository.findOneBy({ id });
+  }
+
+  findOneWithPassword(id: number): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        password: true,
+        email: true,
+        phone: true,
+        status: true,
+        role: true,
+        create_time: true,
+        update_time: true,
+        last_login_time: true,
+        ip: true,
+      },
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

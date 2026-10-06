@@ -8,8 +8,9 @@ import {
   Max,
   MinLength,
   MaxLength,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateExperimentDto {
   @ApiProperty({ description: '实验名称', example: '实验1' })
@@ -52,21 +53,25 @@ export class CreateExperimentDto {
 
   @ApiProperty({ description: '实验开始时间', example: '2021-01-01 00:00:00' })
   @IsNotEmpty({ message: '开始时间不能为空' })
-  @IsDateString({}, { message: '开始时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '开始时间格式不正确' })
   startTime: Date;
 
   @ApiProperty({ description: '实验结束时间', example: '2021-01-03 00:00:00' })
   @IsNotEmpty({ message: '结束时间不能为空' })
-  @IsDateString({}, { message: '结束时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '结束时间格式不正确' })
   endTime: Date;
 
   @ApiProperty({ description: '实验创建时间', example: '2020-12-31 00:00:00' })
   @IsOptional()
-  @IsDateString({}, { message: '创建时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '创建时间格式不正确' })
   createTime?: Date;
 
   @ApiProperty({ description: '实验更新时间', example: '2021-01-01 00:00:00' })
   @IsOptional()
-  @IsDateString({}, { message: '更新时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '更新时间格式不正确' })
   updateTime?: Date;
 }

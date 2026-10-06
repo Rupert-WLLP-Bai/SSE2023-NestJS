@@ -117,14 +117,19 @@ describe('ExaminationWeightService', () => {
       mockRepository.findOneBy.mockResolvedValueOnce(mockTotalWeight);
       mockRepository.findBy.mockResolvedValue([]);
       mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.findOneBy.mockResolvedValue({ ...mockExaminationWeight, weight: 20 });
+      mockRepository.findOneBy.mockResolvedValue({
+        ...mockExaminationWeight,
+        weight: 20,
+      });
       const result = await service.update(1, { weight: 20 } as any);
       expect(result).toBeDefined();
     });
 
     it('should throw error when examination weight not found', async () => {
       mockRepository.findOneBy.mockResolvedValue(null);
-      await expect(service.update(999, { weight: 20 } as any)).rejects.toThrow();
+      await expect(
+        service.update(999, { weight: 20 } as any),
+      ).rejects.toThrow();
     });
   });
 
@@ -154,7 +159,10 @@ describe('ExaminationWeightService', () => {
 
   describe('findCommon', () => {
     it('should return paginated results', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[mockExaminationWeight], 1]);
+      mockRepository.findAndCount.mockResolvedValue([
+        [mockExaminationWeight],
+        1,
+      ]);
       const result = await service.findCommon({
         page: 1,
         limit: 10,

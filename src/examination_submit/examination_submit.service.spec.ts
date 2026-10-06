@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
-import { ExaminationSubmit, SubmitStatus } from './entities/examination_submit.entity';
+import {
+  ExaminationSubmit,
+  SubmitStatus,
+} from './entities/examination_submit.entity';
 import { ExaminationSubmitService } from './examination_submit.service';
 import { ExaminationService } from '../examination/examination.service';
-import { Examination, ExaminationStatus } from '../examination/entities/examination.entity';
+import {
+  Examination,
+  ExaminationStatus,
+} from '../examination/entities/examination.entity';
 
 describe('ExaminationSubmitService', () => {
   let service: ExaminationSubmitService;
@@ -132,7 +138,10 @@ describe('ExaminationSubmitService', () => {
   describe('update', () => {
     it('should update examination submit', async () => {
       mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.findOneBy.mockResolvedValue({ ...mockExaminationSubmit, score: 90 });
+      mockRepository.findOneBy.mockResolvedValue({
+        ...mockExaminationSubmit,
+        score: 90,
+      });
       const result = await service.update(1, { score: 90 } as any);
       expect(result).toBeDefined();
       expect(mockRepository.update).toHaveBeenCalledWith(1, { score: 90 });
@@ -141,7 +150,10 @@ describe('ExaminationSubmitService', () => {
     it('should update with feedback', async () => {
       const updateDto = { score: 85, feedback: 'Good job!' };
       mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.findOneBy.mockResolvedValue({ ...mockExaminationSubmit, ...updateDto });
+      mockRepository.findOneBy.mockResolvedValue({
+        ...mockExaminationSubmit,
+        ...updateDto,
+      });
       const result = await service.update(1, updateDto as any);
       expect(result).toBeDefined();
     });
@@ -209,7 +221,10 @@ describe('ExaminationSubmitService', () => {
 
   describe('findCommon', () => {
     it('should return paginated results', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[mockExaminationSubmit], 1]);
+      mockRepository.findAndCount.mockResolvedValue([
+        [mockExaminationSubmit],
+        1,
+      ]);
       const result = await service.findCommon({
         page: 1,
         limit: 10,
@@ -225,25 +240,37 @@ describe('ExaminationSubmitService', () => {
     });
 
     it('should filter by studentId', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[mockExaminationSubmit], 1]);
+      mockRepository.findAndCount.mockResolvedValue([
+        [mockExaminationSubmit],
+        1,
+      ]);
       await service.findCommon({ studentId: 1 });
       expect(mockRepository.findAndCount).toHaveBeenCalled();
     });
 
     it('should filter by problemId', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[mockExaminationSubmit], 1]);
+      mockRepository.findAndCount.mockResolvedValue([
+        [mockExaminationSubmit],
+        1,
+      ]);
       await service.findCommon({ problemId: 1 });
       expect(mockRepository.findAndCount).toHaveBeenCalled();
     });
 
     it('should filter by status', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[mockExaminationSubmit], 1]);
+      mockRepository.findAndCount.mockResolvedValue([
+        [mockExaminationSubmit],
+        1,
+      ]);
       await service.findCommon({ status: SubmitStatus.SUBMITTED });
       expect(mockRepository.findAndCount).toHaveBeenCalled();
     });
 
     it('should handle custom filters', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[mockExaminationSubmit], 1]);
+      mockRepository.findAndCount.mockResolvedValue([
+        [mockExaminationSubmit],
+        1,
+      ]);
       await service.findCommon({ page: 2, limit: 20 });
       expect(mockRepository.findAndCount).toHaveBeenCalled();
     });
@@ -359,9 +386,7 @@ describe('ExaminationSubmitService', () => {
   describe('validateSubmitted', () => {
     it('should not throw when submission exists', async () => {
       mockRepository.findOne.mockResolvedValue(mockExaminationSubmit);
-      await expect(
-        service.validateSubmitted(1, 1, 1),
-      ).resolves.not.toThrow();
+      await expect(service.validateSubmitted(1, 1, 1)).resolves.not.toThrow();
     });
 
     it('should throw when submission not found', async () => {

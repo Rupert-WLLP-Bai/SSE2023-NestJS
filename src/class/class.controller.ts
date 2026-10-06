@@ -27,6 +27,7 @@ import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { errorMessage } from '../common/errors';
 
 @Controller('class')
 @ApiTags('class')
@@ -60,7 +61,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -83,7 +84,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -108,7 +109,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -138,7 +139,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -164,7 +165,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -193,7 +194,7 @@ export class ClassController {
       response.data.pageSize = queryClassDto.limit;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -219,7 +220,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -245,7 +246,7 @@ export class ClassController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

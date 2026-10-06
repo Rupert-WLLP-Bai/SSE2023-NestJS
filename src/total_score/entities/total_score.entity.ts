@@ -5,9 +5,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity()
+@Unique(['courseId', 'studentId'])
 export class TotalScore extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

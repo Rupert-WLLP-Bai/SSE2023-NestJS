@@ -29,6 +29,7 @@ import { CreateExperimentWeightDto } from './dto/create-experiment_weight.dto';
 import { UpdateExperimentWeightDto } from './dto/update-experiment_weight.dto';
 import { JwtAuthGuard, CurrentUser } from '../common/guards';
 import { AuditService } from '../audit/audit.service';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('experiment-weight')
 @ApiBearerAuth('JWT-auth')
@@ -76,7 +77,7 @@ export class ExperimentWeightController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -100,7 +101,7 @@ export class ExperimentWeightController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -126,7 +127,7 @@ export class ExperimentWeightController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -173,7 +174,7 @@ export class ExperimentWeightController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -197,7 +198,7 @@ export class ExperimentWeightController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -225,7 +226,7 @@ export class ExperimentWeightController {
       response.data.pageSize = query.limit || 10;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

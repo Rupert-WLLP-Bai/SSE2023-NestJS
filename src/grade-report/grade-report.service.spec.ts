@@ -140,16 +140,19 @@ describe('GradeReportService', () => {
     };
 
     mockUserRepository = {
+      find: jest.fn(),
       findOne: jest.fn(),
       findOneBy: jest.fn(),
     };
 
     mockExperimentRepository = {
+      find: jest.fn(),
       findOne: jest.fn(),
       findOneBy: jest.fn(),
     };
 
     mockExaminationRepository = {
+      find: jest.fn(),
       findOne: jest.fn(),
       findOneBy: jest.fn(),
     };
@@ -159,6 +162,7 @@ describe('GradeReportService', () => {
     };
 
     mockCourseRepository = {
+      find: jest.fn(),
       findOne: jest.fn(),
       findOneBy: jest.fn(),
     };
@@ -168,16 +172,43 @@ describe('GradeReportService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         GradeReportService,
-        { provide: getRepositoryToken(TotalScore), useValue: mockTotalScoreRepository },
-        { provide: getRepositoryToken(TotalWeight), useValue: mockTotalWeightRepository },
-        { provide: getRepositoryToken(ExperimentScore), useValue: mockExperimentScoreRepository },
-        { provide: getRepositoryToken(ExperimentWeight), useValue: mockExperimentWeightRepository },
-        { provide: getRepositoryToken(ExaminationScore), useValue: mockExaminationScoreRepository },
-        { provide: getRepositoryToken(ExaminationWeight), useValue: mockExaminationWeightRepository },
+        {
+          provide: getRepositoryToken(TotalScore),
+          useValue: mockTotalScoreRepository,
+        },
+        {
+          provide: getRepositoryToken(TotalWeight),
+          useValue: mockTotalWeightRepository,
+        },
+        {
+          provide: getRepositoryToken(ExperimentScore),
+          useValue: mockExperimentScoreRepository,
+        },
+        {
+          provide: getRepositoryToken(ExperimentWeight),
+          useValue: mockExperimentWeightRepository,
+        },
+        {
+          provide: getRepositoryToken(ExaminationScore),
+          useValue: mockExaminationScoreRepository,
+        },
+        {
+          provide: getRepositoryToken(ExaminationWeight),
+          useValue: mockExaminationWeightRepository,
+        },
         { provide: getRepositoryToken(User), useValue: mockUserRepository },
-        { provide: getRepositoryToken(Experiment), useValue: mockExperimentRepository },
-        { provide: getRepositoryToken(Examination), useValue: mockExaminationRepository },
-        { provide: getRepositoryToken(Enrollment), useValue: mockEnrollmentRepository },
+        {
+          provide: getRepositoryToken(Experiment),
+          useValue: mockExperimentRepository,
+        },
+        {
+          provide: getRepositoryToken(Examination),
+          useValue: mockExaminationRepository,
+        },
+        {
+          provide: getRepositoryToken(Enrollment),
+          useValue: mockEnrollmentRepository,
+        },
         { provide: getRepositoryToken(Course), useValue: mockCourseRepository },
         { provide: EnrollmentService, useValue: mockEnrollmentService },
       ],
@@ -203,7 +234,7 @@ describe('GradeReportService', () => {
       mockTotalScoreRepository.find.mockResolvedValue(scores);
       mockCourseRepository.findOneBy.mockResolvedValue(mockCourse);
 
-      const result = await service.getCourseStatistics(1) as any;
+      const result = (await service.getCourseStatistics(1)) as any;
 
       expect(result.courseId).toBe(1);
       expect(result.courseName).toBe('软件工程');
@@ -218,7 +249,7 @@ describe('GradeReportService', () => {
       mockTotalScoreRepository.find.mockResolvedValue([]);
       mockCourseRepository.findOneBy.mockResolvedValue(mockCourse);
 
-      const result = await service.getCourseStatistics(1) as any;
+      const result = (await service.getCourseStatistics(1)) as any;
 
       expect(result.courseId).toBe(1);
       expect(result.averageScore).toBe(0);
@@ -258,6 +289,40 @@ describe('GradeReportService', () => {
     });
   });
 
+  describe('getStudentStatistics', () => {
+    it('should rank classmates using scores from the enrolled course', async () => {
+      mockUserRepository.findOneBy.mockResolvedValue(mockStudent);
+      mockTotalScoreRepository.find.mockImplementation(({ where }) =>
+        where.studentId === 1
+          ? Promise.resolve([
+              { studentId: 1, courseId: 1, totalScore: 80 },
+              { studentId: 1, courseId: 2, totalScore: 60 },
+            ])
+          : Promise.resolve([
+              { studentId: 1, courseId: 1, totalScore: 80 },
+              { studentId: 2, courseId: 1, totalScore: 90 },
+            ]),
+      );
+      mockCourseRepository.find.mockResolvedValue([
+        { id: 1, name: '软件工程' },
+        { id: 2, name: '数据结构' },
+      ]);
+      mockEnrollmentRepository.find
+        .mockResolvedValueOnce([{ studentId: 1, courseId: 1, classId: 10 }])
+        .mockResolvedValueOnce([
+          { studentId: 1, courseId: 1, classId: 10 },
+          { studentId: 2, courseId: 1, classId: 10 },
+        ]);
+      const result = await service.getStudentStatistics(1);
+
+      expect(result.classRank).toBe(2);
+      expect(mockTotalScoreRepository.find).toHaveBeenCalledWith({
+        where: { courseId: 1, studentId: expect.anything() },
+      });
+      expect(mockTotalScoreRepository.findOne).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getStudentGradeDetail', () => {
     it('should return student grade detail with all information', async () => {
       // Mock student
@@ -270,22 +335,30 @@ describe('GradeReportService', () => {
       mockTotalWeightRepository.findOneBy.mockResolvedValue(mockTotalWeight);
 
       // Mock experiment weights
-      mockExperimentWeightRepository.find.mockResolvedValue([mockExperimentWeight]);
+      mockExperimentWeightRepository.find.mockResolvedValue([
+        mockExperimentWeight,
+      ]);
 
       // Mock experiment
-      mockExperimentRepository.findOneBy.mockResolvedValue(mockExperiment);
+      mockExperimentRepository.find.mockResolvedValue([mockExperiment]);
 
       // Mock experiment score
-      mockExperimentScoreRepository.findOne.mockResolvedValue(mockExperimentScore);
+      mockExperimentScoreRepository.find.mockResolvedValue([
+        mockExperimentScore,
+      ]);
 
       // Mock examination weights
-      mockExaminationWeightRepository.find.mockResolvedValue([mockExaminationWeight]);
+      mockExaminationWeightRepository.find.mockResolvedValue([
+        mockExaminationWeight,
+      ]);
 
       // Mock examination
-      mockExaminationRepository.findOneBy.mockResolvedValue(mockExamination);
+      mockExaminationRepository.find.mockResolvedValue([mockExamination]);
 
       // Mock examination scores
-      mockExaminationScoreRepository.find.mockResolvedValue([mockExaminationScore]);
+      mockExaminationScoreRepository.find.mockResolvedValue([
+        mockExaminationScore,
+      ]);
 
       const result = await service.getStudentGradeDetail(1, 1);
 
@@ -303,7 +376,9 @@ describe('GradeReportService', () => {
     it('should throw NotFoundException when student not found', async () => {
       mockUserRepository.findOneBy.mockResolvedValue(null);
 
-      await expect(service.getStudentGradeDetail(999, 1)).rejects.toThrow(NotFoundException);
+      await expect(service.getStudentGradeDetail(999, 1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should return zero scores when no data exists', async () => {
@@ -332,13 +407,19 @@ describe('GradeReportService', () => {
       ];
       mockExperimentWeightRepository.find.mockResolvedValue(experimentWeights);
 
-      mockExperimentRepository.findOneBy.mockResolvedValue(mockExperiment);
-      mockExperimentScoreRepository.findOne.mockResolvedValue(mockExperimentScore);
+      mockExperimentRepository.find.mockResolvedValue([mockExperiment]);
+      mockExperimentScoreRepository.find.mockResolvedValue([
+        mockExperimentScore,
+      ]);
 
       const examinationWeights = [{ examinationId: 1, weight: 30 }];
-      mockExaminationWeightRepository.find.mockResolvedValue(examinationWeights);
-      mockExaminationRepository.findOneBy.mockResolvedValue(mockExamination);
-      mockExaminationScoreRepository.find.mockResolvedValue([mockExaminationScore]);
+      mockExaminationWeightRepository.find.mockResolvedValue(
+        examinationWeights,
+      );
+      mockExaminationRepository.find.mockResolvedValue([mockExamination]);
+      mockExaminationScoreRepository.find.mockResolvedValue([
+        mockExaminationScore,
+      ]);
 
       const result = await service.getStudentGradeDetail(1, 1);
 
@@ -358,7 +439,7 @@ describe('GradeReportService', () => {
       mockTotalScoreRepository.find.mockResolvedValue([mockTotalScore]);
 
       // Mock student
-      mockUserRepository.findOneBy.mockResolvedValue(mockStudent);
+      mockUserRepository.find.mockResolvedValue([mockStudent]);
 
       const result = await service.exportExcelData(1);
 
@@ -371,7 +452,7 @@ describe('GradeReportService', () => {
       mockCourseRepository.findOneBy.mockResolvedValue(mockCourse);
       mockEnrollmentRepository.find.mockResolvedValue([mockEnrollment]);
       mockTotalScoreRepository.find.mockResolvedValue([mockTotalScore]);
-      mockUserRepository.findOneBy.mockResolvedValue(mockStudent);
+      mockUserRepository.find.mockResolvedValue([mockStudent]);
 
       await service.exportExcelData(1, 1);
 
@@ -396,7 +477,7 @@ describe('GradeReportService', () => {
         { totalScore: 80, experimentScore: 80, examinationScore: 80 },
         { totalScore: 60, experimentScore: 60, examinationScore: 60 },
       ]);
-      mockUserRepository.findOneBy.mockResolvedValue(mockStudent);
+      mockUserRepository.find.mockResolvedValue([mockStudent]);
 
       const result = await service.exportExcelData(1);
 
@@ -444,7 +525,7 @@ describe('GradeReportService', () => {
         { totalScore: 60, experimentScore: 60, examinationScore: 60 },
         { totalScore: 50, experimentScore: 50, examinationScore: 50 },
       ]);
-      mockUserRepository.findOneBy.mockResolvedValue(mockStudent);
+      mockUserRepository.find.mockResolvedValue([mockStudent]);
 
       const result = await service.getPDFRawData(1);
 
@@ -514,7 +595,7 @@ describe('GradeReportService', () => {
   describe('exportCourseGrades', () => {
     it('should export course grades as CSV data', async () => {
       mockTotalScoreRepository.find.mockResolvedValue([mockTotalScore]);
-      mockUserRepository.findOneBy.mockResolvedValue(mockStudent);
+      mockUserRepository.find.mockResolvedValue([mockStudent]);
 
       const result = await service.exportCourseGrades(1);
 
@@ -535,12 +616,23 @@ describe('GradeReportService', () => {
 
     it('should sort by student number', async () => {
       mockTotalScoreRepository.find.mockResolvedValue([
-        { studentId: 2, totalScore: 80, experimentScore: 80, examinationScore: 80 },
-        { studentId: 1, totalScore: 90, experimentScore: 90, examinationScore: 90 },
+        {
+          studentId: 2,
+          totalScore: 80,
+          experimentScore: 80,
+          examinationScore: 80,
+        },
+        {
+          studentId: 1,
+          totalScore: 90,
+          experimentScore: 90,
+          examinationScore: 90,
+        },
       ]);
-      mockUserRepository.findOneBy
-        .mockResolvedValueOnce({ id: 2, name: '李四' })
-        .mockResolvedValueOnce({ id: 1, name: '张三' });
+      mockUserRepository.find.mockResolvedValue([
+        { id: 2, name: '李四' },
+        { id: 1, name: '张三' },
+      ]);
 
       const result = await service.exportCourseGrades(1);
 
@@ -614,16 +706,20 @@ describe('GradeReportService', () => {
         { courseId: 1, totalScore: 85 },
         { courseId: 2, totalScore: 90 },
       ];
-      mockTotalScoreRepository.find.mockResolvedValue(scores);
+      mockTotalScoreRepository.find.mockImplementation(({ where }) =>
+        where.studentId === 1
+          ? Promise.resolve(scores)
+          : Promise.resolve([{ studentId: 1, courseId: 1, totalScore: 85 }]),
+      );
 
-      mockCourseRepository.findOneBy
-        .mockResolvedValueOnce({ id: 1, name: '课程1' })
-        .mockResolvedValueOnce({ id: 2, name: '课程2' });
+      mockCourseRepository.find.mockResolvedValue([
+        { id: 1, name: '课程1' },
+        { id: 2, name: '课程2' },
+      ]);
 
-      const enrollments = [{ studentId: 1, classId: 1 }];
-      mockEnrollmentRepository.find.mockResolvedValue(enrollments);
-      mockEnrollmentRepository.find.mockResolvedValue([{ studentId: 1, classId: 1 }]);
-      mockTotalScoreRepository.findOne.mockResolvedValue({ totalScore: 80 });
+      mockEnrollmentRepository.find
+        .mockResolvedValueOnce([{ studentId: 1, courseId: 1, classId: 1 }])
+        .mockResolvedValueOnce([{ studentId: 1, courseId: 1, classId: 1 }]);
 
       const result = await service.getStudentStatistics(1);
 
@@ -636,7 +732,9 @@ describe('GradeReportService', () => {
     it('should throw NotFoundException when student not found', async () => {
       mockUserRepository.findOneBy.mockResolvedValue(null);
 
-      await expect(service.getStudentStatistics(999)).rejects.toThrow(NotFoundException);
+      await expect(service.getStudentStatistics(999)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

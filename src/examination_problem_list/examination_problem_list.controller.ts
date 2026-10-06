@@ -28,6 +28,7 @@ import {
   UpdateResponse,
   DeleteResponse,
 } from '../common/response/response.interface';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('examination-problem-list')
 @ApiBearerAuth('JWT-auth')
@@ -62,7 +63,7 @@ export class ExaminationProblemListController {
       result.data = res;
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }
@@ -125,9 +126,8 @@ export class ExaminationProblemListController {
       traceId: '',
       host: '',
     };
-    const data = await this.problemListService.findByExaminationId(
-      +examinationId,
-    );
+    const data =
+      await this.problemListService.findByExaminationId(+examinationId);
     result.data.list = data;
     result.data.total = data.length;
     return result;
@@ -187,7 +187,7 @@ export class ExaminationProblemListController {
       );
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }
@@ -215,7 +215,7 @@ export class ExaminationProblemListController {
       result.data.affected = deleteResult.affected || 0;
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }

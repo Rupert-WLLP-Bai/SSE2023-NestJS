@@ -3,12 +3,13 @@ import {
   IsOptional,
   IsNumber,
   IsString,
-  IsDateString,
+  IsDate,
   IsEnum,
   IsNotEmpty,
   Min,
   Max,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   ExaminationStatus,
   ExaminationType,
@@ -66,12 +67,14 @@ export class CreateExaminationDto {
 
   @ApiProperty({ description: '考试开始时间', example: '2023-06-01 09:00:00' })
   @IsNotEmpty({ message: '开始时间不能为空' })
-  @IsDateString({}, { message: '开始时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '开始时间格式不正确' })
   startTime: Date;
 
   @ApiProperty({ description: '考试结束时间', example: '2023-06-01 12:00:00' })
   @IsNotEmpty({ message: '结束时间不能为空' })
-  @IsDateString({}, { message: '结束时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '结束时间格式不正确' })
   endTime: Date;
 
   @ApiProperty({ description: '考试时长（分钟）', example: 180 })
@@ -121,7 +124,8 @@ export class CreateExaminationDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString({}, { message: '创建时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '创建时间格式不正确' })
   createTime?: Date;
 
   @ApiProperty({
@@ -130,6 +134,7 @@ export class CreateExaminationDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString({}, { message: '更新时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '更新时间格式不正确' })
   updateTime?: Date;
 }

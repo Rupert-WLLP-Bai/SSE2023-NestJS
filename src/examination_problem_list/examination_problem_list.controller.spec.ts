@@ -43,7 +43,9 @@ describe('ExaminationProblemListController', () => {
       ],
     }).compile();
 
-    controller = module.get<ExaminationProblemListController>(ExaminationProblemListController);
+    controller = module.get<ExaminationProblemListController>(
+      ExaminationProblemListController,
+    );
   });
 
   describe('create', () => {
@@ -173,7 +175,11 @@ describe('ExaminationProblemListController', () => {
         problemScore: 20,
       };
 
-      mockService.update.mockResolvedValue({ affected: 1, raw: {}, generatedMaps: [] });
+      mockService.update.mockResolvedValue({
+        affected: 1,
+        raw: {},
+        generatedMaps: [],
+      });
 
       const result = await controller.update('1', updateDto as any);
 

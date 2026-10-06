@@ -320,6 +320,7 @@ describe('TotalScoreService', () => {
       // totalScore = 40 + 90 = 130
       expect(result).toBeDefined();
       expect(result.length).toBeGreaterThan(0);
+      expect(mockRepository.findOne).not.toHaveBeenCalled();
     });
 
     it('should handle missing experiment scores', async () => {
@@ -403,7 +404,9 @@ describe('TotalScoreService', () => {
 
       // Make save throw error
       const mockQueryRunner = mockDataSource.createQueryRunner();
-      mockQueryRunner.manager.save.mockRejectedValue(new Error('Database error'));
+      mockQueryRunner.manager.save.mockRejectedValue(
+        new Error('Database error'),
+      );
 
       await expect(service.recalculate(1)).rejects.toThrow('Database error');
     });

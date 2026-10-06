@@ -39,13 +39,14 @@ jest.mock('qiniu', () => ({
 }));
 
 // Mock axios
-jest.mock('axios', () => ({
-  default: jest.fn().mockResolvedValue({
+jest.mock('axios', () => {
+  const axios = jest.fn().mockResolvedValue({
     data: {
       pipe: jest.fn(),
     },
-  }),
-}));
+  });
+  return Object.assign(axios, { default: axios });
+});
 
 // Mock common/key module
 jest.mock('../common/key', () => ({

@@ -1,15 +1,13 @@
 import { NormalResponse } from './../common/response/response.interface';
 import { Body, Controller, Post, Logger, Get } from '@nestjs/common';
 import { ApiOperation, ApiBody, ApiTags } from '@nestjs/swagger';
-import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
-import { UseGuards } from '@nestjs/common';
-import { LoginResponse } from 'src/login/login.response';
+import { Throttle } from '@nestjs/throttler';
+import { LoginResponse } from './login.response';
 import { LoginParams } from './dto/login';
 import { LoginService } from './login.service';
 
 @Controller('login')
 @ApiTags('login')
-@UseGuards(ThrottlerGuard)
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
@@ -19,7 +17,7 @@ export class LoginController {
   @ApiOperation({ summary: '登录' })
   @ApiBody({ type: LoginParams })
   async login(@Body() loginParams: LoginParams): Promise<LoginResponse> {
-    Logger.debug('loginParams', JSON.stringify(loginParams));
+    Logger.debug(`login attempt for id=${loginParams.id}`);
     return await this.loginService.login(loginParams);
   }
 

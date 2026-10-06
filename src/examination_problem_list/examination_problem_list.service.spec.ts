@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ExaminationProblemList, ProblemType } from './entities/examination_problem_list.entity';
+import {
+  ExaminationProblemList,
+  ProblemType,
+} from './entities/examination_problem_list.entity';
 import { ExaminationProblemListService } from './examination_problem_list.service';
 
 describe('ExaminationProblemListService', () => {
@@ -43,7 +46,9 @@ describe('ExaminationProblemListService', () => {
       ],
     }).compile();
 
-    service = module.get<ExaminationProblemListService>(ExaminationProblemListService);
+    service = module.get<ExaminationProblemListService>(
+      ExaminationProblemListService,
+    );
   });
 
   describe('create', () => {
@@ -129,7 +134,10 @@ describe('ExaminationProblemListService', () => {
 
   describe('findByExaminationId', () => {
     it('should return problem lists by examination id', async () => {
-      const problems = [mockProblemList, { ...mockProblemList, id: 2, problemOrder: 2 }];
+      const problems = [
+        mockProblemList,
+        { ...mockProblemList, id: 2, problemOrder: 2 },
+      ];
       mockRepository.find.mockResolvedValue(problems);
 
       const result = await service.findByExaminationId(1);

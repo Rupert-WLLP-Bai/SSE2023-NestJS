@@ -193,7 +193,11 @@ describe('EnrollmentService', () => {
 
   describe('dropCourse', () => {
     it('should drop course successfully', async () => {
-      const droppedEnrollment = { ...mockEnrollment, status: 'dropped', dropDate: new Date() };
+      const droppedEnrollment = {
+        ...mockEnrollment,
+        status: 'dropped',
+        dropDate: new Date(),
+      };
       mockRepository.findOne.mockResolvedValue(mockEnrollment);
       mockRepository.save.mockResolvedValue(droppedEnrollment);
       const result = await service.dropCourse(1, 1);

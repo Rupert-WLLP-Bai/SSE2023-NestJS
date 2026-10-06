@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request & { files?: unknown }, res: Response, next: NextFunction) {
     // Getting the request log
     const logger = new Logger('RequestLogger');
     // output the request log

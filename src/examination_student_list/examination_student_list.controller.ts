@@ -33,6 +33,7 @@ import {
   UpdateResponse,
   DeleteResponse,
 } from '../common/response/response.interface';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('examination-student-list')
 @ApiBearerAuth('JWT-auth')
@@ -67,7 +68,7 @@ export class ExaminationStudentListController {
       result.data = res;
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }
@@ -130,9 +131,8 @@ export class ExaminationStudentListController {
       traceId: '',
       host: '',
     };
-    const data = await this.studentListService.findByExaminationId(
-      +examinationId,
-    );
+    const data =
+      await this.studentListService.findByExaminationId(+examinationId);
     result.data.list = data;
     result.data.total = data.length;
     return result;
@@ -215,7 +215,7 @@ export class ExaminationStudentListController {
       );
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }
@@ -243,7 +243,7 @@ export class ExaminationStudentListController {
       result.data.affected = deleteResult.affected || 0;
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }
@@ -279,7 +279,7 @@ export class ExaminationStudentListController {
       result.data = importResult;
     } catch (error) {
       result.success = false;
-      result.errorMessage = error.message;
+      result.errorMessage = errorMessage(error);
     }
     return result;
   }

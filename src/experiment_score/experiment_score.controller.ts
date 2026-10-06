@@ -30,6 +30,7 @@ import { UpdateExperimentScoreDto } from './dto/update-experiment_score.dto';
 import { JwtAuthGuard, RolesGuard, Roles, CurrentUser } from '../common/guards';
 import { UserRole } from '../user/entities/user.entity';
 import { AuditService } from '../audit/audit.service';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('experiment-score')
 @ApiBearerAuth('JWT-auth')
@@ -78,7 +79,7 @@ export class ExperimentScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -103,7 +104,7 @@ export class ExperimentScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -130,7 +131,7 @@ export class ExperimentScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -178,7 +179,7 @@ export class ExperimentScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -203,7 +204,7 @@ export class ExperimentScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -232,7 +233,7 @@ export class ExperimentScoreController {
       response.data.pageSize = query.limit || 10;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -283,7 +284,7 @@ export class ExperimentScoreController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

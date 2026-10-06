@@ -1,9 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  Repository,
-  FindOptionsWhere,
-  DeepPartial,
-} from 'typeorm';
+import { Repository, FindOptionsWhere, DeepPartial } from 'typeorm';
 
 /**
  * @file BaseService 抽象类
@@ -11,7 +7,6 @@ import {
  * @author SSE Team
  */
 @Injectable()
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class BaseService<T extends Record<string, any>> {
   protected readonly logger: Logger;
 
@@ -52,7 +47,6 @@ export abstract class BaseService<T extends Record<string, any>> {
    * 根据 ID 查询单条记录
    */
   async findOne(id: number): Promise<T | null> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return this.repository.findOneBy({ id } as any);
   }
 
@@ -74,7 +68,7 @@ export abstract class BaseService<T extends Record<string, any>> {
   /**
    * 更新记录
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   async update(id: number, updateDto: any): Promise<T> {
     await this.repository.update(id, updateDto);
     return this.findOne(id) as Promise<T>;

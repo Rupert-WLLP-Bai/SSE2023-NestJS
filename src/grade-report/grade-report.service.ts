@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as ExcelJS from 'exceljs';
 import * as PDFDocument from 'pdfkit';
 import { TotalScore } from '../total_score/entities/total_score.entity';
@@ -253,20 +253,31 @@ export class GradeReportService {
     const experimentWeights = await this.experimentWeightRepository.find({
       where: { courseId },
     });
+    const experimentIds = experimentWeights.map(
+      (weight) => weight.experimentId,
+    );
+    const experiments = experimentIds.length
+      ? await this.experimentRepository.find({
+          where: { id: In(experimentIds) },
+        })
+      : [];
+    const experimentsById = new Map(
+      experiments.map((experiment) => [experiment.id, experiment]),
+    );
+    const experimentScores = experimentIds.length
+      ? await this.experimentScoreRepository.find({
+          where: { courseId, studentId, experimentId: In(experimentIds) },
+        })
+      : [];
+    const experimentScoresById = new Map(
+      experimentScores.map((score) => [score.experimentId, score]),
+    );
     const experimentDetails = [];
     let experimentTotal = 0;
 
     for (const expWeight of experimentWeights) {
-      const exp = await this.experimentRepository.findOneBy({
-        id: expWeight.experimentId,
-      });
-      const expScore = await this.experimentScoreRepository.findOne({
-        where: {
-          courseId,
-          studentId,
-          experimentId: expWeight.experimentId,
-        },
-      });
+      const exp = experimentsById.get(expWeight.experimentId);
+      const expScore = experimentScoresById.get(expWeight.experimentId);
 
       const score = expScore ? Number(expScore.score) : 0;
       const weightValue = Number(expWeight.weight);
@@ -287,25 +298,41 @@ export class GradeReportService {
     const examinationWeights = await this.examinationWeightRepository.find({
       where: { courseId },
     });
+    const examinationIds = examinationWeights.map(
+      (weight) => weight.examinationId,
+    );
+    const examinations = examinationIds.length
+      ? await this.examinationRepository.find({
+          where: { id: In(examinationIds) },
+        })
+      : [];
+    const examinationsById = new Map(
+      examinations.map((examination) => [examination.id, examination]),
+    );
+    const examinationScores = examinationIds.length
+      ? await this.examinationScoreRepository.find({
+          where: { courseId, studentId, examinationId: In(examinationIds) },
+        })
+      : [];
+    const examinationScoresById = new Map<number, number[]>();
+    for (const score of examinationScores) {
+      const scores = examinationScoresById.get(score.examinationId);
+      if (scores) scores.push(Number(score.score));
+      else
+        examinationScoresById.set(score.examinationId, [Number(score.score)]);
+    }
     const examinationDetails = [];
     let examinationTotal = 0;
 
     for (const examWeight of examinationWeights) {
-      const exam = await this.examinationRepository.findOneBy({
-        id: examWeight.examinationId,
-      });
-      const examScores = await this.examinationScoreRepository.find({
-        where: {
-          courseId,
-          studentId,
-          examinationId: examWeight.examinationId,
-        },
-      });
+      const exam = examinationsById.get(examWeight.examinationId);
+      const examScores =
+        examinationScoresById.get(examWeight.examinationId) ?? [];
 
       // 考试可能是多题目的，计算平均分
       const avgScore =
         examScores.length > 0
-          ? examScores.reduce((sum, s) => sum + Number(s.score), 0) /
+          ? examScores.reduce((sum, score) => sum + score, 0) /
             examScores.length
           : 0;
       const weightValue = Number(examWeight.weight);
@@ -351,11 +378,16 @@ export class GradeReportService {
     });
 
     const results: ExportRow[] = [];
+    const studentIds = scores.map((score) => score.studentId);
+    const students = studentIds.length
+      ? await this.userRepository.find({ where: { id: In(studentIds) } })
+      : [];
+    const studentsById = new Map(
+      students.map((student) => [student.id, student]),
+    );
 
     for (const score of scores) {
-      const student = await this.userRepository.findOneBy({
-        id: score.studentId,
-      });
+      const student = studentsById.get(score.studentId);
 
       if (student) {
         results.push({
@@ -398,9 +430,12 @@ export class GradeReportService {
       };
     }
 
-    const scoreValues = scores.map((s) => Number(s.totalScore)).sort((a, b) => a - b);
+    const scoreValues = scores
+      .map((s) => Number(s.totalScore))
+      .sort((a, b) => a - b);
     const totalStudents = scoreValues.length;
-    const averageScore = scoreValues.reduce((sum, s) => sum + s, 0) / totalStudents;
+    const averageScore =
+      scoreValues.reduce((sum, s) => sum + s, 0) / totalStudents;
     const passCount = scoreValues.filter((s) => s >= 60).length;
     const excellentCount = scoreValues.filter((s) => s >= 90).length;
 
@@ -442,10 +477,16 @@ export class GradeReportService {
     const courses: StudentStatistics['courses'] = [];
     let totalScoreSum = 0;
 
+    const courseIds = [...new Set(scores.map((score) => score.courseId))];
+    const courseRecords = courseIds.length
+      ? await this.courseRepository.find({ where: { id: In(courseIds) } })
+      : [];
+    const coursesById = new Map(
+      courseRecords.map((course) => [course.id, course]),
+    );
+
     for (const score of scores) {
-      const course = await this.courseRepository.findOneBy({
-        id: score.courseId,
-      });
+      const course = coursesById.get(score.courseId);
       const scoreValue = Number(score.totalScore);
       totalScoreSum += scoreValue;
 
@@ -469,22 +510,44 @@ export class GradeReportService {
         where: { classId },
       });
 
+      const classStudentIds = classStudents.map(
+        (enrollment) => enrollment.studentId,
+      );
+      const rankingCourseId = enrollments[0].courseId;
+      const classScores = classStudentIds.length
+        ? await this.totalScoreRepository.find({
+            where: {
+              courseId: rankingCourseId,
+              studentId: In(classStudentIds),
+            },
+          })
+        : [];
+      const classScoresByStudentId = new Map(
+        classScores.map((score) => [score.studentId, score]),
+      );
+
+      const studentCourseScore = rankingCourseId
+        ? Number(
+            scores.find((score) => score.courseId === rankingCourseId)
+              ?.totalScore ?? 0,
+          )
+        : 0;
+
       let rank = 1;
       for (const classStudent of classStudents) {
         if (classStudent.studentId === studentId) continue;
-        const otherScore = await this.totalScoreRepository.findOne({
-          where: { studentId: classStudent.studentId },
-        });
-        if (otherScore && Number(otherScore.totalScore) > totalScoreSum / scores.length) {
+        const otherScore = classScoresByStudentId.get(classStudent.studentId);
+        if (otherScore && Number(otherScore.totalScore) > studentCourseScore) {
           rank++;
         }
       }
       classRank = rank;
     }
 
-    const semesterAverage = scores.length > 0
-      ? Math.round((totalScoreSum / scores.length) * 100) / 100
-      : 0;
+    const semesterAverage =
+      scores.length > 0
+        ? Math.round((totalScoreSum / scores.length) * 100) / 100
+        : 0;
 
     return {
       studentId,
@@ -531,7 +594,8 @@ export class GradeReportService {
 
     const total = scores.length;
     for (const d of distribution) {
-      d.percentage = total > 0 ? Math.round((d.count / total) * 10000) / 100 : 0;
+      d.percentage =
+        total > 0 ? Math.round((d.count / total) * 10000) / 100 : 0;
     }
 
     return {
@@ -603,7 +667,8 @@ export class GradeReportService {
         totalStudents: values.length,
         averageScore: Math.round(avg * 100) / 100,
         passRate: Math.round((passCount / values.length) * 10000) / 100,
-        excellentRate: Math.round((excellentCount / values.length) * 10000) / 100,
+        excellentRate:
+          Math.round((excellentCount / values.length) * 10000) / 100,
       };
     };
 
@@ -651,6 +716,12 @@ export class GradeReportService {
     });
 
     const scoreMap = new Map(scores.map((s) => [s.studentId, s]));
+    const students = studentIds.length
+      ? await this.userRepository.find({ where: { id: In(studentIds) } })
+      : [];
+    const studentsById = new Map(
+      students.map((student) => [student.id, student]),
+    );
 
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'SSE2023 System';
@@ -680,7 +751,7 @@ export class GradeReportService {
 
     // 添加数据
     for (const studentId of studentIds) {
-      const student = await this.userRepository.findOneBy({ id: studentId });
+      const student = studentsById.get(studentId);
       const score = scoreMap.get(studentId);
 
       if (student) {
@@ -696,7 +767,6 @@ export class GradeReportService {
     }
 
     // 添加统计行
-    const lastRow = sheet.lastRow?.number || 1;
     sheet.addRow([]);
     const statsRow = sheet.addRow({
       studentNumber: '统计',
@@ -708,12 +778,19 @@ export class GradeReportService {
     // 计算统计
     const scoreValues = scores.map((s) => Number(s.totalScore));
     if (scoreValues.length > 0) {
-      const avg = scoreValues.reduce((sum, v) => sum + v, 0) / scoreValues.length;
+      const avg =
+        scoreValues.reduce((sum, v) => sum + v, 0) / scoreValues.length;
       const passCount = scoreValues.filter((v) => v >= 60).length;
       const passRate = (passCount / scoreValues.length) * 100;
 
-      sheet.addRow({ studentNumber: '平均分', totalScore: Math.round(avg * 100) / 100 });
-      sheet.addRow({ studentNumber: '及格率', totalScore: Math.round(passRate * 100) / 100 + '%' });
+      sheet.addRow({
+        studentNumber: '平均分',
+        totalScore: Math.round(avg * 100) / 100,
+      });
+      sheet.addRow({
+        studentNumber: '及格率',
+        totalScore: Math.round(passRate * 100) / 100 + '%',
+      });
     }
 
     return {
@@ -749,15 +826,12 @@ export class GradeReportService {
       enrollments = enrollments.filter((e) => e.classId === Number(classId));
     }
 
-    const studentIds = enrollments.map((e) => e.studentId);
     const className = enrollments[0]?.className || '全部班级';
 
     // 获取成绩
     const scores = await this.totalScoreRepository.find({
       where: { courseId },
     });
-
-    const scoreMap = new Map(scores.map((s) => [s.studentId, s]));
 
     // 计算统计
     const scoreValues = scores.map((s) => Number(s.totalScore));
@@ -770,13 +844,16 @@ export class GradeReportService {
     };
 
     if (scoreValues.length > 0) {
-      stats.average = Math.round(
-        (scoreValues.reduce((sum, v) => sum + v, 0) / scoreValues.length) * 100,
-      ) / 100;
+      stats.average =
+        Math.round(
+          (scoreValues.reduce((sum, v) => sum + v, 0) / scoreValues.length) *
+            100,
+        ) / 100;
       stats.max = Math.max(...scoreValues);
       stats.min = Math.min(...scoreValues);
       const passCount = scoreValues.filter((v) => v >= 60).length;
-      stats.passRate = Math.round((passCount / scoreValues.length) * 10000) / 100;
+      stats.passRate =
+        Math.round((passCount / scoreValues.length) * 10000) / 100;
     }
 
     return {
@@ -811,9 +888,15 @@ export class GradeReportService {
 
     const scoreMap = new Map(scores.map((s) => [s.studentId, s]));
 
+    const students = studentIds.length
+      ? await this.userRepository.find({ where: { id: In(studentIds) } })
+      : [];
+    const studentsById = new Map(
+      students.map((student) => [student.id, student]),
+    );
     const studentsData = [];
     for (const studentId of studentIds) {
-      const student = await this.userRepository.findOneBy({ id: studentId });
+      const student = studentsById.get(studentId);
       const score = scoreMap.get(studentId);
 
       if (student) {
@@ -838,13 +921,16 @@ export class GradeReportService {
     };
 
     if (scoreValues.length > 0) {
-      stats.average = Math.round(
-        (scoreValues.reduce((sum, v) => sum + v, 0) / scoreValues.length) * 100,
-      ) / 100;
+      stats.average =
+        Math.round(
+          (scoreValues.reduce((sum, v) => sum + v, 0) / scoreValues.length) *
+            100,
+        ) / 100;
       stats.max = Math.max(...scoreValues);
       stats.min = Math.min(...scoreValues);
       const passCount = scoreValues.filter((v) => v >= 60).length;
-      stats.passRate = Math.round((passCount / scoreValues.length) * 10000) / 100;
+      stats.passRate =
+        Math.round((passCount / scoreValues.length) * 10000) / 100;
     }
 
     return {

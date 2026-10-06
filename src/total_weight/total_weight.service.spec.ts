@@ -112,15 +112,25 @@ describe('TotalWeightService', () => {
     it('should update with both weights valid', async () => {
       mockRepository.findOneBy.mockResolvedValue(mockTotalWeight);
       mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.findOneBy.mockResolvedValue({ ...mockTotalWeight, experimentWeight: 60, examinationWeight: 40 });
-      const result = await service.update(1, { experimentWeight: 60, examinationWeight: 40 } as any);
+      mockRepository.findOneBy.mockResolvedValue({
+        ...mockTotalWeight,
+        experimentWeight: 60,
+        examinationWeight: 40,
+      });
+      const result = await service.update(1, {
+        experimentWeight: 60,
+        examinationWeight: 40,
+      } as any);
       expect(result).toBeDefined();
     });
 
     it('should throw error when updating with invalid sum', async () => {
       mockRepository.findOneBy.mockResolvedValue(mockTotalWeight);
       await expect(
-        service.update(1, { experimentWeight: 50, examinationWeight: 40 } as any),
+        service.update(1, {
+          experimentWeight: 50,
+          examinationWeight: 40,
+        } as any),
       ).rejects.toThrow();
     });
   });

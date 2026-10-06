@@ -81,7 +81,10 @@ describe('AllExceptionsFilter', () => {
 
   describe('catch - HttpException handling', () => {
     it('should handle HttpException with string response', () => {
-      const exception = new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+      const exception = new HttpException(
+        'Bad Request',
+        HttpStatus.BAD_REQUEST,
+      );
 
       filter.catch(exception, createMockHost() as any);
 
@@ -204,7 +207,10 @@ describe('AllExceptionsFilter', () => {
     });
 
     it('should set showType to SYSTEM_ERROR for 502 status', () => {
-      const exception = new HttpException('Bad Gateway', HttpStatus.BAD_GATEWAY);
+      const exception = new HttpException(
+        'Bad Gateway',
+        HttpStatus.BAD_GATEWAY,
+      );
 
       filter.catch(exception, createMockHost() as any);
 

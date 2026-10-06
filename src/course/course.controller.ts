@@ -23,6 +23,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { NormalResponse } from '../common/response/response.interface';
+import { ok, okQuery } from '../common/response/response.factory';
 
 @Controller('course')
 @ApiTags('course')
@@ -41,17 +42,14 @@ export class CourseController {
     type: NormalResponse,
   })
   async create(@Body() createCourseDto: CreateCourseDto) {
-    return this.courseService.create(createCourseDto);
+    return ok(await this.courseService.create(createCourseDto));
   }
 
   @Get()
   @ApiOperation({ summary: '查询所有课程' })
   async findAll() {
     const list = await this.courseService.findAll();
-    return {
-      list,
-      total: list.length,
-    };
+    return okQuery(list, list.length);
   }
 
   @Get(':id')
@@ -59,10 +57,7 @@ export class CourseController {
   @ApiParam({ name: 'id', description: '课程id' })
   async findOne(@Param('id') id: string) {
     const res = await this.courseService.findOne(+id);
-    return {
-      list: res ? [res] : [],
-      total: res ? 1 : 0,
-    };
+    return okQuery(res ? [res] : [], res ? 1 : 0);
   }
 
   @Patch(':id')

@@ -61,7 +61,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
 
       // 如果是 401/403，不记录堆栈
-      if (status === HttpStatus.UNAUTHORIZED || status === HttpStatus.FORBIDDEN) {
+      if (
+        status === HttpStatus.UNAUTHORIZED ||
+        status === HttpStatus.FORBIDDEN
+      ) {
         this.logger.warn(
           `[HttpException] ${status}: ${errorMessage} - ${request.method} ${request.url}`,
         );

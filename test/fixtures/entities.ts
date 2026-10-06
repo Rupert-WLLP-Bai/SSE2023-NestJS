@@ -1,5 +1,9 @@
 import * as bcrypt from 'bcrypt';
-import { User, UserRole, UserStatus } from '../../src/user/entities/user.entity';
+import {
+  User,
+  UserRole,
+  UserStatus,
+} from '../../src/user/entities/user.entity';
 import { Course } from '../../src/course/entities/course.entity';
 import { Class } from '../../src/class/entities/class.entity';
 import { Enrollment } from '../../src/enrollment/entities/enrollment.entity';
@@ -130,7 +134,9 @@ export interface ExaminationWeightFixtureOptions {
 }
 
 // 用户工厂函数
-export async function createUser(options: UserFixtureOptions = {}): Promise<User> {
+export async function createUser(
+  options: UserFixtureOptions = {},
+): Promise<User> {
   const hashedPassword = await bcrypt.hash(options.password || '123456', 10);
   return {
     id: options.id || 2052500 + Math.floor(Math.random() * 1000),
@@ -148,7 +154,9 @@ export async function createUser(options: UserFixtureOptions = {}): Promise<User
 }
 
 // 教师工厂函数
-export async function createTeacher(options: UserFixtureOptions = {}): Promise<User> {
+export async function createTeacher(
+  options: UserFixtureOptions = {},
+): Promise<User> {
   return createUser({
     ...options,
     role: UserRole.TEACHER,
@@ -158,7 +166,9 @@ export async function createTeacher(options: UserFixtureOptions = {}): Promise<U
 }
 
 // 学生工厂函数
-export async function createStudent(options: UserFixtureOptions = {}): Promise<User> {
+export async function createStudent(
+  options: UserFixtureOptions = {},
+): Promise<User> {
   return createUser({
     ...options,
     role: UserRole.STUDENT,
@@ -200,7 +210,9 @@ export function createClass(options: ClassFixtureOptions = {}): Class {
 }
 
 // 选课工厂函数
-export function createEnrollment(options: EnrollmentFixtureOptions = {}): Enrollment {
+export function createEnrollment(
+  options: EnrollmentFixtureOptions = {},
+): Enrollment {
   const now = new Date();
   return {
     id: options.id || 1,
@@ -218,7 +230,9 @@ export function createEnrollment(options: EnrollmentFixtureOptions = {}): Enroll
 }
 
 // 考试工厂函数
-export function createExamination(options: ExaminationFixtureOptions = {}): Examination {
+export function createExamination(
+  options: ExaminationFixtureOptions = {},
+): Examination {
   const now = options.startTime || new Date();
   const endTime = options.endTime || new Date(now.getTime() + 7200000);
   return {
@@ -287,7 +301,9 @@ export function createExaminationScore(
 }
 
 // 总分工厂函数
-export function createTotalScore(options: TotalScoreFixtureOptions = {}): TotalScore {
+export function createTotalScore(
+  options: TotalScoreFixtureOptions = {},
+): TotalScore {
   return {
     id: options.id || 1,
     studentId: options.studentId || 2052526,
@@ -309,7 +325,9 @@ export function createTotalScore(options: TotalScoreFixtureOptions = {}): TotalS
 }
 
 // 总权重工厂函数
-export function createTotalWeight(options: TotalWeightFixtureOptions = {}): TotalWeight {
+export function createTotalWeight(
+  options: TotalWeightFixtureOptions = {},
+): TotalWeight {
   return {
     id: options.id || 1,
     courseId: options.courseId || 1,

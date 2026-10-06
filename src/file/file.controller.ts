@@ -11,7 +11,14 @@ import {
 import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   getAccessKey,
   getSecretKey,
@@ -31,7 +38,10 @@ export class FileController {
 
   // 测试七牛云上传文件
   @Post('qiniu')
-  @ApiOperation({ summary: '上传文件到七牛云', description: '将文件上传到七牛云存储' })
+  @ApiOperation({
+    summary: '上传文件到七牛云',
+    description: '将文件上传到七牛云存储',
+  })
   @UseInterceptors(
     FileInterceptor('file', {
       dest: 'qiniu_files',
@@ -94,7 +104,10 @@ export class FileController {
 
   // 测试七牛云下载文件
   @Get('qiniu/:filepath')
-  @ApiOperation({ summary: '从七牛云下载文件', description: '通过文件路径从七牛云下载文件' })
+  @ApiOperation({
+    summary: '从七牛云下载文件',
+    description: '通过文件路径从七牛云下载文件',
+  })
   @ApiParam({
     name: 'filepath',
     description: 'The path of the file to download',
@@ -125,7 +138,10 @@ export class FileController {
   // 测试七牛云查询文件
   // 返回文件名列表
   @Get('qiniu')
-  @ApiOperation({ summary: '查询七牛云文件列表', description: '获取七牛云存储中的所有文件列表' })
+  @ApiOperation({
+    summary: '查询七牛云文件列表',
+    description: '获取七牛云存储中的所有文件列表',
+  })
   async listFileFromQiniu() {
     // 定义鉴权对象
     const mac = new qiniu.auth.digest.Mac(getAccessKey(), getSecretKey());

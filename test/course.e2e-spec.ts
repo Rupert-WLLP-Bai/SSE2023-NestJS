@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Repository } from 'typeorm';
-import * as request from 'supertest';
+import request from 'supertest';
 import { Course } from '../src/course/entities/course.entity';
 import { Class } from '../src/class/entities/class.entity';
 import { Enrollment } from '../src/enrollment/entities/enrollment.entity';
@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from '../src/common/strategies/jwt.strategy';
 import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
 import { TransformInterceptor } from '../src/common/interceptors/success.interceptor';
+import { createValidationPipe } from '../src/common/pipes/validation.pipe';
 
 const JWT_SECRET = 'test-secret-for-e2e';
 
@@ -54,7 +55,7 @@ describe('CourseController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalPipes(createValidationPipe());
     app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalInterceptors(new TransformInterceptor());
     await app.init();

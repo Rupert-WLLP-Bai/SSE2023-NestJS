@@ -77,7 +77,11 @@ export class LoggerService implements NestLoggerService {
   /**
    * 格式化日志为 JSON 字符串
    */
-  private formatLog(level: string, message: string, meta?: Record<string, unknown>): string {
+  private formatLog(
+    level: string,
+    message: string,
+    meta?: Record<string, unknown>,
+  ): string {
     const logData: LogData = {
       timestamp: new Date().toISOString(),
       level,
@@ -141,35 +145,55 @@ export class LoggerService implements NestLoggerService {
   /**
    * 记录 error 级别日志
    */
-  error(message: string, context?: string, meta?: Record<string, unknown>): void {
+  error(
+    message: string,
+    context?: string,
+    meta?: Record<string, unknown>,
+  ): void {
     this.logMessage('error', message, context, meta);
   }
 
   /**
    * 记录 warn 级别日志
    */
-  warn(message: string, context?: string, meta?: Record<string, unknown>): void {
+  warn(
+    message: string,
+    context?: string,
+    meta?: Record<string, unknown>,
+  ): void {
     this.logMessage('warn', message, context, meta);
   }
 
   /**
    * 记录 info 级别日志
    */
-  info(message: string, context?: string, meta?: Record<string, unknown>): void {
+  info(
+    message: string,
+    context?: string,
+    meta?: Record<string, unknown>,
+  ): void {
     this.logMessage('info', message, context, meta);
   }
 
   /**
    * 记录 debug 级别日志
    */
-  debug(message: string, context?: string, meta?: Record<string, unknown>): void {
+  debug(
+    message: string,
+    context?: string,
+    meta?: Record<string, unknown>,
+  ): void {
     this.logMessage('debug', message, context, meta);
   }
 
   /**
    * 记录 verbose 级别日志
    */
-  verbose(message: string, context?: string, meta?: Record<string, unknown>): void {
+  verbose(
+    message: string,
+    context?: string,
+    meta?: Record<string, unknown>,
+  ): void {
     this.logMessage('verbose', message, context, meta);
   }
 
@@ -184,7 +208,8 @@ export class LoggerService implements NestLoggerService {
     requestId?: string,
     meta?: Record<string, unknown>,
   ): void {
-    const level = statusCode >= 500 ? 'error' : statusCode >= 400 ? 'warn' : 'info';
+    const level =
+      statusCode >= 500 ? 'error' : statusCode >= 400 ? 'warn' : 'info';
 
     this.logMessage(
       level,
@@ -205,7 +230,7 @@ export class LoggerService implements NestLoggerService {
    * 创建子日志实例（带上下文）
    */
   child(bindings: Record<string, unknown>): LoggerService {
-    const context = bindings.context as string || this.context;
+    const context = (bindings.context as string) || this.context;
     return new LoggerService({ context });
   }
 }

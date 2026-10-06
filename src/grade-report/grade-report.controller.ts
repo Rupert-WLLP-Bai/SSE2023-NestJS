@@ -21,6 +21,7 @@ import { GradeReportService } from './grade-report.service';
 import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
 import { UserRole } from '../user/entities/user.entity';
 import { ExportQueryDto } from './dto/grade-report-query.dto';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('grade-report')
 @ApiBearerAuth('JWT-auth')
@@ -53,7 +54,7 @@ export class GradeReportController {
         success: false,
         data: null,
         errorCode: '',
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
         showType: 0,
         traceId: '',
         host: '',
@@ -90,7 +91,7 @@ export class GradeReportController {
         success: false,
         data: null,
         errorCode: '',
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
         showType: 0,
         traceId: '',
         host: '',
@@ -146,7 +147,7 @@ export class GradeReportController {
     } catch (e) {
       res.status(500).json({
         success: false,
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
       });
     }
   }
@@ -193,14 +194,17 @@ export class GradeReportController {
         'Content-Type',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       );
-      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${filename}"`,
+      );
 
       await workbook.xlsx.write(res);
       res.end();
     } catch (e) {
       res.status(500).json({
         success: false,
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
       });
     }
   }
@@ -248,7 +252,10 @@ export class GradeReportController {
         /[^a-zA-Z0-9\u4e00-\u9fa5_.-]/g,
         '_',
       );
-      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${filename}"`,
+      );
 
       doc.pipe(res);
 
@@ -271,7 +278,10 @@ export class GradeReportController {
       });
 
       // 表格线
-      doc.moveTo(50, tableTop + 15).lineTo(550, tableTop + 15).stroke();
+      doc
+        .moveTo(50, tableTop + 15)
+        .lineTo(550, tableTop + 15)
+        .stroke();
 
       // 数据行
       let y = tableTop + 20;
@@ -282,7 +292,10 @@ export class GradeReportController {
           align: 'center',
         });
         x += colWidths[0];
-        doc.text(student.studentName, x, y, { width: colWidths[1], align: 'center' });
+        doc.text(student.studentName, x, y, {
+          width: colWidths[1],
+          align: 'center',
+        });
         x += colWidths[1];
         doc.text(student.experimentScore.toString(), x, y, {
           width: colWidths[2],
@@ -315,7 +328,7 @@ export class GradeReportController {
     } catch (e) {
       res.status(500).json({
         success: false,
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
       });
     }
   }
@@ -350,7 +363,7 @@ export class GradeReportController {
         success: false,
         data: null,
         errorCode: '',
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
         showType: 0,
         traceId: '',
         host: '',
@@ -371,7 +384,8 @@ export class GradeReportController {
     @Param('studentId', ParseIntPipe) studentId: number,
   ): Promise<any> {
     try {
-      const stats = await this.gradeReportService.getStudentStatistics(studentId);
+      const stats =
+        await this.gradeReportService.getStudentStatistics(studentId);
       return {
         success: true,
         data: stats,
@@ -386,7 +400,7 @@ export class GradeReportController {
         success: false,
         data: null,
         errorCode: '',
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
         showType: 0,
         traceId: '',
         host: '',
@@ -407,9 +421,8 @@ export class GradeReportController {
     @Param('courseId', ParseIntPipe) courseId: number,
   ): Promise<any> {
     try {
-      const distribution = await this.gradeReportService.getGradeDistribution(
-        courseId,
-      );
+      const distribution =
+        await this.gradeReportService.getGradeDistribution(courseId);
       return {
         success: true,
         data: distribution,
@@ -424,7 +437,7 @@ export class GradeReportController {
         success: false,
         data: null,
         errorCode: '',
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
         showType: 0,
         traceId: '',
         host: '',
@@ -479,7 +492,7 @@ export class GradeReportController {
         success: false,
         data: null,
         errorCode: '',
-        errorMessage: e.message,
+        errorMessage: errorMessage(e),
         showType: 0,
         traceId: '',
         host: '',

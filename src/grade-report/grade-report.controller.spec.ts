@@ -174,7 +174,7 @@ describe('GradeReportController', () => {
     it('should return course statistics', async () => {
       mockService.getCourseStats.mockResolvedValue(mockCourseStats);
 
-      const result = await controller.getCourseStats(1) as any;
+      const result = (await controller.getCourseStats(1)) as any;
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockCourseStats);
@@ -184,7 +184,7 @@ describe('GradeReportController', () => {
     it('should handle error when getting course stats fails', async () => {
       mockService.getCourseStats.mockRejectedValue(new Error('Database error'));
 
-      const result = await controller.getCourseStats(1) as any;
+      const result = (await controller.getCourseStats(1)) as any;
 
       expect(result.success).toBe(false);
       expect(result.errorMessage).toBe('Database error');
@@ -193,9 +193,11 @@ describe('GradeReportController', () => {
 
   describe('getStudentGradeDetail', () => {
     it('should return student grade detail', async () => {
-      mockService.getStudentGradeDetail.mockResolvedValue(mockStudentGradeDetail);
+      mockService.getStudentGradeDetail.mockResolvedValue(
+        mockStudentGradeDetail,
+      );
 
-      const result = await controller.getStudentGradeDetail(1, 1) as any;
+      const result = (await controller.getStudentGradeDetail(1, 1)) as any;
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockStudentGradeDetail);
@@ -207,7 +209,7 @@ describe('GradeReportController', () => {
         new Error('学生 1 不存在'),
       );
 
-      const result = await controller.getStudentGradeDetail(999, 1) as any;
+      const result = (await controller.getStudentGradeDetail(999, 1)) as any;
 
       expect(result.success).toBe(false);
       expect(result.errorMessage).toBe('学生 1 不存在');
@@ -240,7 +242,9 @@ describe('GradeReportController', () => {
     });
 
     it('should handle error during CSV export', async () => {
-      mockService.exportCourseGrades.mockRejectedValue(new Error('Export failed'));
+      mockService.exportCourseGrades.mockRejectedValue(
+        new Error('Export failed'),
+      );
 
       const mockResponse = createMockResponse();
 
@@ -258,7 +262,7 @@ describe('GradeReportController', () => {
     it('should return course statistics', async () => {
       mockService.getCourseStatistics.mockResolvedValue(mockCourseStatistics);
 
-      const result = await controller.getCourseStatistics(1) as any;
+      const result = (await controller.getCourseStatistics(1)) as any;
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockCourseStatistics);
@@ -268,7 +272,7 @@ describe('GradeReportController', () => {
     it('should handle error', async () => {
       mockService.getCourseStatistics.mockRejectedValue(new Error('Error'));
 
-      const result = await controller.getCourseStatistics(1) as any;
+      const result = (await controller.getCourseStatistics(1)) as any;
 
       expect(result.success).toBe(false);
     });
@@ -278,7 +282,7 @@ describe('GradeReportController', () => {
     it('should return student statistics', async () => {
       mockService.getStudentStatistics.mockResolvedValue(mockStudentStatistics);
 
-      const result = await controller.getStudentStatistics(1) as any;
+      const result = (await controller.getStudentStatistics(1)) as any;
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockStudentStatistics);
@@ -290,7 +294,7 @@ describe('GradeReportController', () => {
         new Error('学生不存在'),
       );
 
-      const result = await controller.getStudentStatistics(999) as any;
+      const result = (await controller.getStudentStatistics(999)) as any;
 
       expect(result.success).toBe(false);
       expect(result.errorMessage).toBe('学生不存在');
@@ -301,7 +305,7 @@ describe('GradeReportController', () => {
     it('should return grade distribution', async () => {
       mockService.getGradeDistribution.mockResolvedValue(mockGradeDistribution);
 
-      const result = await controller.getGradeDistribution(1) as any;
+      const result = (await controller.getGradeDistribution(1)) as any;
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockGradeDistribution);
@@ -313,15 +317,27 @@ describe('GradeReportController', () => {
     it('should return grade comparison', async () => {
       mockService.getGradeComparison.mockResolvedValue(mockGradeComparison);
 
-      const result = await controller.getGradeComparison('1', '2023-1', '2023-2') as any;
+      const result = (await controller.getGradeComparison(
+        '1',
+        '2023-1',
+        '2023-2',
+      )) as any;
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockGradeComparison);
-      expect(mockService.getGradeComparison).toHaveBeenCalledWith(1, '2023-1', '2023-2');
+      expect(mockService.getGradeComparison).toHaveBeenCalledWith(
+        1,
+        '2023-1',
+        '2023-2',
+      );
     });
 
     it('should return error when courseId not provided', async () => {
-      const result = await controller.getGradeComparison(undefined, '2023-1', '2023-2') as any;
+      const result = (await controller.getGradeComparison(
+        undefined,
+        '2023-1',
+        '2023-2',
+      )) as any;
 
       expect(result.success).toBe(false);
       expect(result.errorMessage).toBe('请提供课程ID');
@@ -355,7 +371,10 @@ describe('GradeReportController', () => {
     it('should return error when courseId not provided', async () => {
       const mockResponse = createMockResponse();
 
-      await controller.exportExcel({ courseId: undefined }, mockResponse as any);
+      await controller.exportExcel(
+        { courseId: undefined },
+        mockResponse as any,
+      );
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({

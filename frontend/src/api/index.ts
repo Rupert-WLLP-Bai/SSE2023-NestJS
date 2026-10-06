@@ -2,8 +2,11 @@ import request from './request'
 
 // 登录相关API
 export const loginApi = {
-  account: (data: { username: string; password: string }) =>
-    request.post('/login/account', data),
+  account: (data: { id: number; password: string }) =>
+    request.post<{ success: boolean; data: { token: string; currentAuthority: string } }>(
+      '/login/account',
+      data,
+    ),
   outlogin: () => request.get('/login/outlogin'),
 }
 

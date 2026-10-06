@@ -149,7 +149,7 @@ export type ErrorCode = (typeof ErrorCodes)[keyof typeof ErrorCodes];
 /**
  * 错误消息映射
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const ErrorMessages: Record<string, any> = {
   // 通用错误
   [CommonErrorCode.INTERNAL_ERROR]: '服务器内部错误',

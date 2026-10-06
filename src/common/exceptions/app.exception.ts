@@ -68,7 +68,7 @@ export class AppException extends HttpException {
   /**
    * 错误码
    */
-  public readonly errorCode: ErrorCode;
+  declare public readonly errorCode: ErrorCode;
 
   /**
    * 错误消息
@@ -118,7 +118,10 @@ export class AppException extends HttpException {
   /**
    * 创建业务错误异常
    */
-  static businessError(errorCode: ErrorCode, errorMessage?: string): AppException {
+  static businessError(
+    errorCode: ErrorCode,
+    errorMessage?: string,
+  ): AppException {
     return new AppException({
       errorCode,
       errorMessage,
@@ -129,7 +132,10 @@ export class AppException extends HttpException {
   /**
    * 创建系统错误异常
    */
-  static systemError(errorCode: ErrorCode, errorMessage?: string): AppException {
+  static systemError(
+    errorCode: ErrorCode,
+    errorMessage?: string,
+  ): AppException {
     return new AppException({
       errorCode,
       errorMessage,
@@ -152,7 +158,10 @@ export class AppException extends HttpException {
   /**
    * 创建未授权异常
    */
-  static unauthorized(errorCode: ErrorCode, errorMessage?: string): AppException {
+  static unauthorized(
+    errorCode: ErrorCode,
+    errorMessage?: string,
+  ): AppException {
     return new AppException({
       errorCode,
       errorMessage,

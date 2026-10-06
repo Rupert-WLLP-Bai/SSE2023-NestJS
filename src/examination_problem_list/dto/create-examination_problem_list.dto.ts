@@ -4,8 +4,9 @@ import {
   IsNumber,
   IsString,
   IsEnum,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ProblemType } from '../entities/examination_problem_list.entity';
 
 export class CreateExaminationProblemListDto {
@@ -66,7 +67,8 @@ export class CreateExaminationProblemListDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   createTime?: Date;
 
   @ApiProperty({
@@ -75,6 +77,7 @@ export class CreateExaminationProblemListDto {
     required: false,
   })
   @IsOptional()
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   updateTime?: Date;
 }

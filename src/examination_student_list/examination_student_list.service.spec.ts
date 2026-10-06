@@ -53,7 +53,7 @@ describe('ExaminationStudentListService', () => {
     };
 
     mockUserRepository = {
-      findByIds: jest.fn().mockResolvedValue([]),
+      findBy: jest.fn().mockResolvedValue([]),
     };
 
     mockDataSource = {
@@ -181,7 +181,7 @@ describe('ExaminationStudentListService', () => {
   describe('importStudentsFromClass', () => {
     it('should import students from class', async () => {
       mockEnrollmentRepository.find.mockResolvedValue([mockEnrollment]);
-      mockUserRepository.findByIds.mockResolvedValue([mockUser]);
+      mockUserRepository.findBy.mockResolvedValue([mockUser]);
       mockRepository.find.mockResolvedValue([]);
       mockRepository.findOne.mockResolvedValue(null);
 
@@ -193,7 +193,7 @@ describe('ExaminationStudentListService', () => {
 
     it('should skip existing students', async () => {
       mockEnrollmentRepository.find.mockResolvedValue([mockEnrollment]);
-      mockUserRepository.findByIds.mockResolvedValue([mockUser]);
+      mockUserRepository.findBy.mockResolvedValue([mockUser]);
       mockRepository.find.mockResolvedValue([mockStudentList]);
       mockRepository.findOne.mockResolvedValue(mockStudentList);
 

@@ -44,7 +44,10 @@ describe('NoticeService', () => {
   describe('create', () => {
     it('should create a notice', async () => {
       mockRepository.save.mockResolvedValue(mockNotice);
-      const result = await service.create({ title: 'Test Notice', content: 'Content' });
+      const result = await service.create({
+        title: 'Test Notice',
+        content: 'Content',
+      });
       expect(result).toEqual(mockNotice);
     });
   });

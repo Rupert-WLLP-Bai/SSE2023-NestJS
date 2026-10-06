@@ -78,10 +78,9 @@ describe('ExaminationScoreService', () => {
       expect(result).toEqual(mockExaminationScore);
       expect(mockRepository.create).toHaveBeenCalledWith(createDto);
       expect(mockRepository.save).toHaveBeenCalledWith(mockExaminationScore);
-      expect(mockExaminationSubmitService.validateSubmitted).toHaveBeenCalledWith(
-        createDto.examinationId,
-        createDto.studentId,
-      );
+      expect(
+        mockExaminationSubmitService.validateSubmitted,
+      ).toHaveBeenCalledWith(createDto.examinationId, createDto.studentId);
     });
 
     it('should throw error when validateSubmitted fails', async () => {
@@ -89,7 +88,9 @@ describe('ExaminationScoreService', () => {
         new BadRequestException('Submission not found'),
       );
 
-      await expect(service.create(createDto)).rejects.toThrow(BadRequestException);
+      await expect(service.create(createDto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -164,7 +165,9 @@ describe('ExaminationScoreService', () => {
       const result = await service.update(1, updateDto);
 
       expect(result).toEqual(updatedScore);
-      expect(mockExaminationSubmitService.validateSubmitted).toHaveBeenCalledWith(
+      expect(
+        mockExaminationSubmitService.validateSubmitted,
+      ).toHaveBeenCalledWith(
         mockExaminationScore.examinationId,
         mockExaminationScore.studentId,
       );
@@ -303,7 +306,10 @@ describe('ExaminationScoreService', () => {
       const scores = [mockExaminationScore];
       mockRepository.findAndCount.mockResolvedValue([scores, 1]);
 
-      const result = await service.findCommon({ examinationId: 1, studentId: 1 });
+      const result = await service.findCommon({
+        examinationId: 1,
+        studentId: 1,
+      });
 
       expect(result).toEqual([scores, 1]);
       expect(mockRepository.findAndCount).toHaveBeenCalledWith({
@@ -359,7 +365,10 @@ describe('ExaminationScoreService', () => {
       const result = await service.findByCourseAndStudent(1, 1);
 
       expect(result).toEqual(scores);
-      expect(mockRepository.findBy).toHaveBeenCalledWith({ courseId: 1, studentId: 1 });
+      expect(mockRepository.findBy).toHaveBeenCalledWith({
+        courseId: 1,
+        studentId: 1,
+      });
     });
   });
 });

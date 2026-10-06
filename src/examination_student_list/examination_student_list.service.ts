@@ -1,6 +1,12 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult, DeleteResult, DataSource } from 'typeorm';
+import {
+  In,
+  Repository,
+  UpdateResult,
+  DeleteResult,
+  DataSource,
+} from 'typeorm';
 import { CreateExaminationStudentListDto } from './dto/create-examination_student_list.dto';
 import { UpdateExaminationStudentListDto } from './dto/update-examination_student_list.dto';
 import { ExaminationStudentList } from './entities/examination_student_list.entity';
@@ -107,14 +113,15 @@ export class ExaminationStudentListService {
 
     // 获取用户信息
     const studentIds = enrollments.map((e) => e.studentId);
-    const users = await this.userRepository.findByIds(studentIds);
+    const users = await this.userRepository.findBy({
+      id: In(studentIds),
+    });
     const userMap = new Map(users.map((u) => [u.id, u]));
 
     // 查询已存在的考生列表
     const existingRecords = await this.studentListRepository.find({
       where: {
         examinationId,
-        studentId: undefined,
       },
     });
     // 过滤出已存在的 (examinationId, studentId) 组合

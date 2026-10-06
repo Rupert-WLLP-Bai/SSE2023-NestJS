@@ -23,15 +23,19 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard, Roles } from '../common/guards';
+import { UserRole } from './entities/user.entity';
 
 @ApiTags('user')
 @ApiBearerAuth('JWT-auth')
 @Controller('user')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
   private readonly logger = new Logger(UserController.name);
 
   @Post()
+  @Roles(UserRole.ADMIN)
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: '创建用户' })
   async create(@Body() createUserDto: CreateUserDto) {
@@ -40,7 +44,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
   @ApiOperation({ summary: '根据id查询用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   async findOne(@Param('id') id: string) {
@@ -53,7 +57,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: '根据id更新用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   @ApiBody({ type: UpdateUserDto })
@@ -64,7 +68,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: '根据id删除用户' })
   @ApiParam({ name: 'id', description: '用户id' })
   async remove(@Param('id') id: string) {
@@ -73,7 +77,7 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
   @ApiOperation({ summary: '分页查询用户' })
   @ApiQuery({
     name: 'page',
@@ -109,7 +113,7 @@ export class UserController {
   }
 
   @Post('query')
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN, UserRole.TEACHER, UserRole.ASSISTANT)
   @ApiOperation({ summary: '通用查询用户' })
   @ApiBody({
     type: QueryUserDto,

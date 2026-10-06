@@ -173,7 +173,9 @@ describe('ClassController', () => {
     });
 
     it('should handle error when finding by teacher id', async () => {
-      mockService.findByTeacherId.mockRejectedValue(new Error('Database error'));
+      mockService.findByTeacherId.mockRejectedValue(
+        new Error('Database error'),
+      );
       const result = await controller.findByTeacherId('1');
       expect(result.success).toBe(false);
     });

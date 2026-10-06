@@ -41,7 +41,12 @@ describe('CourseController', () => {
     it('should create course', async () => {
       mockService.create.mockResolvedValue(mockCourse);
       const result = await controller.create({} as any);
-      expect(result).toEqual(mockCourse);
+      expect(result).toEqual(
+        expect.objectContaining({
+          success: true,
+          data: mockCourse,
+        }),
+      );
     });
   });
 
@@ -49,8 +54,9 @@ describe('CourseController', () => {
     it('should return all courses', async () => {
       mockService.findAll.mockResolvedValue([mockCourse]);
       const result = await controller.findAll();
-      expect(result.list).toEqual([mockCourse]);
-      expect(result.total).toBe(1);
+      expect(result.success).toBe(true);
+      expect(result.data.list).toEqual([mockCourse]);
+      expect(result.data.total).toBe(1);
     });
   });
 
@@ -58,13 +64,15 @@ describe('CourseController', () => {
     it('should return course by id', async () => {
       mockService.findOne.mockResolvedValue(mockCourse);
       const result = await controller.findOne('1');
-      expect(result.list).toEqual([mockCourse]);
+      expect(result.success).toBe(true);
+      expect(result.data.list).toEqual([mockCourse]);
     });
 
     it('should return empty when not found', async () => {
       mockService.findOne.mockResolvedValue(null);
       const result = await controller.findOne('999');
-      expect(result.list).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(result.data.list).toEqual([]);
     });
   });
 

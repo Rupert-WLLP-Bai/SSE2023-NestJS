@@ -45,20 +45,25 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (username: string, password: string) => {
     try {
-      const res = await loginApi.account({ username, password })
-      if (res.data) {
-        token.value = res.data.accessToken
-        userInfo.value = {
-          id: res.data.user.id,
-          username: res.data.user.username,
-          name: res.data.user.name,
-          role: res.data.user.role,
-          email: res.data.user.email,
-          studentId: res.data.user.studentId,
-          teacherId: res.data.user.teacherId,
-        }
+      const id = Number(username)
+      if (!Number.isFinite(id)) {
+        ElMessage.error('用户名必须是学号/工号数字')
+        return false
+      }
+      const res = await loginApi.account({ id, password })
+      if (res?.success && res.data?.token) {
+        token.value = res.data.token
         localStorage.setItem('token', token.value)
-        localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
+        const ok = await fetchCurrentUser()
+        if (!ok) {
+          // token 可用但资料拉取失败时，至少保留角色名
+          userInfo.value = {
+            id: String(id),
+            username: String(id),
+            role: (res.data.currentAuthority?.toUpperCase() || 'STUDENT') as UserRole,
+          }
+          localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
+        }
         ElMessage.success('登录成功')
         return true
       }
@@ -86,15 +91,19 @@ export const useAuthStore = defineStore('auth', () => {
     if (!token.value) return false
     try {
       const res = await commonApi.getCurrentUser()
-      if (res.data) {
+      if (res?.success && res.data) {
+        const roleMap: Record<number, UserRole> = {
+          0: 'ADMIN',
+          1: 'STUDENT',
+          2: 'TEACHER',
+          3: 'ASSISTANT',
+        }
         userInfo.value = {
-          id: res.data.id,
-          username: res.data.username,
+          id: String(res.data.id),
+          username: String(res.data.id),
           name: res.data.name,
-          role: res.data.role,
+          role: roleMap[Number(res.data.role)] || 'STUDENT',
           email: res.data.email,
-          studentId: res.data.studentId,
-          teacherId: res.data.teacherId,
         }
         localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
         return true

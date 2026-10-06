@@ -29,6 +29,7 @@ import { CreateExaminationSubmitDto } from './dto/create-examination_submit.dto'
 import { UpdateExaminationSubmitDto } from './dto/update-examination_submit.dto';
 import { JwtAuthGuard, RolesGuard, Roles } from '../common/guards';
 import { UserRole } from '../user/entities/user.entity';
+import { errorMessage } from '../common/errors';
 
 @ApiTags('examination-submit')
 @ApiBearerAuth('JWT-auth')
@@ -65,7 +66,7 @@ export class ExaminationSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -107,7 +108,7 @@ export class ExaminationSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -132,7 +133,7 @@ export class ExaminationSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -159,7 +160,7 @@ export class ExaminationSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -192,7 +193,7 @@ export class ExaminationSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -217,7 +218,7 @@ export class ExaminationSubmitController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -246,7 +247,7 @@ export class ExaminationSubmitController {
       response.data.pageSize = query.limit || 10;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }

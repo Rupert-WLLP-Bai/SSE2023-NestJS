@@ -7,9 +7,10 @@ import {
   Min,
   Max,
   MaxLength,
-  IsDateString,
+  IsDate,
   IsNumber,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateEnrollmentDto {
   @ApiProperty({ description: '学生ID', example: 2052526 })
@@ -64,7 +65,8 @@ export class CreateEnrollmentDto {
     nullable: true,
   })
   @IsOptional()
-  @IsDateString({}, { message: '选课日期格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '选课日期格式不正确' })
   enrollmentDate?: Date;
 
   @ApiProperty({
@@ -73,7 +75,8 @@ export class CreateEnrollmentDto {
     nullable: true,
   })
   @IsOptional()
-  @IsDateString({}, { message: '退课日期格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '退课日期格式不正确' })
   dropDate?: Date;
 
   @ApiProperty({ description: '成绩', example: 90, nullable: true })
@@ -91,11 +94,13 @@ export class CreateEnrollmentDto {
 
   @ApiProperty({ description: '创建时间', example: '2023-01-01 00:00:00' })
   @IsOptional()
-  @IsDateString({}, { message: '创建时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '创建时间格式不正确' })
   createTime?: Date;
 
   @ApiProperty({ description: '更新时间', example: '2023-01-01 00:00:00' })
   @IsOptional()
-  @IsDateString({}, { message: '更新时间格式不正确' })
+  @Type(() => Date)
+  @IsDate({ message: '更新时间格式不正确' })
   updateTime?: Date;
 }

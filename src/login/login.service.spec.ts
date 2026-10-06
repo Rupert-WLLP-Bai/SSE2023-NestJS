@@ -13,7 +13,7 @@ describe('LoginService', () => {
 
   beforeEach(async () => {
     mockUserService = {
-      findOne: jest.fn(),
+      findOneWithPassword: jest.fn(),
       update: jest.fn(),
     };
 
@@ -48,7 +48,7 @@ describe('LoginService', () => {
 
   describe('login', () => {
     it('should return error when user not found', async () => {
-      mockUserService.findOne.mockResolvedValue(null);
+      mockUserService.findOneWithPassword.mockResolvedValue(null);
       const result = await service.login({ id: 123, password: 'password' });
 
       expect(result.success).toBe(false);
@@ -57,7 +57,7 @@ describe('LoginService', () => {
 
     it('should return error when password is incorrect', async () => {
       const hashedPassword = await bcrypt.hash('correctpassword', 10);
-      mockUserService.findOne.mockResolvedValue({
+      mockUserService.findOneWithPassword.mockResolvedValue({
         id: 123,
         password: hashedPassword,
         role: 1,
@@ -74,7 +74,7 @@ describe('LoginService', () => {
 
     it('should return JWT token when login is successful', async () => {
       const hashedPassword = await bcrypt.hash('correctpassword', 10);
-      mockUserService.findOne.mockResolvedValue({
+      mockUserService.findOneWithPassword.mockResolvedValue({
         id: 123,
         password: hashedPassword,
         role: 1,

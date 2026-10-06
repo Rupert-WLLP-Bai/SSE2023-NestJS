@@ -145,7 +145,13 @@ describe('UserController', () => {
   describe('findCommon', () => {
     it('should return users with query parameters', async () => {
       const mockUsers = [mockUser];
-      const queryDto: any = { page: 1, limit: 10, sort: 'id', order: 'ASC', filter: {} };
+      const queryDto: any = {
+        page: 1,
+        limit: 10,
+        sort: 'id',
+        order: 'ASC',
+        filter: {},
+      };
       mockService.findCommon.mockResolvedValue([mockUsers, 1]);
       const result = await controller.findCommon(queryDto);
       expect(result.list).toEqual(mockUsers);
@@ -172,7 +178,13 @@ describe('UserController', () => {
     });
 
     it('should handle empty results', async () => {
-      const queryDto: any = { page: 1, limit: 10, sort: 'id', order: 'ASC', filter: {} };
+      const queryDto: any = {
+        page: 1,
+        limit: 10,
+        sort: 'id',
+        order: 'ASC',
+        filter: {},
+      };
       mockService.findCommon.mockResolvedValue([[], 0]);
       const result = await controller.findCommon(queryDto);
       expect(result.list).toEqual([]);

@@ -82,11 +82,10 @@ import { GradeReportModule } from './grade-report/grade-report.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        // 非开发环境关闭 synchronize
-        synchronize: configService.get<string>('NODE_ENV') !== 'production',
+        synchronize: false,
         autoLoadEntities: true,
         migrations: [__dirname + '/migrations/*{.ts,.js}'],
-        migrationsRun: configService.get<string>('NODE_ENV') === 'production',
+        migrationsRun: true,
         migrationsTableName: 'migrations',
       }),
     }),
@@ -126,6 +125,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+      .forRoutes({ path: '{*path}', method: RequestMethod.ALL });
   }
 }

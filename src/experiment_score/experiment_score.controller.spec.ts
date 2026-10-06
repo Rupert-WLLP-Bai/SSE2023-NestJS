@@ -82,14 +82,20 @@ describe('ExperimentScoreController', () => {
       ],
     }).compile();
 
-    controller = module.get<ExperimentScoreController>(ExperimentScoreController);
+    controller = module.get<ExperimentScoreController>(
+      ExperimentScoreController,
+    );
   });
 
   describe('create', () => {
     it('should create an experiment score', async () => {
       mockService.create.mockResolvedValue(mockExperimentScore);
 
-      const response = await controller.create(createDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.create(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(response.data).toEqual(mockExperimentScore);
@@ -100,7 +106,10 @@ describe('ExperimentScoreController', () => {
     it('should create an experiment score with null user', async () => {
       mockService.create.mockResolvedValue(mockExperimentScore);
 
-      const response = await controller.create(createDto, null, { connection: { remoteAddress: '127.0.0.1' }, headers: { 'user-agent': 'test' } });
+      const response = await controller.create(createDto, null, {
+        connection: { remoteAddress: '127.0.0.1' },
+        headers: { 'user-agent': 'test' },
+      });
 
       expect(response.success).toBe(true);
       expect(response.data).toEqual(mockExperimentScore);
@@ -109,7 +118,11 @@ describe('ExperimentScoreController', () => {
     it('should create an experiment score without ip', async () => {
       mockService.create.mockResolvedValue(mockExperimentScore);
 
-      const response = await controller.create(createDto, { id: 1, username: 'teacher1' }, { headers: { 'user-agent': 'test' } });
+      const response = await controller.create(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(response.data).toEqual(mockExperimentScore);
@@ -118,7 +131,11 @@ describe('ExperimentScoreController', () => {
     it('should return error when create fails', async () => {
       mockService.create.mockRejectedValue(new Error('Validation failed'));
 
-      const response = await controller.create(createDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.create(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(false);
       expect(response.errorMessage).toBe('Validation failed');
@@ -194,7 +211,12 @@ describe('ExperimentScoreController', () => {
       mockService.findOne.mockResolvedValue(mockExperimentScore);
       mockService.update.mockResolvedValue(updatedScore);
 
-      const response = await controller.update(1, updateDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.update(
+        1,
+        updateDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(mockService.update).toHaveBeenCalledWith(1, updateDto);
@@ -206,7 +228,10 @@ describe('ExperimentScoreController', () => {
       mockService.findOne.mockResolvedValue(mockExperimentScore);
       mockService.update.mockResolvedValue(updatedScore);
 
-      const response = await controller.update(1, updateDto, null, { connection: { remoteAddress: '127.0.0.1' }, headers: { 'user-agent': 'test' } });
+      const response = await controller.update(1, updateDto, null, {
+        connection: { remoteAddress: '127.0.0.1' },
+        headers: { 'user-agent': 'test' },
+      });
 
       expect(response.success).toBe(true);
       expect(mockService.update).toHaveBeenCalledWith(1, updateDto);
@@ -217,7 +242,12 @@ describe('ExperimentScoreController', () => {
       mockService.findOne.mockResolvedValue(mockExperimentScore);
       mockService.update.mockResolvedValue(updatedScore);
 
-      const response = await controller.update(1, updateDto, { id: 1, username: 'teacher1' }, { headers: { 'user-agent': 'test' } });
+      const response = await controller.update(
+        1,
+        updateDto,
+        { id: 1, username: 'teacher1' },
+        { headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(mockService.update).toHaveBeenCalledWith(1, updateDto);
@@ -227,7 +257,12 @@ describe('ExperimentScoreController', () => {
       mockService.findOne.mockResolvedValue(mockExperimentScore);
       mockService.update.mockRejectedValue(new Error('Update failed'));
 
-      const response = await controller.update(1, updateDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.update(
+        1,
+        updateDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(false);
       expect(response.errorMessage).toBe('Update failed');
@@ -260,7 +295,11 @@ describe('ExperimentScoreController', () => {
       const scores = [mockExperimentScore];
       mockService.findCommon.mockResolvedValue([scores, 1]);
 
-      const response = await controller.findCommon({ page: 1, limit: 10, experimentId: 1 });
+      const response = await controller.findCommon({
+        page: 1,
+        limit: 10,
+        experimentId: 1,
+      });
 
       expect(response.success).toBe(true);
       expect(response.data.list).toEqual(scores);
@@ -295,7 +334,11 @@ describe('ExperimentScoreController', () => {
       mockService.findOneByCondition.mockResolvedValue(null);
       mockService.upsert.mockResolvedValue(mockExperimentScore);
 
-      const response = await controller.upsert(createDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.upsert(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(response.data).toEqual(mockExperimentScore);
@@ -310,7 +353,10 @@ describe('ExperimentScoreController', () => {
       mockService.findOneByCondition.mockResolvedValue(null);
       mockService.upsert.mockResolvedValue(mockExperimentScore);
 
-      const response = await controller.upsert(createDto, null, { connection: { remoteAddress: '127.0.0.1' }, headers: { 'user-agent': 'test' } });
+      const response = await controller.upsert(createDto, null, {
+        connection: { remoteAddress: '127.0.0.1' },
+        headers: { 'user-agent': 'test' },
+      });
 
       expect(response.success).toBe(true);
       expect(response.data).toEqual(mockExperimentScore);
@@ -320,7 +366,11 @@ describe('ExperimentScoreController', () => {
       mockService.findOneByCondition.mockResolvedValue(null);
       mockService.upsert.mockResolvedValue(mockExperimentScore);
 
-      const response = await controller.upsert(createDto, { id: 1, username: 'teacher1' }, { headers: { 'user-agent': 'test' } });
+      const response = await controller.upsert(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(response.data).toEqual(mockExperimentScore);
@@ -332,7 +382,11 @@ describe('ExperimentScoreController', () => {
       const updatedScore = { ...mockExperimentScore, score: 90 };
       mockService.upsert.mockResolvedValue(updatedScore);
 
-      const response = await controller.upsert(createDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.upsert(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(true);
       expect(mockAuditService.create).toHaveBeenCalledWith(
@@ -346,7 +400,11 @@ describe('ExperimentScoreController', () => {
       mockService.findOneByCondition.mockResolvedValue(null);
       mockService.upsert.mockRejectedValue(new Error('Upsert failed'));
 
-      const response = await controller.upsert(createDto, { id: 1, username: 'teacher1' }, { ip: '127.0.0.1', headers: { 'user-agent': 'test' } });
+      const response = await controller.upsert(
+        createDto,
+        { id: 1, username: 'teacher1' },
+        { ip: '127.0.0.1', headers: { 'user-agent': 'test' } },
+      );
 
       expect(response.success).toBe(false);
       expect(response.errorMessage).toBe('Upsert failed');

@@ -27,6 +27,7 @@ import { EnrollmentService } from './enrollment.service';
 import { CreateEnrollmentDto } from './dto/create-enrollment.dto';
 import { UpdateEnrollmentDto } from './dto/update-enrollment.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { errorMessage } from '../common/errors';
 
 @Controller('enrollment')
 @ApiTags('enrollment')
@@ -60,7 +61,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -83,7 +84,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -108,7 +109,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -141,7 +142,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -167,7 +168,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -196,7 +197,7 @@ export class EnrollmentController {
       response.data.pageSize = queryEnrollmentDto.limit;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -217,14 +218,13 @@ export class EnrollmentController {
       host: '',
     };
     try {
-      response.data.list = await this.enrollmentService.findByStudentId(
-        +studentId,
-      );
+      response.data.list =
+        await this.enrollmentService.findByStudentId(+studentId);
       response.data.total = response.data.list.length;
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -250,7 +250,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -271,14 +271,13 @@ export class EnrollmentController {
       host: '',
     };
     try {
-      response.data.list = await this.enrollmentService.findByCourseId(
-        +courseId,
-      );
+      response.data.list =
+        await this.enrollmentService.findByCourseId(+courseId);
       response.data.total = response.data.list.length;
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
@@ -308,7 +307,7 @@ export class EnrollmentController {
       response.success = true;
     } catch (e) {
       response.success = false;
-      response.errorMessage = e.message;
+      response.errorMessage = errorMessage(e);
     }
     return response;
   }
